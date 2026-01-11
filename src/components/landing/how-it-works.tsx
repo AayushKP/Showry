@@ -4,53 +4,61 @@ import { motion } from "framer-motion";
 
 const steps = [
   {
-    num: "01",
-    title: "Claim your name",
-    desc: "Sign up and secure your unique .showry.com subdomain instantly. No configurations, no hassle.",
+    number: "01",
+    title: "Sign Up",
+    description: "Create your account with Google in seconds.",
   },
   {
-    num: "02",
-    title: "Curate your work",
-    desc: "Add your projects, experience, and thoughts. Our smart template applies professional typography automatically.",
+    number: "02",
+    title: "Customize",
+    description: "Add your projects, skills, and experience.",
   },
   {
-    num: "03",
-    title: "Publish to the world",
-    desc: "One click to go live. Share your professional portfolio with clients, recruiters, and the world.",
+    number: "03",
+    title: "Publish",
+    description: "Go live with your custom subdomain instantly.",
   },
 ];
 
 export function HowItWorks() {
   return (
-    <section className="bg-[#050505] px-6 py-32 md:px-12">
-      <div className="mx-auto max-w-[1800px]">
-        <div className="mb-24 border-b border-white/10 pb-8">
-          <h2 className="font-instrument text-5xl text-white md:text-7xl">
-            The Process
+    <section className="w-full bg-[#050505] px-6 py-32 md:px-12 lg:px-20 xl:px-32 md:py-40 lg:py-52 flex justify-center relative z-10">
+      <div className="w-full max-w-7xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-16 md:mb-24"
+        >
+          <h2 className="font-instrument text-4xl md:text-5xl lg:text-6xl text-white mb-4">
+            Three steps to
+            <br />
+            <span className="italic text-[#d4a373]">your portfolio.</span>
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-12 md:grid-cols-3 md:gap-24">
-          {steps.map((step, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
+          {steps.map((step, index) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
+              key={step.number}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className="group flex flex-col justify-between"
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+              className="relative"
             >
-              <div>
-                <span className="mb-6 block font-mono text-xs text-[#d4a373]">
-                  ( {step.num} )
+              <div className="mb-6">
+                <span className="font-mono text-6xl md:text-7xl text-white/5 font-bold">
+                  {step.number}
                 </span>
-                <h3 className="mb-4 font-instrument text-3xl text-neutral-200 transition-colors group-hover:text-white">
-                  {step.title}
-                </h3>
-                <p className="max-w-sm text-sm leading-relaxed text-neutral-500">
-                  {step.desc}
-                </p>
               </div>
+              <h3 className="mb-4 font-instrument text-3xl md:text-4xl text-white">
+                {step.title}
+              </h3>
+              <p className="font-mono text-sm text-neutral-500 leading-relaxed max-w-xs">
+                {step.description}
+              </p>
             </motion.div>
           ))}
         </div>

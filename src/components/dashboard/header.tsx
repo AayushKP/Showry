@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/lib/auth-client";
+import { useSession, signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { LogOut, Rocket, Check, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -25,14 +25,18 @@ export function DashboardHeader({
   username,
   isPublished = false,
 }: DashboardHeaderProps) {
-  const { data: session } = useAuth();
+  const { data: session } = useSession();
   const router = useRouter();
   const [isPublishing, setIsPublishing] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleLogout = async () => {
-    await authClient.signOut({
-      callbackURL: "/login",
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/login");
+        },
+      },
     });
   };
 

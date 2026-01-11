@@ -1,40 +1,68 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { AuthModal } from "@/components/auth/auth-modal";
 
 export function CTA() {
-  return (
-    <section className="bg-[#050505] px-6 py-32 md:px-12">
-      <div className="mx-auto max-w-[1800px] border-t border-white/10 pt-32">
-        <div className="flex flex-col items-start justify-between gap-12 md:flex-row md:items-end">
-          <div className="max-w-4xl">
-            <h2 className="font-instrument text-[10vw] leading-[0.8] text-[#e5e5e5] md:text-[8vw]">
-              Ready to <span className="italic text-[#d4a373]">show</span>
-              <br />
-              your work?
-            </h2>
-          </div>
+  const [authOpen, setAuthOpen] = useState(false);
 
-          <div className="mb-4">
-            <Link href="/signup">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group flex h-32 w-32 items-center justify-center rounded-full bg-[#d4a373] text-black transition-colors hover:bg-white md:h-48 md:w-48"
+  return (
+    <>
+      <section className="w-full bg-[#050505] px-6 py-40 md:px-12 lg:px-20 md:py-60 lg:py-80 overflow-hidden flex justify-center">
+        <div className="w-full max-w-7xl">
+          <div className="border-t border-white/10 pt-24 md:pt-32">
+            <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-12 md:gap-16">
+              <div className="max-w-4xl relative text-center md:text-left">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "100px" }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                  className="absolute -top-12 left-1/2 md:left-0 -translate-x-1/2 md:translate-x-0 h-px bg-[#d4a373]"
+                />
+                <motion.h2
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="font-instrument text-6xl md:text-8xl lg:text-9xl leading-[0.85] text-[#e5e5e5] tracking-tight"
+                >
+                  Ready to <span className="italic text-[#d4a373]">show</span>
+                  <br />
+                  your work?
+                </motion.h2>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex-shrink-0"
               >
-                <div className="flex flex-col items-center gap-2">
-                  <span className="font-mono text-sm font-semibold uppercase tracking-widest">
-                    Start
-                  </span>
-                  <ArrowRight className="h-6 w-6 transition-transform group-hover:-rotate-45" />
-                </div>
-              </motion.button>
-            </Link>
+                <button
+                  onClick={() => setAuthOpen(true)}
+                  className="group flex h-40 w-40 md:h-56 md:w-56 lg:h-64 lg:w-64 items-center justify-center rounded-full bg-[#d4a373] text-black transition-all duration-500 hover:bg-white hover:scale-105"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="font-mono text-sm md:text-base font-bold uppercase tracking-widest">
+                      Start
+                    </span>
+                    <ArrowRight className="h-6 w-6 md:h-8 md:w-8 transition-transform duration-500 group-hover:-rotate-45" />
+                  </div>
+                </button>
+              </motion.div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <AuthModal
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        defaultTab="signup"
+      />
+    </>
   );
 }

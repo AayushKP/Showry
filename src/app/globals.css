@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@plugin "tailwindcss-animate";
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
@@ -42,6 +40,9 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Glassmorphism Utilities */

@@ -7,15 +7,16 @@ import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const handleGoogleLogin = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/dashboard",
-      onError: (ctx) => {
-        toast.error("Failed to login", {
-          description: ctx.error.message,
-        });
-      },
-    });
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      });
+    } catch (ctx: any) {
+      toast.error("Failed to login", {
+        description: ctx.error?.message || "Something went wrong",
+      });
+    }
   };
 
   return (
@@ -30,18 +31,18 @@ export default function LoginPage() {
         </Link>
       </nav>
 
-      <div className="flex flex-1 flex-col items-center justify-center px-6">
+      <div className="flex flex-1 flex-col items-center justify-center px-6 pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="w-full max-w-md"
         >
-          <div className="mb-12 text-center">
-            <h1 className="mb-4 font-instrument text-5xl text-white md:text-6xl">
+          <div className="mb-10 text-center">
+            <h1 className="mb-3 font-instrument text-5xl text-white md:text-6xl">
               Welcome back
             </h1>
-            <p className="text-neutral-500">
+            <p className="text-neutral-500 font-mono text-xs uppercase tracking-wide">
               Continue building your masterpiece.
             </p>
           </div>
@@ -68,13 +69,13 @@ export default function LoginPage() {
                 fill="#EA4335"
               />
             </svg>
-            <span className="font-mono text-sm uppercase tracking-wider group-hover:font-semibold">
+            <span className="font-mono text-xs uppercase tracking-wider group-hover:font-semibold">
               Continue with Google
             </span>
           </button>
 
           <div className="mt-8 text-center">
-            <p className="font-mono text-xs text-neutral-600">
+            <p className="font-mono text-[10px] text-neutral-600">
               Don&apos;t have an account?{" "}
               <Link
                 href="/signup"

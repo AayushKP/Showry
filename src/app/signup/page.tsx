@@ -29,18 +29,18 @@ export default function SignupPage() {
         </Link>
       </nav>
 
-      <div className="flex flex-1 flex-col items-center justify-center px-6">
+      <div className="flex flex-1 flex-col items-center justify-center px-6 pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="w-full max-w-md"
         >
-          <div className="mb-12 text-center">
-            <h1 className="mb-4 font-instrument text-5xl text-white md:text-6xl">
+          <div className="mb-10 text-center">
+            <h1 className="mb-3 font-instrument text-5xl text-white md:text-6xl">
               Start creating
             </h1>
-            <p className="text-neutral-500">
+            <p className="text-neutral-500 font-mono text-xs uppercase tracking-wide">
               Your professional journey begins here.
             </p>
           </div>
@@ -67,13 +67,13 @@ export default function SignupPage() {
                 fill="#EA4335"
               />
             </svg>
-            <span className="font-mono text-sm uppercase tracking-wider group-hover:font-semibold">
+            <span className="font-mono text-xs uppercase tracking-wider group-hover:font-semibold">
               Sign up with Google
             </span>
           </button>
 
           <div className="mt-8 text-center">
-            <p className="font-mono text-xs text-neutral-600">
+            <p className="font-mono text-[10px] text-neutral-600">
               Already have an account?{" "}
               <Link
                 href="/login"
@@ -99,6 +99,13 @@ export default function SignupPage() {
             </Link>
           </div>
         </motion.div>
+      </div>
+
+      {/* Simple Footer */}
+      <div className="w-full px-6 py-6 text-center md:px-12 md:text-left">
+        <span className="font-mono text-[10px] uppercase text-neutral-700">
+          © 2024 Showry Inc.
+        </span>
       </div>
     </div>
   );
