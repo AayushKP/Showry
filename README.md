@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Builder
+
+A complete Portfolio Builder SaaS application with custom subdomains featuring a minimal, elegant portfolio template. Built with Next.js 15, Better Auth, PostgreSQL (Neon), and Drizzle ORM.
+
+## Features
+
+- **Beautiful Minimal Design** - Stand out with elegant typography and sophisticated design
+- **Custom Subdomain** - Get yourname.portfolio.com instantly
+- **Easy Editing** - Update your portfolio anytime from your dashboard
+- **Mobile Responsive** - Perfect on all devices
+- **Google OAuth** - Quick and secure authentication
+- **Auto-Save** - Your changes are saved automatically
+- **Real-time Username Validation** - Check username availability instantly
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router with TypeScript, React 19)
+- **Database**: PostgreSQL via Neon serverless
+- **ORM**: Drizzle ORM
+- **Auth**: Better Auth v1 with Google OAuth
+- **Styling**: Tailwind CSS v4 + Framer Motion
+- **Fonts**: Playfair Display, Cormorant Garamond, Inter, Geist
+- **Components**: Custom shadcn/ui-style components
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- Neon PostgreSQL database
+- Google OAuth credentials
+
+### Environment Variables
+
+Create a `.env.local` file with:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Database (Neon)
+DATABASE_URL=postgresql://username:password@host:5432/database?sslmode=require
+
+# Better Auth
+BETTER_AUTH_SECRET=your-random-32-character-secret
+BETTER_AUTH_URL=http://localhost:3000
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# App URLs
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_DOMAIN=localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Install dependencies**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   pnpm install
+   ```
 
-## Learn More
+2. **Set up the database**
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   pnpm db:push
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Run the development server**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   pnpm dev
+   ```
 
-## Deploy on Vercel
+4. Open [http://localhost:3000](http://localhost:3000)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Database Commands
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `pnpm db:generate` - Generate migrations
+- `pnpm db:migrate` - Run migrations
+- `pnpm db:push` - Push schema to database
+- `pnpm db:studio` - Open Drizzle Studio
+
+## Deployment
+
+### Vercel
+
+1. Push to GitHub
+2. Connect to Vercel
+3. Set environment variables
+4. Add custom domain (portfolio.com)
+5. Add wildcard domain (\*.portfolio.com)
+6. Configure DNS:
+   - A record @ → Vercel IP
+   - CNAME \* → cname.vercel-dns.com
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── api/
+│   │   ├── auth/[...all]/    # Better Auth
+│   │   ├── check-username/   # Username availability
+│   │   ├── portfolio/        # Portfolio CRUD
+│   │   └── portfolio/publish/ # Publish/unpublish
+│   ├── dashboard/            # Portfolio editor
+│   ├── login/                # Login page
+│   ├── portfolio/[username]/ # Public portfolio
+│   ├── preview/              # Portfolio preview
+│   └── signup/               # Signup page
+├── components/
+│   ├── aceternity/           # Animated components
+│   ├── dashboard/            # Dashboard components
+│   ├── landing/              # Landing page sections
+│   ├── portfolio/            # Portfolio template
+│   └── ui/                   # Base UI components
+├── db/
+│   ├── index.ts              # Database connection
+│   └── schema.ts             # Drizzle schema
+└── lib/
+    ├── auth.ts               # Better Auth config
+    ├── auth-client.ts        # Auth client
+    ├── utils.ts              # Utilities
+    └── validations.ts        # Zod schemas
+```
+
+## License
+
+MIT

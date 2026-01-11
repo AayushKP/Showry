@@ -1,182 +1,89 @@
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-geist-sans: "Geist Sans", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
+  --font-inter: var(--font-inter);
+  --font-playfair: var(--font-playfair);
+  --font-cormorant: var(--font-cormorant);
+  --font-instrument: var(--font-instrument);
+}
+
 :root {
-  --background: #0a0a0a;
-  --foreground: #f5f5f5;
-  --muted: #a3a3a3;
-  --accent: #fbbf24;
-  --accent-dark: #d4af37;
+  --background: #050505;
+  --foreground: #ededed;
+
+  --primary: #d4a373;
+  --primary-foreground: #000000;
+
+  --secondary: #121212;
+  --secondary-foreground: #ffffff;
+
+  --muted: #1a1a1a;
+  --muted-foreground: #a3a3a3;
+
+  --accent: #d4a373;
+  --accent-foreground: #000000;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+
   --border: #262626;
-  --card: rgba(23, 23, 23, 0.5);
-}
+  --input: #262626;
+  --ring: #d4a373;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html {
-  scroll-behavior: smooth;
+  --radius: 0.5rem;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar styling */
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(212, 163, 115, 0.2);
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #050505;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #404040;
+  background: #262626;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #525252;
+  background: #404040;
 }
 
-/* Custom grid background */
-.bg-grid-white\/\[0\.02\] {
-  background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.02) 1px,
-      transparent 1px
-    ),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-.bg-dot-white\/\[0\.2\] {
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.2) 1px,
-    transparent 1px
-  );
-  background-size: 20px 20px;
-}
-
-/* Gradient text */
-.gradient-text {
-  background: linear-gradient(to right, #f5f5f5, #a3a3a3);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-text-gold {
-  background: linear-gradient(to right, #fbbf24, #d4af37);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Animation keyframes */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slideUp 0.6s ease-out forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Glassmorphism */
-.glass {
-  background: rgba(23, 23, 23, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Selection styling */
+/* Text Selection */
 ::selection {
-  background: rgba(251, 191, 36, 0.3);
+  background-color: rgba(212, 163, 115, 0.2);
   color: #fff;
-}
-
-/* Focus visible styling */
-:focus-visible {
-  outline: 2px solid #fbbf24;
-  outline-offset: 2px;
-}
-
-/* Hide scrollbar for timeline */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Smooth transitions */
-.transition-smooth {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Custom underline animation */
-.underline-animation {
-  position: relative;
-}
-
-.underline-animation::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(to right, #fbbf24, #d4af37);
-  transition: width 0.3s ease;
-}
-
-.underline-animation:hover::after {
-  width: 100%;
 }

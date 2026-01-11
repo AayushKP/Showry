@@ -1,0 +1,174 @@
+"use client";
+
+import { useAuth } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
+import { LogOut, Rocket, Check, ExternalLink } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import Link from "next/link";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
+interface DashboardHeaderProps {
+  username?: string;
+  isPublished?: boolean;
+}
+
+export function DashboardHeader({
+  username,
+  isPublished = false,
+}: DashboardHeaderProps) {
+  const { data: session } = useAuth();
+  const router = useRouter();
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const handleLogout = async () => {
+    await authClient.signOut({
+      callbackURL: "/login",
+    });
+  };
+
+  const handlePublish = async () => {
+    try {
+      setIsPublishing(true);
+      const response = await fetch("/api/portfolio/publish", {
+        method: "POST",
+        body: JSON.stringify({ isPublished: !isPublished }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update status");
+
+      const data = await response.json();
+
+      if (data.isPublished) {
+        setShowSuccessModal(true);
+        toast.success("Portfolio published!");
+      } else {
+        toast.info("Portfolio unpublished");
+      }
+
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const domain = process.env.NEXT_PUBLIC_DOMAIN || "showry.com";
+  const portfolioUrl = username ? `http://${username}.${domain}` : "#";
+
+  return (
+    <>
+      <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-white/5 bg-[#050505]/80 px-6 backdrop-blur-md md:px-10">
+        <div>
+          {/* Mobile menu trigger is in sidebar, spacing managed there. 
+               We just need to ensure content doesn't overlap on mobile.
+           */}
+          <div className="flex flex-col md:ml-0 ml-10">
+            <h1 className="font-instrument text-2xl text-white">Dashboard</h1>
+            <p className="hidden font-mono text-xs text-neutral-500 md:block">
+              Manage your portfolio content
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="hidden items-center gap-3 md:flex">
+            {session?.user.image && (
+              <img
+                src={session.user.image}
+                alt={session.user.name || "User"}
+                className="h-8 w-8 rounded-full border border-white/10"
+              />
+            )}
+          </div>
+
+          <div className="h-6 w-px bg-white/10 hidden md:block" />
+
+          <Button
+            onClick={handlePublish}
+            disabled={isPublishing}
+            variant={isPublished ? "outline" : "default"}
+            className={
+              isPublished
+                ? "border-white/10 bg-transparent text-neutral-400 hover:bg-white/5"
+                : "bg-[#d4a373] text-black hover:bg-white"
+            }
+          >
+            {isPublishing ? (
+              <span className="font-mono text-xs uppercase">Processing...</span>
+            ) : isPublished ? (
+              <span className="font-mono text-xs uppercase flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-green-500" />
+                Live
+              </span>
+            ) : (
+              <span className="font-mono text-xs uppercase flex items-center gap-2">
+                <Rocket className="h-3 w-3" />
+                Publish
+              </span>
+            )}
+          </Button>
+        </div>
+      </header>
+
+      {/* Success Modal */}
+      <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+        <DialogContent className="border-white/10 bg-[#111] sm:max-w-md">
+          <DialogHeader>
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#d4a373]/20 text-[#d4a373]">
+              <Check className="h-6 w-6" />
+            </div>
+            <DialogTitle className="font-instrument text-3xl text-white">
+              You are live!
+            </DialogTitle>
+            <DialogDescription className="text-neutral-400">
+              Your portfolio is now accessible to the world.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="my-6 rounded-lg border border-white/10 bg-black/50 p-4">
+            <div className="flex items-center justify-between">
+              <code className="text-sm text-[#d4a373]">{portfolioUrl}</code>
+              <Link href={portfolioUrl} target="_blank">
+                <ExternalLink className="h-4 w-4 text-neutral-500 hover:text-white" />
+              </Link>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <div className="flex w-full gap-2">
+              <Button
+                onClick={() => {
+                  window.open(
+                    `https://twitter.com/intent/tweet?text=Check out my new portfolio! ${portfolioUrl}`,
+                    "_blank"
+                  );
+                }}
+                className="flex-1 bg-white text-black hover:bg-neutral-200"
+              >
+                Share on Twitter
+              </Button>
+              <Button
+                onClick={() => setShowSuccessModal(false)}
+                variant="outline"
+                className="border-white/10 hover:bg-white/5"
+              >
+                Close
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}

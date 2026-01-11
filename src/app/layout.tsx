@@ -1,71 +1,35 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Cormorant_Garamond } from "next/font/google";
+import {
+  Inter,
+  Playfair_Display,
+  Cormorant_Garamond,
+  Instrument_Serif,
+} from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  display: "swap",
   variable: "--font-playfair",
 });
-
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  display: "swap",
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-cormorant",
 });
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-instrument",
+});
 
 export const metadata: Metadata = {
-  title: "Portfolio Builder - Create Your Professional Portfolio in Minutes",
+  title: "Showry | Build Your Professional Portfolio",
   description:
-    "Build a stunning, minimal portfolio that stands out. Create your professional portfolio with a custom subdomain, beautiful design, and easy editing. No coding required.",
-  keywords: [
-    "portfolio",
-    "portfolio builder",
-    "professional portfolio",
-    "developer portfolio",
-    "designer portfolio",
-    "personal website",
-  ],
-  authors: [{ name: "Portfolio Builder" }],
-  creator: "Portfolio Builder",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://portfolio.com",
-    siteName: "Portfolio Builder",
-    title: "Portfolio Builder - Create Your Professional Portfolio in Minutes",
-    description:
-      "Build a stunning, minimal portfolio that stands out. No coding required.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Portfolio Builder",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Portfolio Builder - Create Your Professional Portfolio in Minutes",
-    description:
-      "Build a stunning, minimal portfolio that stands out. No coding required.",
-    images: ["/og-image.png"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+    "Create a stunning, minimal portfolio that stands out. Get your own subdomain, beautiful design, and easy editing.",
 };
 
 export default function RootLayout({
@@ -74,23 +38,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${playfair.variable} ${cormorant.variable} ${GeistSans.variable} ${GeistMono.variable}`}
-      suppressHydrationWarning
-    >
-      <body className="min-h-screen bg-[#0a0a0a] text-gray-100 antialiased">
+    <html lang="en" className="dark">
+      <body
+        className={`${GeistSans.variable} ${GeistMono.variable} ${inter.variable} ${playfair.variable} ${cormorant.variable} ${instrumentSerif.variable} min-h-screen bg-[#050505] font-sans antialiased selection:bg-amber-500/30 selection:text-amber-500`}
+      >
         {children}
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: "#171717",
-              border: "1px solid #262626",
-              color: "#f5f5f5",
-            },
-          }}
-        />
+        <Toaster />
       </body>
     </html>
   );
