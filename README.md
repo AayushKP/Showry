@@ -1,4 +1,4 @@
-# Portfolio Builder
+# Showry : Build your own portfolio
 
 A complete Portfolio Builder SaaS application with custom subdomains featuring a minimal, elegant portfolio template. Built with Next.js 15, Better Auth, PostgreSQL (Neon), and Drizzle ORM.
 
