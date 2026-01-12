@@ -7,13 +7,16 @@ import { AuthModal } from "@/components/auth/auth-modal";
 
 export function Hero() {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 100]);
-  const rotateX = useTransform(scrollY, [0, 500], [0, 15]);
+  const y = useTransform(scrollY, [0, 500], [0, 0]);
+  const rotateX = useTransform(scrollY, [0, 500], [0, 0]);
   const [authOpen, setAuthOpen] = useState(false);
 
   return (
     <>
-      <section className="relative min-h-screen w-full bg-[#050505] pt-10 md:pt-60 lg:pt-64 xl:pt-30 2xl:pt-40 pb-40 md:pb-60 overflow-visible flex flex-col items-center z-0">
+      <section
+        id="home"
+        className="relative min-h-screen w-full bg-[#050505] pt-24 md:pt-32 lg:pt-40 pb-20 md:pb-32 overflow-visible flex flex-col items-center z-0"
+      >
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#d4a373]/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -35,7 +38,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-instrument text-5xl md:text-7xl lg:text-8xl xl:text-9xl leading-[1.1] md:leading-[1.1] text-[#e5e5e5] tracking-tight mb-12 max-w-5xl"
+            className="font-instrument text-4xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.1] md:leading-[1.1] text-[#e5e5e5] tracking-tight mb-8 md:mb-12 max-w-5xl"
           >
             Expert <span className="italic text-[#d4a373]">Portfolios</span>
             <br />
@@ -46,7 +49,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-instrument text-lg md:text-xl text-neutral-400 max-w-2xl leading-relaxed mb-16"
+            className="font-instrument text-base md:text-lg text-neutral-400 max-w-2xl leading-relaxed mb-10 md:mb-16"
           >
             We help you design and build portfolios that drive results and help
             your career grow. No styling headaches. Just results.
@@ -96,7 +99,7 @@ export function Hero() {
         {/* Hero Image (Desktop Component) */}
         <motion.div
           style={{ y, rotateX }}
-          className="relative w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-32 md:mt-40 perspective-1000"
+          className="relative w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 mt-8 perspective-1000"
         >
           <motion.div
             initial={{ opacity: 0, y: 100, rotateX: 20 }}
@@ -116,25 +119,13 @@ export function Hero() {
               </div>
             </div>
 
-            {/* Preview Content (Simulating the Portfolio) */}
-            <div className="relative h-full w-full bg-[#050505] pt-10 flex items-center justify-center">
-              <div className="text-center">
-                <h2 className="font-instrument text-4xl md:text-6xl text-white mb-4">
-                  Alex <span className="italic text-neutral-500">Morgan</span>
-                </h2>
-                <p className="font-mono text-xs text-[#d4a373] uppercase tracking-widest">
-                  Product Designer
-                </p>
-                {/* Abstract visual */}
-                <div className="mt-12 grid grid-cols-3 gap-4 opacity-20 max-w-lg mx-auto px-10">
-                  {[1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="aspect-square rounded bg-white/10"
-                    />
-                  ))}
-                </div>
-              </div>
+            {/* Preview Page Iframe */}
+            <div className="relative h-full w-full bg-[#050505] pt-10">
+              <iframe
+                src="/preview"
+                className="w-full h-full border-none"
+                title="Portfolio Preview"
+              />
             </div>
 
             {/* Shiny Reflection */}

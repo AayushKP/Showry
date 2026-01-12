@@ -9,6 +9,25 @@
   --font-playfair: var(--font-playfair);
   --font-cormorant: var(--font-cormorant);
   --font-instrument: var(--font-instrument);
+
+  --animate-scroll: scroll var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite;
+  --animate-shine: shine 4s linear infinite;
+
+  @keyframes scroll {
+    to {
+      transform: translate(calc(-50% - 0.5rem));
+    }
+  }
+
+  @keyframes shine {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
 }
 
 :root {
@@ -43,6 +62,15 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* Global Cursor Pointer */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+[role="button"] {
+  cursor: pointer;
 }
 
 /* Glassmorphism Utilities */

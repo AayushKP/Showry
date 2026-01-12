@@ -23,7 +23,10 @@ const features = [
 
 export function Features() {
   return (
-    <section className="w-full bg-[#050505] px-6 py-32 md:px-12 lg:px-20 xl:px-32 md:py-40 lg:py-52 flex justify-center relative z-10">
+    <section
+      id="features"
+      className="w-full bg-[#050505] px-6 py-10 md:px-12 lg:px-20 xl:px-32 md:py-20 flex justify-center relative z-10"
+    >
       <div className="w-full max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -32,7 +35,7 @@ export function Features() {
           transition={{ duration: 0.8 }}
           className="mb-16 md:mb-24 text-center max-w-3xl mx-auto"
         >
-          <h2 className="font-instrument text-4xl md:text-5xl lg:text-6xl text-white mb-4">
+          <h2 className="font-instrument text-3xl md:text-4xl lg:text-5xl text-white mb-4">
             Everything you need,
             <br />
             <span className="italic text-neutral-400">nothing you don't.</span>

@@ -10,7 +10,7 @@ export function CTA() {
 
   return (
     <>
-      <section className="w-full bg-[#050505] px-6 py-40 md:px-12 lg:px-20 md:py-60 lg:py-80 overflow-hidden flex justify-center">
+      <section className="w-full bg-[#050505] px-6 py-12 md:px-12 lg:px-20 md:py-24 overflow-hidden flex justify-center">
         <div className="w-full max-w-7xl">
           <div className="border-t border-white/10 pt-24 md:pt-32">
             <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-12 md:gap-16">
@@ -26,7 +26,7 @@ export function CTA() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8 }}
-                  className="font-instrument text-6xl md:text-8xl lg:text-9xl leading-[0.85] text-[#e5e5e5] tracking-tight"
+                  className="font-instrument text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-[#e5e5e5] tracking-tight"
                 >
                   Ready to <span className="italic text-[#d4a373]">show</span>
                   <br />

@@ -10,7 +10,20 @@ export function Navbar() {
   const [authOpen, setAuthOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Home");
 
-  const navItems = ["Home", "Features", "Templates", "Pricing"];
+  const navItems = ["Home", "Features", "How It Works"];
+
+  const scrollToSection = (sectionId: string) => {
+    setActiveTab(sectionId);
+    const element = document.getElementById(
+      sectionId.toLowerCase().replace(/\s+/g, "-")
+    );
+    if (element) {
+      const yOffset = -100; // Offset for fixed navbar
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
 
   return (
     <>
@@ -27,18 +40,29 @@ export function Navbar() {
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-6 rounded-full bg-white/5 px-6 py-2 border border-white/5">
+          <div className="hidden md:flex items-center gap-1.5 rounded-full bg-white/5 px-1.5 py-1.5 border border-white/5">
             {navItems.map((item) => (
               <button
                 key={item}
-                onClick={() => setActiveTab(item)}
+                onClick={() => scrollToSection(item)}
                 className={cn(
-                  "rounded-full px-4 py-2 text-xs font-mono uppercase tracking-wide transition-all duration-300",
+                  "relative rounded-full px-4 py-1.5 text-xs font-mono uppercase tracking-wide transition-colors duration-200 z-10",
                   activeTab === item
-                    ? "bg-[#d4a373] text-black font-bold shadow-lg"
+                    ? "text-black font-bold"
                     : "text-neutral-400 hover:text-white"
                 )}
               >
+                {activeTab === item && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute inset-0 bg-[#d4a373] rounded-full -z-10"
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 30,
+                    }}
+                  />
+                )}
                 {item}
               </button>
             ))}
