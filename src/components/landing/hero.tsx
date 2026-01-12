@@ -13,7 +13,7 @@ export function Hero() {
 
   return (
     <>
-      <section className="relative min-h-screen w-full bg-[#050505] pt-40 md:pt-60 lg:pt-64 xl:pt-72 2xl:pt-96 pb-40 md:pb-60 overflow-visible flex flex-col items-center z-0">
+      <section className="relative min-h-screen w-full bg-[#050505] pt-10 md:pt-60 lg:pt-64 xl:pt-30 2xl:pt-40 pb-40 md:pb-60 overflow-visible flex flex-col items-center z-0">
         {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#d4a373]/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -27,7 +27,7 @@ export function Hero() {
           >
             <span className="flex h-2 w-2 rounded-full bg-[#27c93f] animate-pulse"></span>
             <span className="font-mono text-[10px] uppercase tracking-widest text-neutral-300">
-              v2.0 Now Available
+              v1.0 is Live {"->"}
             </span>
           </motion.div>
 
