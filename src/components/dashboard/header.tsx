@@ -17,17 +17,26 @@ import {
 } from "@/components/ui/dialog";
 
 interface DashboardHeaderProps {
-  username?: string;
-  isPublished?: boolean;
+  user: {
+    name: string;
+    email: string;
+    image?: string;
+  };
+  portfolio: {
+    username: string;
+    isPublished: boolean;
+  };
+  onPublish: () => void;
+  isPublishing: boolean;
 }
 
 export function DashboardHeader({
-  username,
-  isPublished = false,
+  user,
+  portfolio,
+  onPublish,
+  isPublishing,
 }: DashboardHeaderProps) {
-  const { data: session } = useSession();
   const router = useRouter();
-  const [isPublishing, setIsPublishing] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleLogout = async () => {
@@ -40,35 +49,11 @@ export function DashboardHeader({
     });
   };
 
-  const handlePublish = async () => {
-    try {
-      setIsPublishing(true);
-      const response = await fetch("/api/portfolio/publish", {
-        method: "POST",
-        body: JSON.stringify({ isPublished: !isPublished }),
-      });
-
-      if (!response.ok) throw new Error("Failed to update status");
-
-      const data = await response.json();
-
-      if (data.isPublished) {
-        setShowSuccessModal(true);
-        toast.success("Portfolio published!");
-      } else {
-        toast.info("Portfolio unpublished");
-      }
-
-      router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsPublishing(false);
-    }
-  };
-
   const domain = process.env.NEXT_PUBLIC_DOMAIN || "showry.com";
-  const portfolioUrl = username ? `http://${username}.${domain}` : "#";
+  // Use portfolio.username from props
+  const portfolioUrl = portfolio.username
+    ? `http://${portfolio.username}.${domain}`
+    : "#";
 
   return (
     <>
@@ -87,10 +72,10 @@ export function DashboardHeader({
 
         <div className="flex items-center gap-4">
           <div className="hidden items-center gap-3 md:flex">
-            {session?.user.image && (
+            {user.image && (
               <img
-                src={session.user.image}
-                alt={session.user.name || "User"}
+                src={user.image}
+                alt={user.name || "User"}
                 className="h-8 w-8 rounded-full border border-white/10"
               />
             )}
@@ -99,18 +84,18 @@ export function DashboardHeader({
           <div className="h-6 w-px bg-white/10 hidden md:block" />
 
           <Button
-            onClick={handlePublish}
+            onClick={onPublish}
             disabled={isPublishing}
-            variant={isPublished ? "outline" : "default"}
+            variant={portfolio.isPublished ? "outline" : "default"}
             className={
-              isPublished
+              portfolio.isPublished
                 ? "border-white/10 bg-transparent text-neutral-400 hover:bg-white/5"
                 : "bg-[#d4a373] text-black hover:bg-white"
             }
           >
             {isPublishing ? (
               <span className="font-mono text-xs uppercase">Processing...</span>
-            ) : isPublished ? (
+            ) : portfolio.isPublished ? (
               <span className="font-mono text-xs uppercase flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-green-500" />
                 Live

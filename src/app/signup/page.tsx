@@ -7,15 +7,16 @@ import { motion } from "framer-motion";
 
 export default function SignupPage() {
   const handleGoogleSignup = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/dashboard",
-      onError: (ctx) => {
-        toast.error("Failed to sign up", {
-          description: ctx.error.message,
-        });
-      },
-    });
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+      });
+    } catch (ctx: any) {
+      toast.error("Failed to sign up", {
+        description: ctx.error?.message || "Something went wrong",
+      });
+    }
   };
 
   return (

@@ -22,11 +22,16 @@ export function PortfolioTemplate({
     title = "Creative Developer",
     tagline,
     bio,
-    skills = [],
-    projects = [],
-    experience = [],
-    socialLinks = {},
+    skills: rawSkills,
+    projects: rawProjects,
+    experience: rawExperience,
+    socialLinks: rawSocialLinks,
   } = portfolio;
+
+  const skills = rawSkills ?? [];
+  const projects = rawProjects ?? [];
+  const experience = rawExperience ?? [];
+  const socialLinks = rawSocialLinks ?? {};
 
   const steps = [
     { label: "About", href: "#about" },

@@ -21,40 +21,61 @@ import {
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface SidebarProps {
+  activeSection: string;
+  onSectionChange: (section: string) => void;
+}
+
 const navItems = [
-  { name: "Basic Info", href: "/dashboard", icon: User },
-  { name: "About", href: "/dashboard?section=about", icon: FileText },
-  { name: "Skills", href: "/dashboard?section=skills", icon: Sparkles },
+  { id: "basic", name: "Basic Info", href: "/dashboard", icon: User },
   {
+    id: "about",
+    name: "About",
+    href: "/dashboard?section=about",
+    icon: FileText,
+  },
+  {
+    id: "skills",
+    name: "Skills",
+    href: "/dashboard?section=skills",
+    icon: Sparkles,
+  },
+  {
+    id: "projects",
     name: "Projects",
     href: "/dashboard?section=projects",
     icon: LayoutTemplate,
   },
   {
+    id: "experience",
     name: "Experience",
     href: "/dashboard?section=experience",
     icon: Briefcase,
   },
   {
+    id: "education",
     name: "Education",
     href: "/dashboard?section=education",
     icon: GraduationCap,
   },
-  { name: "Socials", href: "/dashboard?section=socials", icon: Share2 },
-  { name: "Settings", href: "/dashboard?section=settings", icon: Settings },
+  {
+    id: "social",
+    name: "Socials",
+    href: "/dashboard?section=social",
+    icon: Share2,
+  },
+  {
+    id: "settings",
+    name: "Settings",
+    href: "/dashboard?section=settings",
+    icon: Settings,
+  },
 ];
 
-export function Sidebar() {
+export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  // Helper to determine active state (simplified for query params)
-  // In a real app with query params, you'd check searchParams, but here we might rely on client state
-  // or just basic pathname matching if we used sub-routes.
-  // Since the user is using ?section=..., we'll visually highlight based on current behavior if possible,
-  // but for now let's just highlight based on simple logic or assume standard navigation.
-  // Actually, the previous implementation used query params.
 
   return (
     <>
@@ -125,17 +146,19 @@ export function Sidebar() {
 
         {/* Navigation */}
         <div className="flex-1 overflow-y-auto px-4 py-6 text-sm">
-          {" "}
-          {/* Added text-sm to enforce consistent font size */}
           <nav className="space-y-1">
             {navItems.map((item) => (
-              <Link
+              <button
                 key={item.name}
-                href={item.href}
+                onClick={() => {
+                  onSectionChange(item.id);
+                  setIsMobileOpen(false);
+                }}
                 className={cn(
-                  "group flex items-center gap-3 rounded-lg px-3 py-2.5 transition-colors font-mono tracking-wide text-xs uppercase",
-                  // Basic active check logic would go here, defaulting to neutral style for now
-                  "text-neutral-400 hover:bg-white/5 hover:text-white"
+                  "group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-colors font-mono tracking-wide text-xs uppercase",
+                  activeSection === item.id
+                    ? "bg-white/10 text-white"
+                    : "text-neutral-400 hover:bg-white/5 hover:text-white"
                 )}
               >
                 <item.icon
@@ -152,7 +175,7 @@ export function Sidebar() {
                     {item.name}
                   </div>
                 )}
-              </Link>
+              </button>
             ))}
           </nav>
         </div>

@@ -81,14 +81,14 @@ export function Hero() {
             {/* Chip 3: Secure */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0, y: [0, -10, 0] }}
+              animate={{ opacity: 1, y: [0, -10, 0] }}
               transition={{
                 duration: 6,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 2,
               }}
-              className="absolute bottom-10 left-[15%] hidden md:block"
+              className="absolute bottom-10 left-[5%] hidden xl:block"
             >
               <button className="flex items-center gap-3 px-5 py-2.5 bg-[#1a1a1a]/80 border border-white/10 rounded-xl shadow-xl backdrop-blur-md transition-transform hover:scale-105 pointer-events-auto">
                 <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center border border-blue-500/30">
