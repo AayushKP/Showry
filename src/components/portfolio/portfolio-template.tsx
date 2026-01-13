@@ -41,7 +41,7 @@ export function PortfolioTemplate({
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="fixed bottom-6 right-6 z-50 md:bottom-auto md:right-6 md:top-6"
+          className="fixed bottom-6 right-6 z-50"
         >
           <Link href={isLoggedIn ? "/dashboard" : "/signup"}>
             <button className="flex items-center gap-2 rounded-full border border-white/20 bg-[#111] px-6 py-3 text-sm font-medium text-white shadow-lg shadow-black/50 transition-all hover:bg-[#d4a373] hover:text-black hover:border-transparent">

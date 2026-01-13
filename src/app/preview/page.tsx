@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import type { Portfolio } from "@/db/schema";
 
 // Dummy data for demo preview
-const dummyPortfolio: Partial<Portfolio> = {
+export const dummyPortfolio: Partial<Portfolio> = {
   fullName: "Alex Johnson",
   title: "Full Stack Developer & Designer",
   tagline:
