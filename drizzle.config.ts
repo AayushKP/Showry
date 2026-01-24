@@ -7,8 +7,6 @@ export default defineConfig({
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
-    url: (process.env.DATABASE_URL || "")
-      .replace(/^['"]|['"]$/g, "")
-      .split("&channel_binding")[0],
+    url: process.env.DATABASE_URL || "",
   },
 });
