@@ -24,6 +24,8 @@ import { motion, AnimatePresence } from "framer-motion";
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
+  isCollapsed: boolean;
+  onCollapseChange: (collapsed: boolean) => void;
 }
 
 const navItems = [
@@ -72,9 +74,13 @@ const navItems = [
   },
 ];
 
-export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
+export function Sidebar({
+  activeSection,
+  onSectionChange,
+  isCollapsed,
+  onCollapseChange,
+}: SidebarProps) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
@@ -106,7 +112,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
           "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-white/5 bg-[#050505] transition-all duration-300",
           isCollapsed ? "w-20" : "w-64",
           "md:translate-x-0",
-          isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
         {/* Header */}
@@ -126,7 +132,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
           )}
 
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => onCollapseChange(!isCollapsed)}
             className="hidden rounded-full p-1 text-neutral-500 hover:bg-white/5 hover:text-white md:block"
           >
             {isCollapsed ? (
@@ -158,13 +164,13 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                   "group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-colors font-mono tracking-wide text-xs uppercase",
                   activeSection === item.id
                     ? "bg-white/10 text-white"
-                    : "text-neutral-400 hover:bg-white/5 hover:text-white"
+                    : "text-neutral-400 hover:bg-white/5 hover:text-white",
                 )}
               >
                 <item.icon
                   className={cn(
                     "h-4 w-4 min-w-[16px]",
-                    isCollapsed ? "mx-auto" : ""
+                    isCollapsed ? "mx-auto" : "",
                   )}
                 />
                 {!isCollapsed && <span>{item.name}</span>}
@@ -186,7 +192,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
             <div
               className={cn(
                 "flex items-center gap-3 rounded-lg bg-[#111] p-3 text-white transition-colors hover:bg-[#1a1a1a]",
-                isCollapsed ? "justify-center" : ""
+                isCollapsed ? "justify-center" : "",
               )}
             >
               <Globe className="h-4 w-4" />

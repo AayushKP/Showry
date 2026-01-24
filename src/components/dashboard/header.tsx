@@ -62,7 +62,7 @@ export function DashboardHeader({
           {/* Mobile menu trigger is in sidebar, spacing managed there. 
                We just need to ensure content doesn't overlap on mobile.
            */}
-          <div className="flex flex-col md:ml-0 ml-10">
+          <div className="flex flex-col md:ml-0 ml-12">
             <h1 className="font-instrument text-2xl text-white">Dashboard</h1>
             <p className="hidden font-mono text-xs text-neutral-500 md:block">
               Manage your portfolio content
@@ -140,7 +140,7 @@ export function DashboardHeader({
                 onClick={() => {
                   window.open(
                     `https://twitter.com/intent/tweet?text=Check out my new portfolio! ${portfolioUrl}`,
-                    "_blank"
+                    "_blank",
                   );
                 }}
                 className="flex-1 bg-white text-black hover:bg-neutral-200"

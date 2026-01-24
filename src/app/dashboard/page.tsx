@@ -16,7 +16,7 @@ import { SocialLinksForm } from "@/components/dashboard/forms/social-links-form"
 import { SettingsForm } from "@/components/dashboard/forms/settings-form";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { debounce } from "@/lib/utils";
+import { cn, debounce } from "@/lib/utils";
 import type { Portfolio } from "@/db/schema";
 
 export default function DashboardPage() {
@@ -27,6 +27,7 @@ export default function DashboardPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [activeSection, setActiveSection] = useState("basic");
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Fetch or create portfolio
   useEffect(() => {
@@ -81,7 +82,7 @@ export default function DashboardPage() {
         setIsSaving(false);
       }
     }, 2000),
-    []
+    [],
   );
 
   const handleUpdate = (data: Partial<Portfolio>) => {
@@ -112,7 +113,7 @@ export default function DashboardPage() {
       }
 
       setPortfolio((prev) =>
-        prev ? { ...prev, isPublished: data.isPublished } : null
+        prev ? { ...prev, isPublished: data.isPublished } : null,
       );
 
       if (data.isPublished) {
@@ -180,8 +181,16 @@ export default function DashboardPage() {
       <Sidebar
         activeSection={activeSection}
         onSectionChange={setActiveSection}
+        isCollapsed={isCollapsed}
+        onCollapseChange={setIsCollapsed}
       />
-      <div className="flex flex-1 flex-col">
+      <div
+        className={cn(
+          "flex flex-1 flex-col transition-all duration-300",
+          isCollapsed ? "md:ml-20" : "md:ml-64",
+          "ml-0", // Reset margin on mobile
+        )}
+      >
         <DashboardHeader
           user={{
             name: session.user.name || "",
@@ -195,7 +204,7 @@ export default function DashboardPage() {
           onPublish={handlePublish}
           isPublishing={isPublishing}
         />
-        <main className="flex-1 overflow-auto p-8">
+        <main className="flex-1 overflow-auto p-4 md:p-8">
           <div className="mx-auto max-w-3xl">
             {/* Saving indicator */}
             {isSaving && (
