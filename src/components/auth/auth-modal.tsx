@@ -48,7 +48,7 @@ export function AuthModal({
           <p className="text-center font-mono text-xs text-neutral-500 uppercase tracking-widest mt-4">
             {activeTab === "login"
               ? "Continue to your dashboard"
-              : "Join Showry today"}
+              : "Join Profiled today"}
           </p>
         </DialogHeader>
 
@@ -84,7 +84,7 @@ export function AuthModal({
         <div className="mt-12 text-center bg-white/5 rounded-2xl p-6">
           <p className="font-mono text-xs text-neutral-400">
             {activeTab === "login"
-              ? "New to Showry? "
+              ? "New to Profiled? "
               : "Already have an account? "}
             <button
               onClick={() =>

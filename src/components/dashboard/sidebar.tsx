@@ -61,6 +61,12 @@ const navItems = [
     icon: GraduationCap,
   },
   {
+    id: "blogs",
+    name: "Blogs",
+    href: "/dashboard?section=blogs",
+    icon: Globe,
+  },
+  {
     id: "social",
     name: "Socials",
     href: "/dashboard?section=social",
@@ -122,12 +128,12 @@ export function Sidebar({
               href="/"
               className="font-instrument text-2xl font-bold text-white hover:opacity-80 transition-opacity"
             >
-              Showry<span className="text-[#d4a373]">.</span>
+              Profiled<span className="text-[#d4a373]">.</span>
             </Link>
           )}
           {isCollapsed && (
             <span className="w-full text-center font-instrument text-2xl font-bold text-[#d4a373]">
-              S.
+              P.
             </span>
           )}
 

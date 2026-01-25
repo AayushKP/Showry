@@ -86,6 +86,15 @@ export interface EducationData {
   description?: string;
 }
 
+export interface BlogData {
+  id: string;
+  title: string;
+  description: string;
+  link: string;
+  image?: string;
+  date: string;
+}
+
 export interface SocialLinksData {
   github?: string;
   linkedin?: string;
@@ -111,6 +120,7 @@ export const portfolio = pgTable("portfolio", {
   projects: json("projects").$type<ProjectData[]>().default([]),
   experience: json("experience").$type<ExperienceData[]>().default([]),
   education: json("education").$type<EducationData[]>().default([]),
+  blogs: json("blogs").$type<BlogData[]>().default([]),
   socialLinks: json("social_links").$type<SocialLinksData>().default({}),
   theme: text("theme").default("minimal"),
   isPublished: boolean("is_published").default(false),

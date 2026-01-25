@@ -15,7 +15,7 @@ export function Navbar() {
   const scrollToSection = (sectionId: string) => {
     setActiveTab(sectionId);
     const element = document.getElementById(
-      sectionId.toLowerCase().replace(/\s+/g, "-")
+      sectionId.toLowerCase().replace(/\s+/g, "-"),
     );
     if (element) {
       const yOffset = -100; // Offset for fixed navbar
@@ -36,7 +36,7 @@ export function Navbar() {
         >
           <div className="flex items-center px-3 md:px-4">
             <span className="font-instrument text-lg font-bold text-white">
-              Showry<span className="text-[#d4a373]">.</span>
+              Profiled<span className="text-[#d4a373]">.</span>
             </span>
           </div>
 
@@ -49,7 +49,7 @@ export function Navbar() {
                   "relative rounded-full px-4 py-1.5 text-xs font-mono uppercase tracking-wide transition-colors duration-200 z-10",
                   activeTab === item
                     ? "text-black font-bold"
-                    : "text-neutral-400 hover:text-white"
+                    : "text-neutral-400 hover:text-white",
                 )}
               >
                 {activeTab === item && (

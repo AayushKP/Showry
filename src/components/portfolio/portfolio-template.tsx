@@ -18,14 +18,25 @@ import {
   Smartphone,
   Cloud,
   Layers,
-  Box,
+  Package,
   ExternalLink,
+  User,
+  FileText,
+  Zap,
+  Wind,
+  Command,
+  Hexagon,
+  Box,
+  FileCode,
+  FileJson,
 } from "lucide-react";
-import type { Portfolio } from "@/db/schema";
+import type { Portfolio, BlogData } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";
-import Marquee from "react-fast-marquee";
-import ActivityCalendar from "react-activity-calendar";
+import dynamic from "next/dynamic";
+import { ActivityCalendar } from "react-activity-calendar";
+
+const Marquee = dynamic(() => import("react-fast-marquee"), { ssr: false });
 
 interface PortfolioTemplateProps {
   portfolio: Partial<Portfolio>;
@@ -36,12 +47,12 @@ interface PortfolioTemplateProps {
 // --- Icon & Color Mapping for Skills ---
 const TechStackMap: Record<string, { icon: any; color: string }> = {
   react: { icon: Code2, color: "#61DAFB" },
-  nextjs: { icon: Layers, color: "#FFFFFF" },
-  typescript: { icon: Code2, color: "#3178C6" },
-  javascript: { icon: Code2, color: "#F7DF1E" },
+  nextjs: { icon: Zap, color: "#FFFFFF" },
+  typescript: { icon: FileCode, color: "#3178C6" },
+  javascript: { icon: FileJson, color: "#F7DF1E" },
   node: { icon: Server, color: "#339933" },
   python: { icon: Terminal, color: "#3776AB" },
-  tailwind: { icon: Layout, color: "#06B6D4" },
+  tailwind: { icon: Wind, color: "#06B6D4" },
   css: { icon: Layout, color: "#1572B6" },
   html: { icon: Layout, color: "#E34F26" },
   git: { icon: Github, color: "#F05032" },
@@ -52,78 +63,78 @@ const TechStackMap: Record<string, { icon: any; color: string }> = {
   postgres: { icon: Database, color: "#4169E1" },
   postgresql: { icon: Database, color: "#4169E1" },
   supabase: { icon: Database, color: "#3ECF8E" },
-  graphql: { icon: Database, color: "#E10098" },
+  graphql: { icon: Hexagon, color: "#E10098" },
   prisma: { icon: Database, color: "#2D3748" },
   flutter: { icon: Smartphone, color: "#02569B" },
   swift: { icon: Smartphone, color: "#F05138" },
   kotlin: { icon: Smartphone, color: "#0095D5" },
-  rust: { icon: Terminal, color: "#000000" }, // usually white on dark
+  rust: { icon: Command, color: "#DEA584" },
   go: { icon: Terminal, color: "#00ADD8" },
   solid: { icon: Code2, color: "#2C4F7C" },
   vue: { icon: Code2, color: "#4FC08D" },
   angular: { icon: Code2, color: "#DD0031" },
 };
 
-const DefaultIcon = Cpu;
-const DefaultColor = "#A3A3A3"; // Neutral 400
-
-const getSkillStyle = (skillName: string) => {
-  const normalize = skillName.toLowerCase().replace(/[^a-z0-9]/g, "");
-  // Try exact match or partial match
-  const match = Object.keys(TechStackMap).find((k) => normalize.includes(k));
+// Updated getSkillStyle to use exact match and specific generic icon/color
+const getSkillStyle = (skill: string) => {
+  const normalizedSkill = skill.toLowerCase().trim();
   return (
-    TechStackMap[match || ""] || { icon: DefaultIcon, color: DefaultColor }
+    TechStackMap[normalizedSkill] || {
+      icon: Code2, // Generic Icon
+      color: "#a3a3a3", // Generic Gray
+    }
   );
 };
 
 // --- Components ---
 
 // Ultra Cool Abstract SVG Placeholder
-const CoolProjectPlaceholder = () => (
-  <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#080808]">
-    <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(-45deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]" />
-    <svg
-      viewBox="0 0 200 200"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-32 w-32 animate-pulse opacity-40"
-    >
-      <circle
-        cx="100"
-        cy="100"
-        r="80"
-        stroke="#d4a373"
-        strokeWidth="1"
-        strokeOpacity="0.5"
-      />
-      <circle
-        cx="100"
-        cy="100"
-        r="60"
-        stroke="#d4a373"
-        strokeWidth="1"
-        strokeOpacity="0.3"
-        run="indefinite"
-      />
-      <path
-        d="M100 20V180M20 100H180"
-        stroke="#d4a373"
-        strokeWidth="1"
-        strokeOpacity="0.2"
-      />
-      <rect
-        x="70"
-        y="70"
-        width="60"
-        height="60"
-        stroke="#d4a373"
-        strokeWidth="2"
-        transform="rotate(45 100 100)"
-      />
-    </svg>
-    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent" />
-  </div>
-);
+// ------------------------------------------------------------------
+// 3D Atom Icon (React-like Structure)
+// ------------------------------------------------------------------
+const AtomIcon = ({ color }: { color: string }) => {
+  return (
+    <div className="relative flex h-40 w-40 items-center justify-center perspective-[1000px]">
+      {/* Nucleus */}
+      <div className="relative z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.8)] animate-pulse">
+        <div className="h-full w-full rounded-full bg-linear-to-tr from-inherit to-transparent opacity-80" />
+      </div>
+
+      {/* Electron 1 (Horizontalish) */}
+      <motion.div
+        className="absolute inset-0 z-10 border border-white/30 rounded-[50%]"
+        style={{ rotateX: 70, rotateY: 10, borderColor: color }}
+        animate={{ rotateZ: 360 }}
+        transition={{ duration: 3, ease: "linear", repeat: Infinity }}
+      >
+        <div className="absolute top-0 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_white]" />
+      </motion.div>
+
+      {/* Electron 2 (Rotated) */}
+      <motion.div
+        className="absolute inset-0 z-10 border border-white/30 rounded-[50%]"
+        style={{ rotateX: 70, rotateY: 70, borderColor: color }}
+        animate={{ rotateZ: 360 }}
+        transition={{ duration: 4, ease: "linear", repeat: Infinity }}
+      >
+        <div className="absolute top-0 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_white]" />
+      </motion.div>
+
+      {/* Electron 3 (Rotated opposite) */}
+      <motion.div
+        className="absolute inset-0 z-10 border border-white/30 rounded-[50%]"
+        style={{ rotateX: 70, rotateY: -50, borderColor: color }}
+        animate={{ rotateZ: 360 }} // Reverse rotation
+        transition={{ duration: 5, ease: "linear", repeat: Infinity }}
+      >
+        <div className="absolute top-0 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-[0_0_10px_white]" />
+      </motion.div>
+
+      {/* Glow */}
+      <div className="absolute inset-0 bg-white/5 blur-3xl rounded-full pointer-events-none" />
+    </div>
+  );
+};
 
 // Interactive Logo Component
 const InteractiveLogo = ({ name }: { name: string }) => {
@@ -154,21 +165,10 @@ const InteractiveLogo = ({ name }: { name: string }) => {
 
   return (
     <div className="flex cursor-pointer select-none">
-      {firstName.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          whileHover={{ scale: 1.2, rotate: Math.random() * 10 - 5 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={() => cycleColor(i)}
-          className={cn(
-            "font-sans text-xl font-bold tracking-tighter md:text-2xl transition-colors duration-300",
-            colors[i] || "text-white",
-          )}
-        >
-          {char}
-        </motion.span>
-      ))}
-      <span className="font-sans text-xl font-bold text-[#d4a373] md:text-2xl">
+      <span className="font-serif italic text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
+        {firstName}
+      </span>
+      <span className="font-serif text-2xl font-bold text-[#d4a373] md:text-3xl lg:text-4xl">
         .
       </span>
     </div>
@@ -185,7 +185,7 @@ const RealHeatmap = ({ username }: { username?: string }) => {
     if (!username) return null;
     if (username.includes("github.com/")) {
       const parts = username.split("github.com/");
-      return parts[1].replace(/\/$/, ""); // remove trailing slash
+      return parts[1].replace(/\/?$/, ""); // remove trailing slash
     }
     return username;
   }, [username]);
@@ -256,11 +256,10 @@ const RealHeatmap = ({ username }: { username?: string }) => {
               light: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
               dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
             }}
-            blockSize={12}
-            blockMargin={3}
-            fontSize={12}
-            hideColorLegend
-            hideTotalCount
+            blockSize={15}
+            blockRadius={3}
+            blockMargin={4}
+            fontSize={14}
             style={{ color: "#fff" }}
           />
         ) : (
@@ -272,6 +271,40 @@ const RealHeatmap = ({ username }: { username?: string }) => {
     </motion.div>
   );
 };
+
+const defaultSkills = [
+  "React",
+  "Next.js",
+  "TypeScript",
+  "JavaScript",
+  "Node.js",
+  "TailwindCSS",
+  "PostgreSQL",
+  "Prisma",
+  "Figma",
+  "Docker",
+];
+
+const CoolProjectPlaceholder = () => (
+  <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#050505]">
+    <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] to-[#111]" />
+    {/* 3D Icon Simulation */}
+    <div className="relative z-10 transform transition-transform duration-700 group-hover:rotate-6 group-hover:scale-110">
+      <div className="relative">
+        <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-3xl" />
+        <Package
+          className="h-24 w-24 text-neutral-800 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
+          strokeWidth={1}
+        />
+        {/* Highlight */}
+        <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-blue-500/20 blur-xl" />
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/5 to-transparent opacity-20" />
+      </div>
+    </div>
+
+    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
+  </div>
+);
 
 export function PortfolioTemplate({
   portfolio,
@@ -288,20 +321,36 @@ export function PortfolioTemplate({
     experience: rawExperience,
     socialLinks: rawSocialLinks,
     profileImage,
+    blogs: rawBlogs, // Destructure blogs
   } = portfolio;
 
-  const skills = rawSkills ?? [];
+  const skills =
+    isPreview && (!rawSkills || rawSkills.length === 0)
+      ? defaultSkills
+      : (rawSkills ?? []);
   const projects = rawProjects ?? [];
   const experience = rawExperience ?? [];
   const socialLinks = rawSocialLinks ?? {};
+  const blogs = rawBlogs ?? []; // Initialize blogs
 
   // Split skills for Marquee (Left/Right)
   const half = Math.ceil(skills.length / 2);
   const skillsRow1 = skills.slice(0, half);
   const skillsRow2 = skills.slice(half);
 
+  // Hero Icon Color State
+  const [heroIconColor, setHeroIconColor] = useState("#3b82f6");
+
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+
+  const navItems = [
+    { name: "Home", color: "#3b82f6" },
+    { name: "About", color: "#3b82f6" },
+    { name: "Contact", color: "#3b82f6" },
+  ];
+
   return (
-    <div className="min-h-screen w-full bg-[#050505] text-neutral-200 selection:bg-[#d4a37333] selection:text-[#d4a373] font-sans">
+    <div className="min-h-screen w-full bg-[#050505] text-neutral-200 selection:bg-[#d4a37333] selection:text-[#d4a373] font-sans flex flex-col">
       {/* Edit Button */}
       {isPreview && (
         <div className="fixed bottom-6 right-6 z-50">
@@ -313,18 +362,41 @@ export function PortfolioTemplate({
         </div>
       )}
 
-      {/* Navbar */}
-      <nav className="fixed left-0 right-0 top-0 z-40 border-b border-white/5 bg-[#050505]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
-          <InteractiveLogo name={fullName} />
-          <div className="flex gap-8">
-            {["About", "Projects", "Experience", "Contact"].map((item) => (
+      {/* Navbar - Absolute & Transparent for seamless Hero integration */}
+      <nav className="absolute top-0 left-0 right-0 z-50 w-full pt-8 pb-4 bg-transparent">
+        <div className="mx-auto flex max-w-[90%] w-full items-center justify-between px-6 md:px-10">
+          <div onClick={() => setHeroIconColor("#3b82f6")}>
+            {/* Logo: Reduced size, Cursive/Serif Italic, Not Bold */}
+            <div className="flex cursor-pointer select-none">
+              <span className="font-serif italic text-xl font-medium tracking-tight md:text-2xl text-white">
+                {fullName?.split(" ")[0]}
+              </span>
+              <span className="font-serif text-xl font-medium text-[#3b82f6] md:text-2xl">
+                .
+              </span>
+            </div>
+          </div>
+          <div className="flex gap-10">
+            {navItems.map((item) => (
               <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="hidden text-sm font-medium text-neutral-400 transition-colors hover:text-white md:block"
+                key={item.name}
+                href={`#${item.name.toLowerCase()}`}
+                onClick={() => setHeroIconColor(item.color)}
+                onMouseEnter={() => setHoveredNav(item.name)}
+                onMouseLeave={() => setHoveredNav(null)}
+                className="hidden text-sm font-light tracking-wide text-neutral-400 transition-all duration-300 hover:text-white md:block relative top-[2px]"
+                style={{
+                  color: hoveredNav === item.name ? item.color : undefined,
+                }}
               >
-                {item}
+                {item.name}
+                {hoveredNav === item.name && (
+                  <motion.div
+                    layoutId="nav-underline"
+                    className="absolute -bottom-2 left-0 right-0 h-px"
+                    style={{ backgroundColor: item.color }}
+                  />
+                )}
               </Link>
             ))}
           </div>
@@ -333,57 +405,68 @@ export function PortfolioTemplate({
 
       {/* Hero Section */}
       <section
-        id="hero"
-        className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-20 text-center overflow-hidden"
+        id="home"
+        className="relative flex flex-1 flex-col items-center justify-center text-center overflow-hidden min-h-screen pt-20"
       >
-        {/* Radial Gradient Lowkey */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-900/50 via-[#050505] to-[#050505] z-0 pointer-events-none" />
+        {/* Radial Gradient & Concentric Circles - Increased Visibility & Range */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* Background Gradient */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06)_0%,rgba(0,0,0,0)_70%)]" />
 
-        <div className="relative z-10 flex flex-col items-center max-w-4xl mx-auto">
-          {profileImage && (
-            <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="mb-8 h-32 w-32 overflow-hidden rounded-full border-2 border-white/10 p-1 md:h-40 md:w-40 ring-4 ring-neutral-900"
-            >
-              <img
-                src={profileImage}
-                alt={fullName}
-                className="h-full w-full rounded-full object-cover"
-              />
-            </motion.div>
-          )}
+          {/* Concentric Circles - More visible (opacity increased) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full border border-white/10 opacity-60" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full border border-white/10 opacity-40" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[900px] w-[900px] rounded-full border border-white/10 opacity-30" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[1200px] w-[1200px] rounded-full border border-white/10 opacity-20" />
+        </div>
 
+        <div className="relative z-10 flex flex-col items-center max-w-5xl w-full mx-auto px-6 md:px-10 pb-10">
+          {/* Centered Atom Icon */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-8"
+          >
+            <AtomIcon color={heroIconColor} />
+          </motion.div>
+
+          {/* Name - Ultra Premium Cormorant Garamond Font, Thin/Light */}
           <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="font-sans text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl"
+            className="font-serif text-7xl md:text-9xl font-light tracking-tight text-white mb-4"
+            style={{ fontFamily: "var(--font-cormorant)" }}
           >
             {fullName}
           </motion.h1>
 
+          {/* Title - Light, spaced */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-6 flex flex-wrap justify-center gap-3 md:gap-4"
+            className="mt-2 flex flex-wrap justify-center gap-3 md:gap-4"
           >
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#d4a373] md:text-sm">
+            <span className="font-sans text-xs md:text-sm font-light uppercase tracking-[0.3em] text-neutral-400">
               {title?.toUpperCase()}
             </span>
           </motion.div>
 
-          {tagline && (
-            <motion.p
+          {/* Bio - Centered & Limited Width */}
+          {(bio || tagline) && (
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-400 font-light md:text-xl"
+              className="mt-8 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed text-neutral-400 font-light text-center"
             >
-              {tagline}
-            </motion.p>
+              <p>
+                {(bio || tagline || "").split(" ").slice(0, 22).join(" ")}
+                {(bio || tagline || "").split(" ").length > 22 && "..."}
+              </p>
+            </motion.div>
           )}
 
           {/* Social Icons Row */}
@@ -391,11 +474,10 @@ export function PortfolioTemplate({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="mt-12 flex items-center justify-center gap-6"
+            className="mt-10 flex items-center justify-center gap-6"
           >
             {Object.entries(socialLinks).map(([key, value]) => {
               if (!value) return null;
-              // Map key to icon
               let Icon = Globe;
               if (key.includes("github")) Icon = Github;
               if (key.includes("linkedin")) Icon = Linkedin;
@@ -411,6 +493,10 @@ export function PortfolioTemplate({
                   className="group relative flex h-10 w-10 items-center justify-center rounded-full bg-white/5 transition-all hover:bg-white/10 hover:-translate-y-1"
                 >
                   <Icon className="h-4 w-4 text-neutral-400 group-hover:text-white" />
+                  {/* Tooltip */}
+                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-xs text-white opacity-0 shadow-xl transition-all duration-300 group-hover:opacity-100">
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </span>
                 </a>
               );
             })}
@@ -418,92 +504,86 @@ export function PortfolioTemplate({
         </div>
       </section>
 
-      {/* Tech Stack Marquee */}
-      <section className="py-20 border-y border-white/5 bg-[#080808]/50 overflow-hidden">
-        <div className="mb-12 text-center">
-          <span className="font-mono text-xs font-medium uppercase tracking-wider text-neutral-500">
+      {/* Tech Stack Marquee - Restored & Styled */}
+      <section className="py-20 bg-[#080808]/50 overflow-hidden">
+        <div className="mx-auto max-w-6xl w-full px-6 md:px-10 mb-12">
+          <h3 className="text-2xl font-sans font-light text-white mb-8 text-center">
             Technologies & Tools
-          </span>
+          </h3>
         </div>
 
-        {/* Row 1 - Left */}
-        <div className="mb-8">
-          <Marquee
-            gradient={true}
-            gradientColor="#050505"
-            speed={40}
-            direction="left"
-          >
-            {skillsRow1.concat(skillsRow1).map((skill, i) => {
-              // Duplicate for smoothness if few
-              const { icon: Icon, color } = getSkillStyle(skill);
-              return (
-                <div
-                  key={`${skill}-${i}-1`}
-                  className="mx-6 flex items-center gap-3 rounded-full border border-white/5 bg-[#111] px-6 py-3"
-                >
-                  <Icon className="h-5 w-5" style={{ color }} />
-                  <span className="font-medium text-neutral-300">{skill}</span>
-                </div>
-              );
-            })}
-          </Marquee>
-        </div>
+        <div className="mx-auto max-w-6xl w-full">
+          {/* Row 1 - Left */}
+          <div className="mb-8">
+            <Marquee
+              autoFill
+              gradient={true}
+              gradientColor="#050505"
+              speed={40}
+              direction="left"
+            >
+              {skillsRow1.map((skill, i) => {
+                const { icon: Icon, color } = getSkillStyle(skill);
+                return (
+                  <div
+                    key={`${skill}-${i}-1`}
+                    className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
+                  >
+                    <Icon className="h-8 w-8" style={{ color }} />
+                    <span className="text-sm font-light text-neutral-400 capitalize">
+                      {skill}
+                    </span>
+                  </div>
+                );
+              })}
+            </Marquee>
+          </div>
 
-        {/* Row 2 - Right */}
-        <div>
-          <Marquee
-            gradient={true}
-            gradientColor="#050505"
-            speed={40}
-            direction="right"
-          >
-            {skillsRow2.concat(skillsRow2).map((skill, i) => {
-              const { icon: Icon, color } = getSkillStyle(skill);
-              return (
-                <div
-                  key={`${skill}-${i}-2`}
-                  className="mx-6 flex items-center gap-3 rounded-full border border-white/5 bg-[#111] px-6 py-3"
-                >
-                  <Icon className="h-5 w-5" style={{ color }} />
-                  <span className="font-medium text-neutral-300">{skill}</span>
-                </div>
-              );
-            })}
-          </Marquee>
+          {/* Row 2 - Right */}
+          <div>
+            <Marquee
+              autoFill
+              gradient={true}
+              gradientColor="#050505"
+              speed={40}
+              direction="right"
+            >
+              {skillsRow2.map((skill, i) => {
+                const { icon: Icon, color } = getSkillStyle(skill);
+                return (
+                  <div
+                    key={`${skill}-${i}-2`}
+                    className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
+                  >
+                    <Icon className="h-8 w-8" style={{ color }} />
+                    <span className="text-sm font-light text-neutral-400 capitalize">
+                      {skill}
+                    </span>
+                  </div>
+                );
+              })}
+            </Marquee>
+          </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="px-6 py-24 md:px-10">
-        <div className="mx-auto max-w-4xl text-center">
-          <span className="mb-6 block font-mono text-xs font-medium uppercase tracking-wider text-[#d4a373]">
-            About Me
-          </span>
-          <div
-            className="prose prose-invert prose-xl bg-transparent font-light leading-relaxed text-neutral-300 mx-auto"
-            dangerouslySetInnerHTML={{
-              __html: (bio || "").replace(/\n/g, "<br />"),
-            }}
-          />
-        </div>
-      </section>
+      {/* About Section Removed - Merged into Hero */}
 
       {/* Heatmap Section */}
-      <section className="px-6 pb-20 md:px-10">
-        <div className="mx-auto max-w-4xl">
+      <section className="pb-20 pt-10">
+        <div className="mx-auto max-w-6xl w-full px-6 md:px-10">
           <RealHeatmap username={socialLinks.github} />
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="px-6 py-24 md:px-10 bg-[#080808]">
-        <div className="mx-auto max-w-7xl">
+      {/* Projects Section - Removed Bold */}
+      <section id="projects" className="py-24 bg-[#080808]">
+        <div className="mx-auto max-w-6xl w-full px-6 md:px-10">
           <div className="mb-16">
             <span className="mb-4 block font-mono text-xs font-medium uppercase tracking-wider text-[#d4a373]">
               Selected Work
             </span>
-            <h2 className="font-sans text-4xl font-bold text-white md:text-5xl">
+            <h2 className="font-sans text-4xl font-light text-white md:text-5xl">
               Featured Projects
             </h2>
           </div>
@@ -531,13 +611,13 @@ export function PortfolioTemplate({
                   )}
 
                   {/* Hover Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
                     <div className="flex gap-4">
                       {project.live && (
                         <a
                           href={project.live}
                           target="_blank"
-                          className="flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-bold text-black hover:bg-neutral-200"
+                          className="flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-medium text-black hover:bg-neutral-200"
                         >
                           Live Demo <ArrowUpRight className="h-4 w-4" />
                         </a>
@@ -546,7 +626,7 @@ export function PortfolioTemplate({
                         <a
                           href={project.github}
                           target="_blank"
-                          className="flex items-center gap-2 rounded-full bg-[#111] border border-white/20 px-5 py-2 text-sm font-bold text-white hover:bg-[#222]"
+                          className="flex items-center gap-2 rounded-full bg-[#111] border border-white/20 px-5 py-2 text-sm font-medium text-white hover:bg-[#222]"
                         >
                           Code <Github className="h-4 w-4" />
                         </a>
@@ -558,11 +638,11 @@ export function PortfolioTemplate({
                 {/* Info */}
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-2xl font-medium text-white">
                       {project.title}
                     </h3>
                   </div>
-                  <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-neutral-400">
+                  <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-neutral-400 font-light">
                     {project.description}
                   </p>
                   <div className="mt-auto flex flex-wrap gap-2">
@@ -582,94 +662,248 @@ export function PortfolioTemplate({
         </div>
       </section>
 
-      {/* Experience Section */}
+      {/* Experience Section - Redesigned Timeline */}
       {experience.length > 0 && (
-        <section id="experience" className="px-6 py-24 md:px-10">
-          <div className="mx-auto max-w-4xl">
-            <span className="mb-10 block text-center font-mono text-xs font-medium uppercase tracking-wider text-[#d4a373]">
+        <section id="experience" className="py-24">
+          <div className="mx-auto max-w-6xl w-full px-6 md:px-10">
+            <span className="mb-16 block text-center font-mono text-3xl font-light uppercase tracking-[0.2em] text-white">
               Experience
             </span>
-            <div className="space-y-12 border-l border-white/10 ml-4 md:ml-0 md:pl-0">
-              {experience.map((exp) => (
-                <div
-                  key={exp.id}
-                  className="relative pl-8 md:pl-0 md:grid md:grid-cols-4 md:gap-8"
+            <div className="space-y-0 relative w-full">
+              {experience.map((exp, i) => {
+                const colors = [
+                  { text: "text-cyan-400", border: "border-cyan-400" },
+                  { text: "text-purple-400", border: "border-purple-400" },
+                  { text: "text-orange-400", border: "border-orange-400" },
+                  { text: "text-green-400", border: "border-green-400" },
+                ];
+                const style = colors[i % colors.length];
+
+                return (
+                  <div
+                    key={exp.id}
+                    className="relative grid grid-cols-[50px_1fr] md:grid-cols-[60px_250px_1fr] md:gap-x-4 pb-12 last:pb-0 group"
+                  >
+                    {/* Timeline Column */}
+                    <div className="flex flex-col items-center relative h-full">
+                      {/* Vertical Line */}
+                      <div className="absolute top-0 bottom-0 w-px bg-white/10 group-last:bottom-auto group-last:h-full" />
+                      {/* Hollow Dot */}
+                      <div
+                        className={`relative z-10 h-4 w-4 rounded-full border-2 bg-[#050505] mt-1.5 transition-all duration-300 group-hover:scale-110 ${style.border}`}
+                      />
+                    </div>
+
+                    {/* Meta Column (Date & Company) */}
+                    <div className="flex flex-col mb-4 md:mb-0">
+                      <span className={`text-sm font-mono mb-2 ${style.text}`}>
+                        {exp.duration}
+                      </span>
+                      <h4 className="text-white text-base font-light font-sans tracking-wide">
+                        {exp.company}
+                      </h4>
+                    </div>
+
+                    {/* Content Column (Role & Description) */}
+                    <div className="col-start-2 col-span-1 md:col-start-auto md:col-span-1 flex flex-col pt-0 md:pt-0">
+                      <h3 className="text-2xl text-white font-medium mb-3">
+                        {exp.position}
+                      </h3>
+                      <p className="text-neutral-400 text-base leading-relaxed max-w-3xl font-light">
+                        {exp.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Blogs Section */}
+      {blogs && blogs.length > 0 && (
+        <section id="blogs" className="py-24 bg-[#0a0a0a]">
+          <div className="mx-auto max-w-5xl w-full px-6 md:px-10">
+            <span className="mb-16 block text-center font-mono text-3xl font-light uppercase tracking-[0.2em] text-white">
+              Writing
+            </span>
+            <div className="grid gap-12">
+              {blogs.map((blog: BlogData) => (
+                <a
+                  key={blog.id}
+                  href={blog.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group grid md:grid-cols-[200px_1fr] gap-6 md:gap-10 items-start p-4 -mx-4 rounded-2xl transition-colors hover:bg-white/5"
                 >
-                  {/* Timeline Dot (Mobile) */}
-                  <span className="md:hidden absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full border border-[#d4a373] bg-[#050505]" />
-
-                  <div className="md:col-span-1 mb-2 md:mb-0 md:text-right">
-                    <span className="text-xs font-mono text-neutral-500 uppercase tracking-wide">
-                      {exp.duration}
-                    </span>
+                  {/* Blog Image */}
+                  <div className="aspect-video w-full md:w-[200px] md:h-[140px] overflow-hidden rounded-xl bg-neutral-900 border border-white/10 relative shrink-0">
+                    {blog.image ? (
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-neutral-700">
+                        <FileText className="h-8 w-8" />
+                      </div>
+                    )}
                   </div>
 
-                  {/* Timeline Dot (Desktop) */}
-                  <div className="hidden md:flex flex-col items-center relative">
-                    <div className="h-3 w-3 rounded-full border border-[#d4a373] bg-[#050505] z-10 my-1" />
-                    <div className="absolute top-4 bottom-[-48px] w-px bg-white/10 last:hidden" />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <h4 className="text-lg font-bold text-white">
-                      {exp.company}
-                    </h4>
-                    <span className="text-sm text-[#d4a373] mb-3 block">
-                      {exp.position}
-                    </span>
-                    <p className="text-sm text-neutral-400 leading-relaxed">
-                      {exp.description}
+                  {/* Blog Content */}
+                  <div className="flex flex-col h-full justify-center">
+                    <h3 className="text-2xl font-light text-white mb-2 group-hover:text-[#d4a373] transition-colors leading-tight">
+                      {blog.title}
+                    </h3>
+                    <div className="flex items-center gap-3 mb-3 text-sm text-neutral-500 font-mono">
+                      {blog.date && (
+                        <div className="flex items-center gap-1.5">
+                          <span>{blog.date}</span>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-neutral-400 font-light leading-relaxed line-clamp-2">
+                      {blog.description}
                     </p>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Contact Section */}
-      <footer
-        id="contact"
-        className="px-6 py-24 md:px-10 relative overflow-hidden"
-      >
-        <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-[#d4a373]/5 to-transparent pointer-events-none" />
-        <div className="mx-auto max-w-4xl text-center relative z-10">
-          <h2 className="mb-6 font-sans text-4xl font-bold text-white md:text-6xl">
-            Let's work together.
-          </h2>
-          <p className="mx-auto mb-10 max-w-xl text-neutral-400">
-            I'm always interested in hearing about new projects and
-            opportunities.
-          </p>
-          <a
-            href={`mailto:${socialLinks.email}`}
-            className="inline-flex h-14 items-center justify-center rounded-full bg-white px-8 text-sm font-bold text-black transition-transform hover:scale-105"
-          >
-            Get in Touch
-          </a>
+      {/* Contact Section - Redesigned Form, Light */}
+      <footer id="contact" className="py-24 bg-[#080808]">
+        <div className="mx-auto max-w-6xl w-full px-6 md:px-10">
+          <div className="flex flex-wrap items-end justify-between gap-8 mb-16">
+            <div>
+              <h2 className="font-sans text-4xl font-light text-white md:text-5xl mb-4">
+                Get in Touch
+              </h2>
+              <p className="max-w-md text-neutral-400 font-light">
+                Have a project in mind or just want to chat? Feel free to reach
+                out directly or book a call.
+              </p>
+            </div>
 
-          <div className="mt-20 flex justify-center gap-8">
-            {Object.entries(socialLinks).map(([key, value]) => {
-              if (!value || key === "email") return null;
-              let Icon = Globe;
-              if (key.includes("github")) Icon = Github;
-              if (key.includes("linkedin")) Icon = Linkedin;
-              if (key.includes("twitter")) Icon = Twitter;
-              return (
-                <a
-                  key={key}
-                  href={value}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-neutral-500 hover:text-white transition-colors"
-                >
-                  <Icon className="h-5 w-5" />
-                </a>
-              );
-            })}
+            <a
+              href={`mailto:${socialLinks.email || "hello@example.com"}`}
+              className="group flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-medium text-black transition-all hover:bg-neutral-200"
+            >
+              <span>Book a call</span>
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+            </a>
           </div>
-          <div className="mt-12 text-xs text-neutral-600">
+
+          <div className="grid gap-16 lg:grid-cols-2">
+            {/* Left: Info */}
+            <div className="flex flex-col justify-between">
+              <div className="space-y-8">
+                <p className="text-neutral-400 font-light leading-relaxed text-lg pb-8 border-b border-white/5">
+                  If you have any inquiries, please feel free to reach out. You
+                  can contact me via email at <br />
+                  <a
+                    href={`mailto:${socialLinks.email}`}
+                    className="text-[#d4a373] hover:underline font-medium mt-2 block"
+                  >
+                    {socialLinks.email || "hello@example.com"}
+                  </a>
+                </p>
+
+                <div>
+                  <span className="block text-white font-medium mb-4">
+                    Follow me
+                  </span>
+                  <div className="flex gap-4">
+                    {Object.entries(socialLinks).map(([key, value]) => {
+                      if (!value || key === "email") return null;
+                      let Icon = Globe;
+                      if (key.includes("github")) Icon = Github;
+                      if (key.includes("linkedin")) Icon = Linkedin;
+                      if (key.includes("twitter")) Icon = Twitter;
+                      return (
+                        <a
+                          key={key}
+                          href={value}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-[#111] text-neutral-400 hover:text-white hover:border-white/20 transition-all"
+                        >
+                          <Icon className="h-4 w-4" />
+                        </a>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="block text-white font-medium mb-4">
+                    Let's Connect
+                  </span>
+                  <a
+                    href={`mailto:${socialLinks.email}`}
+                    className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-black hover:bg-neutral-200 transition-colors"
+                  >
+                    <Mail className="h-4 w-4" /> Book a call
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Form */}
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="John Doe"
+                    className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Phone No
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+1 234 567 890"
+                    className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="john@example.com"
+                  className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Message
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Tell me about your project..."
+                  className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
+                />
+              </div>
+              <button className="w-full rounded-lg bg-white py-4 text-sm font-bold text-black transition-transform hover:scale-[1.02] hover:bg-neutral-200">
+                Submit
+              </button>
+            </form>
+          </div>
+
+          <div className="mt-20 pt-8 border-t border-white/5 text-center text-xs text-neutral-600">
             © {new Date().getFullYear()} {fullName}. All rights reserved.
           </div>
         </div>

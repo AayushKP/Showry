@@ -13,7 +13,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div className="flex flex-col items-center md:items-start">
             <div className="h-80 flex items-center justify-center w-full">
-              <TextHoverEffect text="Showry" />
+              <TextHoverEffect text="Profiled" />
             </div>
             <p className="mt-2 font-mono text-xs text-neutral-600">
               Build your professional portfolio in minutes.
@@ -44,7 +44,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-white/5">
           <p className="font-mono text-[10px] text-neutral-700 text-center md:text-left">
-            © {new Date().getFullYear()} Showry Inc. All rights reserved.
+            © {new Date().getFullYear()} Profiled Inc. All rights reserved.
           </p>
         </div>
       </div>

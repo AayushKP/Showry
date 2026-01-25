@@ -13,6 +13,7 @@ import { ProjectsForm } from "@/components/dashboard/forms/projects-form";
 import { ExperienceForm } from "@/components/dashboard/forms/experience-form";
 import { EducationForm } from "@/components/dashboard/forms/education-form";
 import { SocialLinksForm } from "@/components/dashboard/forms/social-links-form";
+import BlogsForm from "@/components/dashboard/forms/blogs-form";
 import { SettingsForm } from "@/components/dashboard/forms/settings-form";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
@@ -169,6 +170,8 @@ export default function DashboardPage() {
         return (
           <SocialLinksForm portfolio={portfolio} onUpdate={handleUpdate} />
         );
+      case "blogs":
+        return <BlogsForm initialData={portfolio} onUpdate={handleUpdate} />;
       case "settings":
         return <SettingsForm portfolio={portfolio} onUpdate={handleUpdate} />;
       default:

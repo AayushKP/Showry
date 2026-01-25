@@ -48,10 +48,7 @@ export const TextHoverEffect = ({
         >
           {hovered && (
             <>
-              <stop offset="0%" stopColor="#d4a373" />
-              <stop offset="25%" stopColor="#f59e0b" />
-              <stop offset="50%" stopColor="#ea580c" />
-              <stop offset="75%" stopColor="#fbbf24" />
+              <stop offset="0%" stopColor="#ffffff" />
               <stop offset="100%" stopColor="#ffffff" />
             </>
           )}
@@ -78,9 +75,9 @@ export const TextHoverEffect = ({
         </mask>
       </defs>
       <motion.text
-        x="50%"
+        x="0"
         y="50%"
-        textAnchor="middle"
+        textAnchor="start"
         dominantBaseline="central"
         strokeWidth="0.4"
         className="font-[helvetica] font-bold stroke-neutral-800 fill-transparent text-7xl"
@@ -91,9 +88,9 @@ export const TextHoverEffect = ({
         {text}
       </motion.text>
       <motion.text
-        x="50%"
+        x="0"
         y="50%"
-        textAnchor="middle"
+        textAnchor="start"
         dominantBaseline="central"
         strokeWidth="0.4"
         className="font-[helvetica] font-bold fill-transparent text-7xl stroke-neutral-700"
@@ -110,9 +107,9 @@ export const TextHoverEffect = ({
         {text}
       </motion.text>
       <text
-        x="50%"
+        x="0"
         y="50%"
-        textAnchor="middle"
+        textAnchor="start"
         dominantBaseline="central"
         fill="url(#textGradient)"
         mask="url(#textMask)"

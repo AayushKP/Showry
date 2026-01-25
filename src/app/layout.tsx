@@ -27,7 +27,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Showry | Build Your Professional Portfolio",
+  title: "Profiled | Build Your Professional Portfolio",
   description:
     "Create a stunning, minimal portfolio that stands out. Get your own subdomain, beautiful design, and easy editing.",
 };
