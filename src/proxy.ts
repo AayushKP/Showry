@@ -13,10 +13,10 @@ export async function proxy(request: NextRequest) {
   const isSubdomain =
     hostname !== rootDomain &&
     hostname !== `www.${rootDomain}` &&
+    hostname.endsWith(rootDomain) &&
     !hostname.startsWith("localhost") &&
     !hostname.startsWith("127.0.0.1") &&
-    !hostname.startsWith("profiled") && // Safety check for root domain
-    hostname.split(".").length > 2; // Basic check: subdomain.domain.com > 2 parts
+    hostname.split(".").length > 2;
 
   // Handle subdomain routing (Public Portfolios)
   if (isSubdomain) {
