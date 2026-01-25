@@ -68,8 +68,42 @@ export async function POST(request: NextRequest) {
     let username = baseUsername;
     let counter = 1;
 
+    // Reserved usernames list
+    const reservedUsernames = [
+      "admin",
+      "api",
+      "www",
+      "app",
+      "dashboard",
+      "login",
+      "signup",
+      "auth",
+      "preview",
+      "settings",
+      "support",
+      "help",
+      "blog",
+      "about",
+      "contact",
+      "terms",
+      "privacy",
+      "portfolio",
+      "user",
+      "users",
+      "profile",
+      "profiles",
+      "account",
+      "accounts",
+    ];
+
     // Check for uniqueness and append number if needed
     while (true) {
+      if (reservedUsernames.includes(username)) {
+        username = `${baseUsername}${counter}`;
+        counter++;
+        continue;
+      }
+
       const existingUsername = await db
         .select({ id: portfolio.id })
         .from(portfolio)
@@ -136,6 +170,33 @@ export async function PATCH(request: NextRequest) {
         { error: "Validation failed", errors: validation.errors },
         { status: 400 },
       );
+    }
+
+    // Server-side uniqueness check if username is being changed
+    if (validation.data.username) {
+      const normalizedUsername = validation.data.username.toLowerCase().trim();
+
+      const { and, eq, ne } = await import("drizzle-orm");
+      const existing = await db
+        .select({ id: portfolio.id })
+        .from(portfolio)
+        .where(
+          and(
+            eq(portfolio.username, normalizedUsername),
+            ne(portfolio.userId, session.user.id),
+          ),
+        )
+        .limit(1);
+
+      if (existing.length > 0) {
+        return NextResponse.json(
+          { error: "Username is already taken" },
+          { status: 400 },
+        );
+      }
+
+      // Update the data with normalized username
+      validation.data.username = normalizedUsername;
     }
 
     // Update the portfolio with validated data

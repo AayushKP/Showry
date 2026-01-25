@@ -41,13 +41,18 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
         const res = await fetch("/api/check-username", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: value }),
+          body: JSON.stringify({
+            username: value,
+            currentUserId: portfolio.userId,
+          }),
         });
         const data = await res.json();
 
         if (data.available) {
           setUsernameStatus("available");
           setUsernameError("");
+          // Only update the actual portfolio when username is available
+          onUpdate({ username: value.toLowerCase().trim() });
         } else {
           setUsernameStatus(
             data.error?.includes("taken") ? "taken" : "invalid",
@@ -58,7 +63,7 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
         setUsernameStatus("idle");
       }
     }, 500),
-    [portfolio.username],
+    [portfolio.username, portfolio.userId, onUpdate],
   );
 
   useEffect(() => {
@@ -70,9 +75,7 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
   const handleUsernameChange = (value: string) => {
     const formatted = value.toLowerCase().replace(/[^a-z0-9-]/g, "");
     setUsername(formatted);
-    if (formatted && formatted !== portfolio.username) {
-      onUpdate({ username: formatted });
-    }
+    // Don't call onUpdate immediately for username, let checkUsername handle it
   };
 
   const handleResumeChange = (value: string) => {

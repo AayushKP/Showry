@@ -138,16 +138,16 @@ export function DashboardHeader({
 
           <div className="h-6 w-px bg-white/10 hidden md:block" />
 
-          {/* Publish button - hidden on mobile */}
+          {/* Publish button */}
           <Button
             onClick={onPublish}
             disabled={isPublishing}
             variant={portfolio.isPublished ? "outline" : "default"}
-            className={`hidden md:flex ${
+            className={
               portfolio.isPublished
                 ? "border-white/10 bg-transparent text-neutral-400 hover:bg-white/5"
                 : "bg-[#d4a373] text-black hover:bg-white"
-            }`}
+            }
           >
             {isPublishing ? (
               <span className="font-mono text-xs uppercase">Processing...</span>
