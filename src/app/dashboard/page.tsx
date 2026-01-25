@@ -36,14 +36,20 @@ export default function DashboardPage() {
   const [hasShownPopup, setHasShownPopup] = useState(false);
 
   // Handle section change with preview popup
-  // Only show popup on first switch if user has actually edited something
+  // First popup: only if user has interacted with forms
+  // After first popup: 25% chance on subsequent switches
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
 
-    // Show popup only if: user has interacted with forms AND popup hasn't been shown yet
-    if (hasInteracted && !hasShownPopup) {
-      setShowPreviewPopup(true);
-      setHasShownPopup(true);
+    if (hasInteracted) {
+      if (!hasShownPopup) {
+        // First time: always show if they've interacted
+        setShowPreviewPopup(true);
+        setHasShownPopup(true);
+      } else if (Math.random() < 0.25) {
+        // After first: 25% chance
+        setShowPreviewPopup(true);
+      }
     }
   };
 
