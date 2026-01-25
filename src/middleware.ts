@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   const hostname = request.headers.get("host") || "";
+  const path = url.pathname;
 
   // Get the domain from environment or default
   const rootDomain = process.env.NEXT_PUBLIC_DOMAIN || "localhost:3000";
@@ -15,35 +16,72 @@ export function middleware(request: NextRequest) {
     !hostname.startsWith("localhost") &&
     !hostname.startsWith("127.0.0.1");
 
-  // Handle subdomain routing
+  // Handle subdomain routing (Public Portfolios)
   if (isSubdomain) {
-    // Extract username from subdomain
     const subdomain = hostname.split(".")[0];
-
-    // Skip if it's www or the root domain
     if (subdomain === "www" || !subdomain) {
       return NextResponse.next();
     }
-
-    // Rewrite to the portfolio page
-    url.pathname = `/portfolio/${subdomain}${
-      url.pathname === "/" ? "" : url.pathname
-    }`;
+    url.pathname = `/portfolio/${subdomain}${path === "/" ? "" : path}`;
     return NextResponse.rewrite(url);
   }
 
-  // For local development subdomain testing
+  // Handle Localhost Subdomain Testing
   if (hostname.includes(".localhost") || hostname.includes(".127.0.0.1")) {
     const subdomain = hostname.split(".")[0];
     if (subdomain && subdomain !== "www") {
-      url.pathname = `/portfolio/${subdomain}${
-        url.pathname === "/" ? "" : url.pathname
-      }`;
+      url.pathname = `/portfolio/${subdomain}${path === "/" ? "" : path}`;
       return NextResponse.rewrite(url);
     }
   }
 
-  return NextResponse.next();
+  // --- Auth & Routing Logic for Root Domain ---
+
+  // Check for session cookie (better-auth default)
+  // Note: For robust verification we might need an API call, but cookie presence is standard for fast middleware.
+  const sessionToken = request.cookies.get("better-auth.session_token");
+  const isLoggedIn = !!sessionToken;
+
+  // Define allowed paths
+  const isDashboard = path.startsWith("/dashboard");
+  const isPreview = path.startsWith("/preview");
+  const isRoot = path === "/";
+  // const isAuthPage = path === "/login" || path === "/signup"; // If you had dedicated pages
+
+  // Allow API routes/static assets handled by matcher, but explicit check if needed:
+  // (Matcher already handles exclusion of api/static)
+
+  if (isLoggedIn) {
+    // User is logged in
+
+    // 1. If accessing Root -> Redirect to Dashboard
+    if (isRoot) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    // 2. If accessing Dashboard or Preview -> Allow
+    if (isDashboard || isPreview) {
+      return NextResponse.next();
+    }
+
+    // 3. Any other route (unknown) -> Redirect to Dashboard
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  } else {
+    // User is NOT logged in
+
+    // 1. If accessing Dashboard -> Redirect to Root
+    if (isDashboard) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    // 2. If accessing Root or Preview -> Allow
+    if (isRoot || isPreview) {
+      return NextResponse.next();
+    }
+
+    // 3. Any other route (unknown) -> Redirect to Root
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 }
 
 export const config = {
