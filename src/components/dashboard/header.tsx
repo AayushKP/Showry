@@ -138,31 +138,46 @@ export function DashboardHeader({
 
           <div className="h-6 w-px bg-white/10 hidden md:block" />
 
-          {/* Publish button */}
-          <Button
-            onClick={onPublish}
-            disabled={isPublishing}
-            variant={portfolio.isPublished ? "outline" : "default"}
-            className={
-              portfolio.isPublished
-                ? "border-white/10 bg-transparent text-neutral-400 hover:bg-white/5"
-                : "bg-[#d4a373] text-black hover:bg-white"
-            }
-          >
-            {isPublishing ? (
-              <span className="font-mono text-xs uppercase">Processing...</span>
-            ) : portfolio.isPublished ? (
-              <span className="font-mono text-xs uppercase flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-                Live
-              </span>
-            ) : (
-              <span className="font-mono text-xs uppercase flex items-center gap-2">
-                <Rocket className="h-3 w-3" />
-                Publish
-              </span>
+          <div className="flex items-center gap-2">
+            {portfolio.isPublished && (
+              <a
+                href={portfolioUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden md:flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 font-mono text-xs uppercase text-white hover:bg-white/10 transition-colors"
+              >
+                <ExternalLink className="h-3 w-3" />
+                Visit Site
+              </a>
             )}
-          </Button>
+
+            <Button
+              onClick={onPublish}
+              disabled={isPublishing}
+              variant={portfolio.isPublished ? "outline" : "default"}
+              className={
+                portfolio.isPublished
+                  ? "border-red-500/50 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                  : "bg-[#d4a373] text-black hover:bg-white"
+              }
+            >
+              {isPublishing ? (
+                <span className="font-mono text-xs uppercase">
+                  Processing...
+                </span>
+              ) : portfolio.isPublished ? (
+                <span className="font-mono text-xs uppercase flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  Live
+                </span>
+              ) : (
+                <span className="font-mono text-xs uppercase flex items-center gap-2">
+                  <Rocket className="h-3 w-3" />
+                  Publish
+                </span>
+              )}
+            </Button>
+          </div>
         </div>
       </header>
 
