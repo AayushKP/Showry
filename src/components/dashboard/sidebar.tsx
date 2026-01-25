@@ -255,7 +255,7 @@ export function Sidebar({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-white/5 p-4 space-y-4">
+        <div className="border-t border-white/5 p-4 flex flex-col gap-3">
           <Link href="/dashboard/preview" target="_blank">
             <div
               className={cn(
@@ -265,9 +265,7 @@ export function Sidebar({
             >
               <Globe className="h-4 w-4" />
               {!isCollapsed && (
-                <span className="font-mono text-xs uppercase">
-                  View Portfolio
-                </span>
+                <span className="font-mono text-xs uppercase">Preview</span>
               )}
             </div>
           </Link>
