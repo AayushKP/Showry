@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
-import { LogOut, Rocket, Check, ExternalLink } from "lucide-react";
+import { LogOut, Rocket, Check, ExternalLink, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -36,6 +36,7 @@ interface DashboardHeaderProps {
   };
   onPublish: () => void;
   isPublishing: boolean;
+  onMenuClick?: () => void;
 }
 
 export function DashboardHeader({
@@ -43,6 +44,7 @@ export function DashboardHeader({
   portfolio,
   onPublish,
   isPublishing,
+  onMenuClick,
 }: DashboardHeaderProps) {
   const router = useRouter();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -65,14 +67,26 @@ export function DashboardHeader({
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-white/5 bg-[#050505]/80 px-6 backdrop-blur-md md:px-10">
-        <div>
-          {/* Mobile menu trigger is in sidebar, spacing managed there. 
-               We just need to ensure content doesn't overlap on mobile.
-           */}
-          <div className="flex flex-col md:ml-0 ml-12">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/5 bg-[#050505]/80 px-4 backdrop-blur-md md:h-20 md:px-10">
+        {/* Left side - Menu + Logo on mobile, Dashboard on desktop */}
+        <div className="flex items-center gap-3">
+          {/* Mobile: Menu button + brand name */}
+          <div className="flex items-center gap-3 md:hidden">
+            <button
+              onClick={onMenuClick}
+              className="rounded-lg border border-white/10 bg-[#111] p-2 text-white hover:bg-white/5"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+            <span className="font-instrument text-lg text-[#d4a373]">
+              Profiled
+            </span>
+          </div>
+
+          {/* Desktop: Show Dashboard title */}
+          <div className="hidden md:flex md:flex-col">
             <h1 className="font-instrument text-2xl text-white">Dashboard</h1>
-            <p className="hidden font-mono text-xs text-neutral-500 md:block">
+            <p className="font-mono text-xs text-neutral-500">
               Manage your portfolio content
             </p>
           </div>
@@ -124,15 +138,16 @@ export function DashboardHeader({
 
           <div className="h-6 w-px bg-white/10 hidden md:block" />
 
+          {/* Publish button - hidden on mobile */}
           <Button
             onClick={onPublish}
             disabled={isPublishing}
             variant={portfolio.isPublished ? "outline" : "default"}
-            className={
+            className={`hidden md:flex ${
               portfolio.isPublished
                 ? "border-white/10 bg-transparent text-neutral-400 hover:bg-white/5"
                 : "bg-[#d4a373] text-black hover:bg-white"
-            }
+            }`}
           >
             {isPublishing ? (
               <span className="font-mono text-xs uppercase">Processing...</span>

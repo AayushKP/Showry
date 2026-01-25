@@ -31,6 +31,7 @@ export default function DashboardPage() {
   const [isPublishing, setIsPublishing] = useState(false);
   const [activeSection, setActiveSection] = useState("basic");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showPreviewPopup, setShowPreviewPopup] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [hasShownPopup, setHasShownPopup] = useState(false);
@@ -206,6 +207,8 @@ export default function DashboardPage() {
         isCollapsed={isCollapsed}
         onCollapseChange={setIsCollapsed}
         portfolio={portfolio}
+        isMobileOpen={isMobileMenuOpen}
+        onMobileOpenChange={setIsMobileMenuOpen}
       />
       <div
         className={cn(
@@ -226,6 +229,7 @@ export default function DashboardPage() {
           }}
           onPublish={handlePublish}
           isPublishing={isPublishing}
+          onMenuClick={() => setIsMobileMenuOpen(true)}
         />
         <main className="flex-1 overflow-auto p-4 md:p-8">
           <div className="mx-auto max-w-3xl">

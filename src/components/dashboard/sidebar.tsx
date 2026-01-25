@@ -35,6 +35,8 @@ interface SidebarProps {
   isCollapsed: boolean;
   onCollapseChange: (collapsed: boolean) => void;
   portfolio: Partial<Portfolio> | null;
+  isMobileOpen?: boolean;
+  onMobileOpenChange?: (open: boolean) => void;
 }
 
 const navItems = [
@@ -95,9 +97,14 @@ export function Sidebar({
   isCollapsed,
   onCollapseChange,
   portfolio,
+  isMobileOpen: externalMobileOpen,
+  onMobileOpenChange,
 }: SidebarProps) {
   const pathname = usePathname();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  // Use external state if provided, otherwise internal state
+  const [internalMobileOpen, setInternalMobileOpen] = useState(false);
+  const isMobileOpen = externalMobileOpen ?? internalMobileOpen;
+  const setIsMobileOpen = onMobileOpenChange ?? setInternalMobileOpen;
 
   // Gamification Logic
   const { score, completedSections } = calculatePortfolioCompletion(portfolio);
@@ -107,19 +114,6 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile Top Navbar */}
-      <div className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center justify-between border-b border-white/5 bg-[#050505]/80 px-4 backdrop-blur-md md:hidden">
-        <Link href="/" className="font-instrument text-xl font-bold text-white">
-          Profiled<span className="text-[#d4a373]">.</span>
-        </Link>
-        <button
-          onClick={() => setIsMobileOpen(true)}
-          className="rounded-full border border-white/10 bg-[#111] p-2 text-white"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-      </div>
-
       {/* Mobile Overlay */}
       <AnimatePresence>
         {isMobileOpen && (

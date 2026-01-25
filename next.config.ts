@@ -21,7 +21,6 @@ const nextConfig: NextConfig = {
     },
   },
 
-  // Security headers - zero latency impact (just HTTP response headers)
   async headers() {
     const securityHeaders = [
       {

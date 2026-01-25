@@ -9,6 +9,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -42,7 +43,7 @@ export default function RootLayout({
       <body
         className={`${GeistSans.variable} ${GeistMono.variable} ${inter.variable} ${playfair.variable} ${cormorant.variable} ${instrumentSerif.variable} min-h-screen bg-[#050505] font-sans antialiased selection:bg-amber-500/30 selection:text-amber-500`}
       >
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <Toaster />
       </body>
     </html>

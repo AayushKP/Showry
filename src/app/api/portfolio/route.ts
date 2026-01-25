@@ -29,7 +29,7 @@ export async function GET() {
     console.error("Error fetching portfolio:", error);
     return NextResponse.json(
       { error: "Failed to fetch portfolio" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     if (existing.length > 0) {
       return NextResponse.json(
         { error: "Portfolio already exists" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating portfolio:", error);
     return NextResponse.json(
       { error: "Failed to create portfolio" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -119,18 +119,30 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const data = await request.json();
+    const rawData = await request.json();
 
     // Remove fields that shouldn't be updated directly
-    delete data.id;
-    delete data.userId;
-    delete data.createdAt;
+    delete rawData.id;
+    delete rawData.userId;
+    delete rawData.createdAt;
+    delete rawData.email; // Email should not be changed
 
-    // Update the portfolio
+    // Validate and sanitize input
+    const { validatePortfolioUpdate } = await import("@/lib/validations");
+    const validation = validatePortfolioUpdate(rawData);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: "Validation failed", errors: validation.errors },
+        { status: 400 },
+      );
+    }
+
+    // Update the portfolio with validated data
     const updatedPortfolio = await db
       .update(portfolio)
       .set({
-        ...data,
+        ...validation.data,
         updatedAt: new Date(),
       })
       .where(eq(portfolio.userId, session.user.id))
@@ -139,19 +151,19 @@ export async function PATCH(request: NextRequest) {
     if (updatedPortfolio.length === 0) {
       return NextResponse.json(
         { error: "Portfolio not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       { portfolio: updatedPortfolio[0] },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("Error updating portfolio:", error);
     return NextResponse.json(
       { error: "Failed to update portfolio" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -173,7 +185,7 @@ export async function DELETE() {
     console.error("Error deleting portfolio:", error);
     return NextResponse.json(
       { error: "Failed to delete portfolio" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
