@@ -255,7 +255,7 @@ export function Sidebar({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-white/5 p-4 space-y-2">
+        <div className="border-t border-white/5 p-4 space-y-4">
           <Link href="/dashboard/preview" target="_blank">
             <div
               className={cn(
@@ -280,7 +280,7 @@ export function Sidebar({
               window.location.href = "/login";
             }}
             className={cn(
-              "flex w-full items-center gap-3 rounded-lg bg-red-500/10 p-3 text-red-500 transition-colors hover:bg-red-500/20",
+              "flex w-full items-center gap-3 rounded-lg bg-red-500/10 p-3 text-red-500 transition-colors hover:bg-red-500/20 lg:hidden",
               isCollapsed ? "justify-center" : "",
             )}
           >
