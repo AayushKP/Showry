@@ -83,6 +83,7 @@ export async function proxy(request: NextRequest) {
   }
 }
 
+// Note: We've optimized the matcher to skip static files more aggressively
 export const config = {
   matcher: [
     /*
@@ -91,8 +92,8 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public files
+     * - public files with extensions
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*|images).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js|woff|woff2|ttf|eot|ico)$).*)",
   ],
 };

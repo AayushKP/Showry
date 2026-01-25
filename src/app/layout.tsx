@@ -10,6 +10,7 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -45,6 +46,7 @@ export default function RootLayout({
       >
         <QueryProvider>{children}</QueryProvider>
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
