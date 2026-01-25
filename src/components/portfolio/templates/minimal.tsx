@@ -740,6 +740,7 @@ export function PortfolioTemplate({
                         <a
                           href={project.live}
                           target="_blank"
+                          rel="noopener noreferrer"
                           className="flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-medium text-black hover:bg-neutral-200"
                         >
                           Live Demo <ArrowUpRight className="h-4 w-4" />
@@ -749,6 +750,7 @@ export function PortfolioTemplate({
                         <a
                           href={project.github}
                           target="_blank"
+                          rel="noopener noreferrer"
                           className="flex items-center gap-2 rounded-full bg-[#111] border border-white/20 px-5 py-2 text-sm font-medium text-white hover:bg-[#222]"
                         >
                           Code <Github className="h-4 w-4" />
@@ -768,6 +770,7 @@ export function PortfolioTemplate({
                   <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-neutral-400 font-light">
                     {project.description}
                   </p>
+
                   <div className="mt-auto flex flex-wrap gap-2">
                     {project.tags.map((tag) => (
                       <span
