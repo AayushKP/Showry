@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { getTemplate } from "@/components/portfolio/templates";
 import { useSession } from "@/lib/auth-client";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Monitor, Smartphone, Tablet } from "lucide-react";
+import { AppLoader } from "@/components/ui/app-loader";
 import type { Portfolio } from "@/db/schema";
 import { useRouter } from "next/navigation";
 import { dummyPortfolio } from "@/lib/dummy-data";
@@ -17,7 +18,7 @@ export default function UserPreviewPage() {
   useEffect(() => {
     // Auth Check
     if (!isPending && !session?.user) {
-      router.push("/login?redirect=/user/preview");
+      router.push("/login?redirect=/dashboard/preview");
       return;
     }
 
@@ -51,12 +52,14 @@ export default function UserPreviewPage() {
 
   if (isPending || isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
-      </div>
+      <AppLoader
+        mode="portfolio"
+        name={portfolio?.fullName || session?.user?.name}
+      />
     );
   }
 
+  if (!portfolio) return <div>Failed to load portfolio</div>;
   // If not logged in (and not redirecting yet), show nothing or loader
   if (!session?.user) return null;
 

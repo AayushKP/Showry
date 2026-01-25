@@ -1,7 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   ArrowUpRight,
   Github,
@@ -32,11 +34,42 @@ import {
 } from "lucide-react";
 import type { Portfolio, BlogData } from "@/db/schema";
 import { cn } from "@/lib/utils";
-import { useState, useEffect, useMemo } from "react";
-import dynamic from "next/dynamic";
 import { ActivityCalendar } from "react-activity-calendar";
 
 const Marquee = dynamic(() => import("react-fast-marquee"), { ssr: false });
+
+const TimelineScrollAnimation = ({
+  containerRef,
+}: {
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}) => {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"],
+  });
+
+  const scrollY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  // Map scroll progress to line height and dot position
+  const height = useTransform(scrollY, [0, 1], ["0%", "100%"]);
+
+  return (
+    <>
+      <motion.div
+        style={{ height }}
+        className="absolute left-[39px] md:left-[49px] top-0 w-px bg-gradient-to-b from-[#3b82f6] via-[#a855f7] to-[#f97316] z-0 opacity-50"
+      />
+      <motion.div
+        style={{ top: height }}
+        className="absolute left-[39px] md:left-[49px] h-2 w-2 rounded-full bg-white shadow-[0_0_10px_white] z-20 -translate-x-1/2 -translate-y-1/2"
+      />
+    </>
+  );
+};
 
 interface PortfolioTemplateProps {
   portfolio: Partial<Portfolio>;
@@ -306,6 +339,27 @@ const CoolProjectPlaceholder = () => (
   </div>
 );
 
+const CoolBlogPlaceholder = () => (
+  <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[#050505]">
+    <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] to-[#111]" />
+    {/* 3D Icon Simulation */}
+    <div className="relative z-10 transform transition-transform duration-700 group-hover:rotate-6 group-hover:scale-110">
+      <div className="relative">
+        <div className="absolute inset-0 rounded-full bg-blue-500/10 blur-3xl" />
+        <FileText
+          className="h-20 w-20 text-neutral-800 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
+          strokeWidth={1}
+        />
+        {/* Highlight */}
+        <div className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-blue-500/20 blur-xl" />
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/5 to-transparent opacity-20" />
+      </div>
+    </div>
+
+    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
+  </div>
+);
+
 export function PortfolioTemplate({
   portfolio,
   isPreview = false,
@@ -340,6 +394,8 @@ export function PortfolioTemplate({
 
   // Hero Icon Color State
   const [heroIconColor, setHeroIconColor] = useState("#d4a373");
+
+  const experienceContainerRef = useRef<HTMLDivElement>(null);
 
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [activeNav, setActiveNav] = useState("Home");
@@ -599,8 +655,10 @@ export function PortfolioTemplate({
 
       {/* Heatmap Section */}
       <section className="pb-20 pt-10">
-        <div className="mx-auto max-w-6xl w-full px-6 md:px-10">
-          <RealHeatmap username={socialLinks.github} />
+        <div className="mx-auto max-w-6xl w-full px-6 md:px-10 overflow-x-auto md:overflow-visible">
+          <div className="min-w-[700px] md:min-w-0 origin-left scale-75 md:scale-100 transform transition-transform">
+            <RealHeatmap username={socialLinks.github} />
+          </div>
         </div>
       </section>
 
@@ -690,60 +748,85 @@ export function PortfolioTemplate({
         </div>
       </section>
 
-      {/* Experience Section - Redesigned Timeline */}
+      {/* Experience Section - Single Line & Animated Point */}
       {experience.length > 0 && (
-        <section id="experience" className="py-24">
-          <div className="mx-auto max-w-6xl w-full px-6 md:px-10">
+        <section id="experience" className="py-24 relative overflow-hidden">
+          <div className="mx-auto max-w-6xl w-full px-6 md:px-10 relative">
             <span className="mb-16 block text-center font-mono text-3xl font-light uppercase tracking-[0.2em] text-white">
               Experience
             </span>
-            <div className="space-y-0 relative w-full">
-              {experience.map((exp, i) => {
-                const colors = [
-                  { text: "text-cyan-400", border: "border-cyan-400" },
-                  { text: "text-purple-400", border: "border-purple-400" },
-                  { text: "text-orange-400", border: "border-orange-400" },
-                  { text: "text-green-400", border: "border-green-400" },
-                ];
-                const style = colors[i % colors.length];
 
-                return (
-                  <div
-                    key={exp.id}
-                    className="relative grid grid-cols-[50px_1fr] md:grid-cols-[60px_250px_1fr] md:gap-x-4 pb-12 last:pb-0 group"
-                  >
-                    {/* Timeline Column */}
-                    <div className="flex flex-col items-center relative h-full">
-                      {/* Vertical Line */}
-                      <div className="absolute top-0 bottom-0 w-px bg-white/10 group-last:bottom-auto group-last:h-full" />
-                      {/* Hollow Dot */}
-                      <div
-                        className={`relative z-10 h-4 w-4 rounded-full border-2 bg-[#050505] mt-1.5 transition-all duration-300 group-hover:scale-110 ${style.border}`}
-                      />
-                    </div>
+            <div
+              className="relative pl-8 md:pl-12"
+              ref={experienceContainerRef}
+            >
+              {/* Continuous Static Line - Hidden on Mobile */}
+              <div className="hidden md:block absolute left-[39px] md:left-[49px] top-0 bottom-0 w-px bg-white/10" />
 
-                    {/* Meta Column (Date & Company) */}
-                    <div className="flex flex-col mb-4 md:mb-0">
-                      <span className={`text-sm font-mono mb-2 ${style.text}`}>
-                        {exp.duration}
-                      </span>
-                      <h4 className="text-white text-base font-light font-sans tracking-wide">
-                        {exp.company}
-                      </h4>
-                    </div>
+              {/* Animated Scroll Point - Hidden on Mobile */}
+              <div className="hidden md:block">
+                <TimelineScrollAnimation
+                  containerRef={experienceContainerRef}
+                />
+              </div>
 
-                    {/* Content Column (Role & Description) */}
-                    <div className="col-start-2 col-span-1 md:col-start-auto md:col-span-1 flex flex-col pt-0 md:pt-0">
-                      <h3 className="text-2xl text-white font-medium mb-3">
-                        {exp.position}
-                      </h3>
-                      <p className="text-neutral-400 text-base leading-relaxed max-w-3xl font-light">
-                        {exp.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+              <div className="space-y-12">
+                {experience.map((exp, i) => {
+                  const colors = [
+                    "border-cyan-400 text-cyan-400",
+                    "border-purple-400 text-purple-400",
+                    "border-orange-400 text-orange-400",
+                    "border-green-400 text-green-400",
+                  ];
+                  const colorClass = colors[i % colors.length];
+
+                  return (
+                    <motion.div
+                      key={exp.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      viewport={{ once: true, margin: "-50px" }}
+                      className="relative grid grid-cols-[1fr] md:grid-cols-[200px_1fr] md:gap-x-12 group"
+                    >
+                      {/* Timeline Dot (Absolute to line) */}
+                      <div className="absolute left-[11px] md:left-[5px] -translate-x-1/2 top-1.5 flex items-center justify-center">
+                        <div
+                          className={cn(
+                            "h-4 w-4 rounded-full bg-[#050505] border-2 z-10 transition-transform duration-300 group-hover:scale-125",
+                            colorClass.split(" ")[0],
+                          )}
+                        />
+                      </div>
+
+                      {/* Meta (Date) - Moves to top on mobile */}
+                      <div className="mb-2 md:mb-0 md:text-right">
+                        <span
+                          className={cn(
+                            "font-mono text-sm",
+                            colorClass.split(" ")[1],
+                          )}
+                        >
+                          {exp.duration}
+                        </span>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex flex-col">
+                        <h3 className="text-2xl text-white font-medium mb-1">
+                          {exp.position}
+                        </h3>
+                        <h4 className="text-white/60 text-base font-light font-sans tracking-wide mb-4">
+                          {exp.company}
+                        </h4>
+                        <p className="text-neutral-400 text-base leading-relaxed max-w-2xl font-light">
+                          {exp.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
@@ -774,9 +857,7 @@ export function PortfolioTemplate({
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center text-neutral-700">
-                        <FileText className="h-8 w-8" />
-                      </div>
+                      <CoolBlogPlaceholder />
                     )}
                   </div>
 

@@ -19,6 +19,7 @@ import {
   ChevronRight,
   Trophy,
   CheckCircle2,
+  LogOut,
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -106,13 +107,18 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile Trigger */}
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className="fixed left-4 top-4 z-50 rounded-full border border-white/10 bg-[#111] p-2 text-white md:hidden"
-      >
-        <Menu className="h-5 w-5" />
-      </button>
+      {/* Mobile Top Navbar */}
+      <div className="fixed top-0 left-0 right-0 z-40 flex h-16 items-center justify-between border-b border-white/5 bg-[#050505]/80 px-4 backdrop-blur-md md:hidden">
+        <Link href="/" className="font-instrument text-xl font-bold text-white">
+          Profiled<span className="text-[#d4a373]">.</span>
+        </Link>
+        <button
+          onClick={() => setIsMobileOpen(true)}
+          className="rounded-full border border-white/10 bg-[#111] p-2 text-white"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+      </div>
 
       {/* Mobile Overlay */}
       <AnimatePresence>
@@ -136,8 +142,8 @@ export function Sidebar({
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
-        {/* Header */}
-        <div className="flex h-20 items-center justify-between px-6">
+        {/* Header - Hidden on Mobile since we have Top Navbar, but visible on Desktop */}
+        <div className="hidden md:flex h-20 items-center justify-between px-6">
           {!isCollapsed && (
             <Link
               href="/"
@@ -154,7 +160,7 @@ export function Sidebar({
 
           <button
             onClick={() => onCollapseChange(!isCollapsed)}
-            className="hidden rounded-full p-1 text-neutral-500 hover:bg-white/5 hover:text-white md:block"
+            className="rounded-full p-1 text-neutral-500 hover:bg-white/5 hover:text-white block"
           >
             {isCollapsed ? (
               <ChevronRight className="h-4 w-4" />
@@ -162,18 +168,24 @@ export function Sidebar({
               <ChevronLeft className="h-4 w-4" />
             )}
           </button>
+        </div>
 
+        {/* Mobile Sidebar Header (Close Button) */}
+        <div className="flex h-16 items-center justify-between px-4 md:hidden border-b border-white/5">
+          <span className="font-mono text-sm uppercase text-neutral-500">
+            Menu
+          </span>
           <button
             onClick={() => setIsMobileOpen(false)}
-            className="md:hidden text-neutral-500 hover:text-white"
+            className="text-white bg-[#111] p-2 rounded-full border border-white/10"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Gamification Widget */}
         {!isCollapsed && (
-          <div className="mx-4 mb-2 rounded-xl border border-white/10 bg-[#111] p-4">
+          <div className="mx-4 mb-2 mt-4 md:mt-0 rounded-xl border border-white/10 bg-[#111] p-4">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Trophy className="h-4 w-4 text-[#d4a373]" />
@@ -219,8 +231,6 @@ export function Sidebar({
                     className={cn(
                       "h-4 w-4 min-w-[16px]",
                       isCollapsed ? "mx-auto" : "",
-                      // If collapsed and completed, show green icon? maybe too much
-                      // Let's keep icon color neutral unless active
                     )}
                   />
                   {!isCollapsed && (
@@ -245,8 +255,8 @@ export function Sidebar({
         </div>
 
         {/* Footer */}
-        <div className="border-t border-white/5 p-4">
-          <Link href="/user/preview" target="_blank">
+        <div className="border-t border-white/5 p-4 space-y-2">
+          <Link href="/dashboard/preview" target="_blank">
             <div
               className={cn(
                 "flex items-center gap-3 rounded-lg bg-[#111] p-3 text-white transition-colors hover:bg-[#1a1a1a]",
@@ -261,6 +271,24 @@ export function Sidebar({
               )}
             </div>
           </Link>
+
+          <button
+            onClick={async () => {
+              await import("@/lib/auth-client").then((mod) =>
+                mod.authClient.signOut(),
+              );
+              window.location.href = "/login";
+            }}
+            className={cn(
+              "flex w-full items-center gap-3 rounded-lg bg-red-500/10 p-3 text-red-500 transition-colors hover:bg-red-500/20",
+              isCollapsed ? "justify-center" : "",
+            )}
+          >
+            <LogOut className="h-4 w-4" />
+            {!isCollapsed && (
+              <span className="font-mono text-xs uppercase">Log out</span>
+            )}
+          </button>
         </div>
       </motion.aside>
     </>

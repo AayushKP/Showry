@@ -40,15 +40,13 @@ export function AuthModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-white/10 bg-[#0a0a0a] sm:max-w-lg p-12 md:p-16">
+      <DialogContent className="border-white/10 bg-[#0a0a0a] sm:max-w-lg p-6 md:p-16">
         <DialogHeader>
           <DialogTitle className="text-center font-instrument text-5xl text-white mb-2">
-            {activeTab === "login" ? "Welcome back" : "Start creating"}
+            Welcome
           </DialogTitle>
           <p className="text-center font-mono text-xs text-neutral-500 uppercase tracking-widest mt-4">
-            {activeTab === "login"
-              ? "Continue to your dashboard"
-              : "Join Profiled today"}
+            Sign in to continue
           </p>
         </DialogHeader>
 
@@ -79,22 +77,6 @@ export function AuthModal({
               Continue with Google
             </span>
           </button>
-        </div>
-
-        <div className="mt-12 text-center bg-white/5 rounded-2xl p-6">
-          <p className="font-mono text-xs text-neutral-400">
-            {activeTab === "login"
-              ? "New to Profiled? "
-              : "Already have an account? "}
-            <button
-              onClick={() =>
-                setActiveTab(activeTab === "login" ? "signup" : "login")
-              }
-              className="text-[#d4a373] hover:text-white transition-colors underline decoration-1 underline-offset-4"
-            >
-              {activeTab === "login" ? "Create account" : "Log in"}
-            </button>
-          </p>
         </div>
       </DialogContent>
     </Dialog>

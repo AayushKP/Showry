@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
+import { AppLoader } from "@/components/ui/app-loader";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { BasicInfoForm } from "@/components/dashboard/forms/basic-info-form";
@@ -132,11 +133,7 @@ export default function DashboardPage() {
 
   // Auth check
   if (isPending || isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
-      </div>
-    );
+    return <AppLoader />;
   }
 
   if (!session?.user) {
@@ -145,11 +142,7 @@ export default function DashboardPage() {
   }
 
   if (!portfolio) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
-      </div>
-    );
+    return <AppLoader />;
   }
 
   const renderSection = () => {

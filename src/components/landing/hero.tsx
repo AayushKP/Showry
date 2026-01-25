@@ -23,8 +23,8 @@ export function Hero() {
           {/* Central Gradient Orb */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#d4a373]/20 blur-[120px] rounded-full pointer-events-none z-0" />
 
-          {/* Floating UI Chips - Button Types Components */}
-          <div className="absolute inset-x-0 top-20 md:top-32 h-[400px] pointer-events-none max-w-7xl mx-auto overflow-visible z-10">
+          {/* Floating UI Chips - Button Types Components - Hidden on Mobile */}
+          <div className="hidden md:block absolute inset-x-0 top-32 h-[400px] pointer-events-none max-w-7xl mx-auto overflow-visible z-10">
             {/* Chip 1: Fast */}
             <motion.div
               initial={{ opacity: 0, x: -50, rotate: -5 }}
@@ -106,7 +106,7 @@ export function Hero() {
             </motion.div>
           </div>
 
-          <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col items-center text-center">
+          <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col items-center text-center mt-20 md:mt-0">
             {/* ... Content remains similar but wrapped correctly ... */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -164,7 +164,7 @@ export function Hero() {
               <button className="group flex items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-4 transition-all hover:bg-white/10 hover:scale-105 backdrop-blur-sm">
                 <Play className="h-3 w-3 fill-current text-white" />
                 <span className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-                  Watch Demo
+                  Preview
                 </span>
               </button>
 
