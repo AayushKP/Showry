@@ -151,7 +151,7 @@ export default function DashboardPage() {
       if (data.isPublished) {
         toast.success("Portfolio published!");
         // Redirect to subdomain after a short delay
-        const domain = process.env.NEXT_PUBLIC_DOMAIN || "showry.com";
+        const domain = process.env.NEXT_PUBLIC_DOMAIN || "profiled.site";
         const protocol = window.location.protocol;
         const portfolioUrl = `${protocol}//${portfolio.username}.${domain}`;
 

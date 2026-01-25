@@ -195,7 +195,7 @@ export function Hero() {
                   <div className="h-3 w-3 rounded-full bg-[#27c93f]/80" />
                 </div>
                 <div className="mx-auto flex h-6 w-auto min-w-[140px] items-center justify-center rounded bg-black/40 px-3 text-[10px] text-neutral-600 font-mono hover:bg-black/60 transition-colors cursor-default">
-                  showry.com/alex
+                  profiled.site/alex
                 </div>
               </div>
 

@@ -26,7 +26,7 @@ export default function NotFound() {
           <Button
             variant="outline"
             onClick={() => {
-              const domain = process.env.NEXT_PUBLIC_DOMAIN || "showry.com";
+              const domain = process.env.NEXT_PUBLIC_DOMAIN || "profiled.site";
               const protocol = window.location.protocol;
               window.location.href = `${protocol}//${domain}`;
             }}
