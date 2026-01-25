@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import { ArrowLeft, FileQuestion } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,12 +23,17 @@ export default function NotFound() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link href="/">
-            <Button variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Go Home
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            onClick={() => {
+              const domain = process.env.NEXT_PUBLIC_DOMAIN || "showry.com";
+              const protocol = window.location.protocol;
+              window.location.href = `${protocol}//${domain}`;
+            }}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Go Home
+          </Button>
           <Link href="/signup">
             <Button>Create Your Portfolio</Button>
           </Link>

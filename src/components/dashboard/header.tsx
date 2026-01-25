@@ -168,7 +168,7 @@ export function DashboardHeader({
               ) : portfolio.isPublished ? (
                 <span className="font-mono text-xs uppercase flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                  Live
+                  Unpublish
                 </span>
               ) : (
                 <span className="font-mono text-xs uppercase flex items-center gap-2">
