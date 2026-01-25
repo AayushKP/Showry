@@ -40,7 +40,7 @@ export function AuthModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="border-white/10 bg-[#0a0a0a] sm:max-w-lg p-6 md:p-16">
+      <DialogContent className="border-white/10 bg-[#0a0a0a] w-[90%] md:w-full sm:max-w-lg p-6 md:p-16 rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-center font-instrument text-5xl text-white mb-2">
             Welcome
