@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, Eye, X } from "lucide-react";
 import { AppLoader } from "@/components/ui/app-loader";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { DashboardHeader } from "@/components/dashboard/header";
@@ -30,6 +31,21 @@ export default function DashboardPage() {
   const [isPublishing, setIsPublishing] = useState(false);
   const [activeSection, setActiveSection] = useState("basic");
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [showPreviewPopup, setShowPreviewPopup] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [hasShownPopup, setHasShownPopup] = useState(false);
+
+  // Handle section change with preview popup
+  // Only show popup on first switch if user has actually edited something
+  const handleSectionChange = (section: string) => {
+    setActiveSection(section);
+
+    // Show popup only if: user has interacted with forms AND popup hasn't been shown yet
+    if (hasInteracted && !hasShownPopup) {
+      setShowPreviewPopup(true);
+      setHasShownPopup(true);
+    }
+  };
 
   // Fetch or create portfolio
   useEffect(() => {
@@ -90,6 +106,10 @@ export default function DashboardPage() {
   const handleUpdate = (data: Partial<Portfolio>) => {
     setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
     savePortfolio(data);
+    // Mark that user has interacted with forms
+    if (!hasInteracted) {
+      setHasInteracted(true);
+    }
   };
 
   const handlePublish = async () => {
@@ -176,7 +196,7 @@ export default function DashboardPage() {
     <div className="flex min-h-screen bg-[#0a0a0a]">
       <Sidebar
         activeSection={activeSection}
-        onSectionChange={setActiveSection}
+        onSectionChange={handleSectionChange}
         isCollapsed={isCollapsed}
         onCollapseChange={setIsCollapsed}
         portfolio={portfolio}
@@ -218,6 +238,71 @@ export default function DashboardPage() {
           </div>
         </main>
       </div>
+
+      {/* Preview Popup Modal */}
+      <AnimatePresence>
+        {showPreviewPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowPreviewPopup(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative mx-4 max-w-md w-full rounded-2xl border border-white/10 bg-[#111] p-8 shadow-2xl"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowPreviewPopup(false)}
+                className="absolute right-4 top-4 rounded-full p-1 text-neutral-500 hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* Icon */}
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#d4a373]/10 border border-[#d4a373]/20">
+                <Eye className="h-8 w-8 text-[#d4a373]" />
+              </div>
+
+              {/* Content */}
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Wanna see how it looks?
+                </h3>
+                <p className="text-sm text-neutral-400 mb-6">
+                  Preview your portfolio to see all your changes in action
+                  before publishing.
+                </p>
+
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => setShowPreviewPopup(false)}
+                    className="px-6 py-2.5 rounded-full border border-white/10 text-neutral-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium"
+                  >
+                    Maybe Later
+                  </button>
+                  <Link href="/dashboard/preview" target="_blank">
+                    <button
+                      onClick={() => setShowPreviewPopup(false)}
+                      className="px-6 py-2.5 rounded-full bg-[#d4a373] text-black hover:bg-[#e5b584] transition-all text-sm font-medium flex items-center gap-2 justify-center w-full sm:w-auto"
+                    >
+                      <Eye className="h-4 w-4" />
+                      Preview Now
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

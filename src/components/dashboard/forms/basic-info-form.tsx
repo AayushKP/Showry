@@ -19,7 +19,7 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
   const [username, setUsername] = useState(portfolio.username || "");
   const [fullName, setFullName] = useState(portfolio.fullName || "");
   const [title, setTitle] = useState(portfolio.title || "");
-  const [tagline, setTagline] = useState(portfolio.tagline || "");
+
   const [usernameStatus, setUsernameStatus] = useState<
     "idle" | "checking" | "available" | "taken" | "invalid"
   >("idle");
@@ -47,7 +47,7 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
           setUsernameError("");
         } else {
           setUsernameStatus(
-            data.error?.includes("taken") ? "taken" : "invalid"
+            data.error?.includes("taken") ? "taken" : "invalid",
           );
           setUsernameError(data.error || "Username not available");
         }
@@ -55,7 +55,7 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
         setUsernameStatus("idle");
       }
     }, 500),
-    [portfolio.username]
+    [portfolio.username],
   );
 
   useEffect(() => {
@@ -178,24 +178,6 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
           />
           <p className="text-xs text-gray-500">
             Your professional title or role
-          </p>
-        </div>
-
-        {/* Tagline */}
-        <div className="space-y-2">
-          <Label>Tagline (optional)</Label>
-          <Textarea
-            value={tagline}
-            onChange={(e) => {
-              setTagline(e.target.value);
-              onUpdate({ tagline: e.target.value });
-            }}
-            placeholder="Building things that work outside the terminal..."
-            rows={2}
-          />
-          <p className="text-xs text-gray-500">
-            A short quote or tagline displayed in your hero section (
-            {tagline.length}/200)
           </p>
         </div>
       </div>
