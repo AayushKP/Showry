@@ -66,7 +66,7 @@ export function SkillsForm({ portfolio, onUpdate }: SkillsFormProps) {
   const suggestedSkills = popularSkills.filter(
     (skill) =>
       !skills.includes(skill) &&
-      skill.toLowerCase().includes(inputValue.toLowerCase())
+      skill.toLowerCase().includes(inputValue.toLowerCase()),
   );
 
   return (
@@ -87,7 +87,10 @@ export function SkillsForm({ portfolio, onUpdate }: SkillsFormProps) {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label>Add Skills</Label>
+          <Label className="flex items-center gap-1">
+            Add Skills
+            <span className="text-red-400">*</span>
+          </Label>
           <div className="flex flex-wrap items-center gap-2 rounded-lg border border-gray-700 bg-gray-900/50 p-3 focus-within:border-amber-500/50 focus-within:ring-2 focus-within:ring-amber-500/50">
             <AnimatePresence>
               {skills.map((skill) => (

@@ -18,36 +18,41 @@ const socialFields = [
     label: "GitHub",
     icon: Github,
     placeholder: "https://github.com/username",
+    required: false,
   },
   {
     key: "linkedin" as keyof SocialLinksData,
     label: "LinkedIn",
     icon: Linkedin,
     placeholder: "https://linkedin.com/in/username",
+    required: true,
   },
   {
     key: "twitter" as keyof SocialLinksData,
     label: "Twitter / X",
     icon: Twitter,
     placeholder: "https://twitter.com/username",
+    required: false,
   },
   {
     key: "website" as keyof SocialLinksData,
     label: "Personal Website",
     icon: Globe,
     placeholder: "https://yourwebsite.com",
+    required: false,
   },
   {
     key: "email" as keyof SocialLinksData,
     label: "Contact Email",
     icon: Mail,
     placeholder: "hello@example.com",
+    required: false,
   },
 ];
 
 export function SocialLinksForm({ portfolio, onUpdate }: SocialLinksFormProps) {
   const [socialLinks, setSocialLinks] = useState<SocialLinksData>(
-    portfolio.socialLinks || {}
+    portfolio.socialLinks || {},
   );
 
   const handleChange = (key: keyof SocialLinksData, value: string) => {
@@ -71,19 +76,22 @@ export function SocialLinksForm({ portfolio, onUpdate }: SocialLinksFormProps) {
       </div>
 
       <div className="space-y-6">
-        {socialFields.map(({ key, label, icon: Icon, placeholder }) => (
-          <div key={key} className="space-y-2">
-            <Label className="flex items-center gap-2">
-              <Icon className="h-4 w-4 text-gray-400" />
-              {label}
-            </Label>
-            <Input
-              value={socialLinks[key] || ""}
-              onChange={(e) => handleChange(key, e.target.value)}
-              placeholder={placeholder}
-            />
-          </div>
-        ))}
+        {socialFields.map(
+          ({ key, label, icon: Icon, placeholder, required }) => (
+            <div key={key} className="space-y-2">
+              <Label className="flex items-center gap-2">
+                <Icon className="h-4 w-4 text-gray-400" />
+                {label}
+                {required && <span className="text-red-400">*</span>}
+              </Label>
+              <Input
+                value={socialLinks[key] || ""}
+                onChange={(e) => handleChange(key, e.target.value)}
+                placeholder={placeholder}
+              />
+            </div>
+          ),
+        )}
       </div>
 
       {/* Tips */}

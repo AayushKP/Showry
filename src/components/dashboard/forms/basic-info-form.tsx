@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Check, X, Loader2 } from "lucide-react";
+import { Check, X, Loader2, FileText, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -19,6 +19,9 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
   const [username, setUsername] = useState(portfolio.username || "");
   const [fullName, setFullName] = useState(portfolio.fullName || "");
   const [title, setTitle] = useState(portfolio.title || "");
+  const [resumeLink, setResumeLink] = useState(
+    portfolio.socialLinks?.resume || "",
+  );
 
   const [usernameStatus, setUsernameStatus] = useState<
     "idle" | "checking" | "available" | "taken" | "invalid"
@@ -72,6 +75,16 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
     }
   };
 
+  const handleResumeChange = (value: string) => {
+    setResumeLink(value);
+    onUpdate({
+      socialLinks: {
+        ...portfolio.socialLinks,
+        resume: value,
+      },
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -105,7 +118,10 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
 
         {/* Username */}
         <div className="space-y-2">
-          <Label>Username (for subdomain)</Label>
+          <Label className="flex items-center gap-1">
+            Username (for subdomain)
+            <span className="text-red-400">*</span>
+          </Label>
           <div className="relative">
             <Input
               value={username}
@@ -141,7 +157,10 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
 
         {/* Full Name */}
         <div className="space-y-2">
-          <Label>Full Name</Label>
+          <Label className="flex items-center gap-1">
+            Full Name
+            <span className="text-red-400">*</span>
+          </Label>
           <Input
             value={fullName}
             onChange={(e) => {
@@ -154,7 +173,10 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
 
         {/* Email */}
         <div className="space-y-2">
-          <Label>Email</Label>
+          <Label className="flex items-center gap-1">
+            Contact Email
+            <span className="text-red-400">*</span>
+          </Label>
           <Input
             value={portfolio.email}
             disabled
@@ -167,7 +189,10 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
 
         {/* Title */}
         <div className="space-y-2">
-          <Label>Title / Role</Label>
+          <Label className="flex items-center gap-1">
+            Title / Role
+            <span className="text-red-400">*</span>
+          </Label>
           <Input
             value={title}
             onChange={(e) => {
@@ -178,6 +203,35 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
           />
           <p className="text-xs text-gray-500">
             Your professional title or role
+          </p>
+        </div>
+
+        {/* Resume Link */}
+        <div className="space-y-2">
+          <Label className="flex items-center gap-2">
+            <FileText className="h-4 w-4 text-amber-500" />
+            Resume / CV Link
+          </Label>
+          <div className="relative">
+            <Input
+              value={resumeLink}
+              onChange={(e) => handleResumeChange(e.target.value)}
+              placeholder="https://drive.google.com/your-resume.pdf"
+              className="pr-10"
+            />
+            {resumeLink && (
+              <a
+                href={resumeLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-500 transition-colors"
+              >
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            )}
+          </div>
+          <p className="text-xs text-gray-500">
+            Link to your resume (Google Drive, Dropbox, or any public URL)
           </p>
         </div>
       </div>
