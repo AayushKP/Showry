@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PortfolioTemplate } from "@/components/portfolio/portfolio-template";
+import { getTemplate } from "@/components/portfolio/templates";
 import { useSession } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 import type { Portfolio } from "@/db/schema";
 import { useRouter } from "next/navigation";
-import { dummyPortfolio } from "@/app/preview/page";
+import { dummyPortfolio } from "@/lib/dummy-data";
 
 export default function UserPreviewPage() {
   const { data: session, isPending } = useSession();
@@ -60,8 +60,10 @@ export default function UserPreviewPage() {
   // If not logged in (and not redirecting yet), show nothing or loader
   if (!session?.user) return null;
 
+  const { component: TemplateComponent } = getTemplate(portfolio?.theme);
+
   return (
-    <PortfolioTemplate
+    <TemplateComponent
       portfolio={portfolio || {}}
       isPreview={true}
       isLoggedIn={true}

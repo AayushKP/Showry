@@ -56,6 +56,10 @@
   --radius: 0.5rem;
 }
 
+html {
+  font-size: 90%;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -84,7 +88,8 @@ input[type="submit"],
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
@@ -96,6 +101,31 @@ input[type="submit"],
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
+}
+
+/* Thin Scrollbar Utility */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #262626 transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+  width: 4px; /* Width for vertical scrollbars */
+  height: 4px; /* Height for horizontal scrollbars */
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: #262626;
+  border-radius: 20px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #404040;
 }
 
 ::-webkit-scrollbar-track {

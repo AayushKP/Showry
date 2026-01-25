@@ -17,15 +17,23 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Trophy,
+  CheckCircle2,
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import type { Portfolio } from "@/db/schema";
+import {
+  calculatePortfolioCompletion,
+  getBuilderRank,
+} from "@/lib/gamification";
 
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
   isCollapsed: boolean;
   onCollapseChange: (collapsed: boolean) => void;
+  portfolio: Partial<Portfolio> | null;
 }
 
 const navItems = [
@@ -85,9 +93,16 @@ export function Sidebar({
   onSectionChange,
   isCollapsed,
   onCollapseChange,
+  portfolio,
 }: SidebarProps) {
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // Gamification Logic
+  const { score, completedSections } = calculatePortfolioCompletion(portfolio);
+  const rank = getBuilderRank(score);
+  const progressColor =
+    score < 40 ? "bg-red-500" : score < 70 ? "bg-yellow-500" : "bg-green-500";
 
   return (
     <>
@@ -156,45 +171,82 @@ export function Sidebar({
           </button>
         </div>
 
-        {/* Navigation */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 text-sm">
-          <nav className="space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => {
-                  onSectionChange(item.id);
-                  setIsMobileOpen(false);
-                }}
-                className={cn(
-                  "group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-colors font-mono tracking-wide text-xs uppercase",
-                  activeSection === item.id
-                    ? "bg-white/10 text-white"
-                    : "text-neutral-400 hover:bg-white/5 hover:text-white",
-                )}
-              >
-                <item.icon
-                  className={cn(
-                    "h-4 w-4 min-w-[16px]",
-                    isCollapsed ? "mx-auto" : "",
-                  )}
-                />
-                {!isCollapsed && <span>{item.name}</span>}
+        {/* Gamification Widget */}
+        {!isCollapsed && (
+          <div className="mx-4 mb-2 rounded-xl border border-white/10 bg-[#111] p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Trophy className="h-4 w-4 text-[#d4a373]" />
+                <span className="text-sm font-semibold text-white">{rank}</span>
+              </div>
+              <span className="text-xs text-neutral-400">{score}%</span>
+            </div>
+            {/* Progress Bar */}
+            <div className="h-1.5 w-full rounded-full bg-neutral-800 overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${score}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                className={cn("h-full rounded-full", progressColor)}
+              />
+            </div>
+            <p className="mt-2 text-[10px] text-neutral-500 text-center">
+              Complete sections to level up!
+            </p>
+          </div>
+        )}
 
-                {/* Tooltip for collapsed state */}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-4 hidden rounded bg-neutral-800 px-2 py-1 text-xs text-white group-hover:block">
-                    {item.name}
-                  </div>
-                )}
-              </button>
-            ))}
+        {/* Navigation */}
+        <div className="flex-1 overflow-y-auto px-4 py-4 text-sm">
+          <nav className="space-y-1">
+            {navItems.map((item) => {
+              const isCompleted = completedSections.includes(item.id);
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => {
+                    onSectionChange(item.id);
+                    setIsMobileOpen(false);
+                  }}
+                  className={cn(
+                    "group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 transition-colors font-mono tracking-wide text-xs uppercase relative",
+                    activeSection === item.id
+                      ? "bg-white/10 text-white"
+                      : "text-neutral-400 hover:bg-white/5 hover:text-white",
+                  )}
+                >
+                  <item.icon
+                    className={cn(
+                      "h-4 w-4 min-w-[16px]",
+                      isCollapsed ? "mx-auto" : "",
+                      // If collapsed and completed, show green icon? maybe too much
+                      // Let's keep icon color neutral unless active
+                    )}
+                  />
+                  {!isCollapsed && (
+                    <>
+                      <span>{item.name}</span>
+                      {isCompleted && item.id !== "settings" && (
+                        <CheckCircle2 className="ml-auto h-3.5 w-3.5 text-green-500/80" />
+                      )}
+                    </>
+                  )}
+
+                  {/* Tooltip for collapsed state */}
+                  {isCollapsed && (
+                    <div className="absolute left-full ml-4 hidden rounded bg-neutral-800 px-2 py-1 text-xs text-white group-hover:block z-50 whitespace-nowrap">
+                      {item.name} {isCompleted && "✅"}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </nav>
         </div>
 
         {/* Footer */}
         <div className="border-t border-white/5 p-4">
-          <Link href="/preview" target="_blank">
+          <Link href="/user/preview" target="_blank">
             <div
               className={cn(
                 "flex items-center gap-3 rounded-lg bg-[#111] p-3 text-white transition-colors hover:bg-[#1a1a1a]",

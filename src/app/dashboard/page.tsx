@@ -186,6 +186,7 @@ export default function DashboardPage() {
         onSectionChange={setActiveSection}
         isCollapsed={isCollapsed}
         onCollapseChange={setIsCollapsed}
+        portfolio={portfolio}
       />
       <div
         className={cn(

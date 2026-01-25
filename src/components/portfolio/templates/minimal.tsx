@@ -86,15 +86,9 @@ const getSkillStyle = (skill: string) => {
   );
 };
 
-// --- Components ---
-
-// Ultra Cool Abstract SVG Placeholder
-// ------------------------------------------------------------------
-// 3D Atom Icon (React-like Structure)
-// ------------------------------------------------------------------
 const AtomIcon = ({ color }: { color: string }) => {
   return (
-    <div className="relative flex h-40 w-40 items-center justify-center perspective-[1000px]">
+    <div className="relative flex h-40 w-40 items-center justify-center perspective-[900px]">
       {/* Nucleus */}
       <div className="relative z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-[0_0_20px_rgba(255,255,255,0.8)] animate-pulse">
         <div className="h-full w-full rounded-full bg-linear-to-tr from-inherit to-transparent opacity-80" />
@@ -136,7 +130,7 @@ const AtomIcon = ({ color }: { color: string }) => {
   );
 };
 
-// Interactive Logo Component
+// InteractiveLogo Component
 const InteractiveLogo = ({ name }: { name: string }) => {
   const [colors, setColors] = useState<string[]>([]);
   const firstName = name.split(" ")[0] || "Portfolio";
@@ -165,10 +159,16 @@ const InteractiveLogo = ({ name }: { name: string }) => {
 
   return (
     <div className="flex cursor-pointer select-none">
-      <span className="font-serif italic text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
+      <span
+        className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl italic"
+        style={{ fontFamily: "var(--font-instrument)" }}
+      >
         {firstName}
       </span>
-      <span className="font-serif text-2xl font-bold text-[#d4a373] md:text-3xl lg:text-4xl">
+      <span
+        className="text-2xl font-bold text-[#d4a373] md:text-3xl lg:text-4xl"
+        style={{ fontFamily: "var(--font-instrument)" }}
+      >
         .
       </span>
     </div>
@@ -244,9 +244,9 @@ const RealHeatmap = ({ username }: { username?: string }) => {
         <span className="text-xs text-neutral-500">Last Year Activity</span>
       </div>
 
-      <div className="flex w-full justify-center overflow-x-auto pb-2">
+      <div className="flex w-full justify-center overflow-x-auto pb-2 thin-scrollbar">
         {loading ? (
-          <div className="flex h-[120px] w-full items-center justify-center text-sm text-neutral-600 animate-pulse">
+          <div className="flex h-[108px] w-full items-center justify-center text-sm text-neutral-600 animate-pulse">
             Loading contributions...
           </div>
         ) : data.length > 0 ? (
@@ -339,14 +339,15 @@ export function PortfolioTemplate({
   const skillsRow2 = skills.slice(half);
 
   // Hero Icon Color State
-  const [heroIconColor, setHeroIconColor] = useState("#3b82f6");
+  const [heroIconColor, setHeroIconColor] = useState("#d4a373");
 
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
+  const [activeNav, setActiveNav] = useState("Home");
 
   const navItems = [
     { name: "Home", color: "#3b82f6" },
-    { name: "About", color: "#3b82f6" },
-    { name: "Contact", color: "#3b82f6" },
+    { name: "About", color: "#f97316" }, // Orange
+    { name: "Contact", color: "#a855f7" }, // Purple
   ];
 
   return (
@@ -368,10 +369,16 @@ export function PortfolioTemplate({
           <div onClick={() => setHeroIconColor("#3b82f6")}>
             {/* Logo: Reduced size, Cursive/Serif Italic, Not Bold */}
             <div className="flex cursor-pointer select-none">
-              <span className="font-serif italic text-xl font-medium tracking-tight md:text-2xl text-white">
+              <span
+                className="italic text-xl font-medium tracking-tight md:text-2xl text-white"
+                style={{ fontFamily: "var(--font-instrument)" }}
+              >
                 {fullName?.split(" ")[0]}
               </span>
-              <span className="font-serif text-xl font-medium text-[#3b82f6] md:text-2xl">
+              <span
+                className="text-xl font-medium text-[#3b82f6] md:text-2xl"
+                style={{ fontFamily: "var(--font-instrument)" }}
+              >
                 .
               </span>
             </div>
@@ -381,16 +388,22 @@ export function PortfolioTemplate({
               <Link
                 key={item.name}
                 href={`#${item.name.toLowerCase()}`}
-                onClick={() => setHeroIconColor(item.color)}
+                onClick={() => {
+                  setActiveNav(item.name);
+                }}
                 onMouseEnter={() => setHoveredNav(item.name)}
                 onMouseLeave={() => setHoveredNav(null)}
                 className="hidden text-sm font-light tracking-wide text-neutral-400 transition-all duration-300 hover:text-white md:block relative top-[2px]"
                 style={{
-                  color: hoveredNav === item.name ? item.color : undefined,
+                  color:
+                    hoveredNav === item.name || activeNav === item.name
+                      ? item.color
+                      : undefined,
                 }}
               >
                 {item.name}
-                {hoveredNav === item.name && (
+                {(hoveredNav === item.name ||
+                  (activeNav === item.name && !hoveredNav)) && (
                   <motion.div
                     layoutId="nav-underline"
                     className="absolute -bottom-2 left-0 right-0 h-px"
@@ -414,10 +427,10 @@ export function PortfolioTemplate({
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06)_0%,rgba(0,0,0,0)_70%)]" />
 
           {/* Concentric Circles - More visible (opacity increased) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full border border-white/10 opacity-60" />
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full border border-white/10 opacity-40" />
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[900px] w-[900px] rounded-full border border-white/10 opacity-30" />
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[1200px] w-[1200px] rounded-full border border-white/10 opacity-20" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[360px] w-[360px] rounded-full border border-white/10 opacity-60" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[540px] w-[540px] rounded-full border border-white/10 opacity-40" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[810px] w-[810px] rounded-full border border-white/10 opacity-30" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[1080px] w-[1080px] rounded-full border border-white/10 opacity-20" />
         </div>
 
         <div className="relative z-10 flex flex-col items-center max-w-5xl w-full mx-auto px-6 md:px-10 pb-10">
@@ -463,8 +476,22 @@ export function PortfolioTemplate({
               className="mt-8 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed text-neutral-400 font-light text-center"
             >
               <p>
-                {(bio || tagline || "").split(" ").slice(0, 22).join(" ")}
-                {(bio || tagline || "").split(" ").length > 22 && "..."}
+                {(bio || tagline || "")
+                  .split(" ")
+                  .slice(0, 30) // increased limit slightly to allow for more text if present
+                  .map((word, i) => {
+                    // Randomly colorize words (approx every 4th word purely for aesthetic randomness)
+                    const isColored = i > 0 && i % 4 === 2;
+                    return (
+                      <span
+                        key={i}
+                        className={isColored ? "text-[#d4a373]" : ""}
+                      >
+                        {word}{" "}
+                      </span>
+                    );
+                  })}
+                {(bio || tagline || "").split(" ").length > 30 && "..."}
               </p>
             </motion.div>
           )}
@@ -483,6 +510,7 @@ export function PortfolioTemplate({
               if (key.includes("linkedin")) Icon = Linkedin;
               if (key.includes("twitter")) Icon = Twitter;
               if (key.includes("email")) Icon = Mail;
+              if (key.includes("resume")) Icon = FileText;
 
               return (
                 <a
@@ -735,10 +763,10 @@ export function PortfolioTemplate({
                   href={blog.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group grid md:grid-cols-[200px_1fr] gap-6 md:gap-10 items-start p-4 -mx-4 rounded-2xl transition-colors hover:bg-white/5"
+                  className="group grid md:grid-cols-[180px_1fr] gap-6 md:gap-10 items-start p-4 -mx-4 rounded-2xl transition-colors hover:bg-white/5"
                 >
                   {/* Blog Image */}
-                  <div className="aspect-video w-full md:w-[200px] md:h-[140px] overflow-hidden rounded-xl bg-neutral-900 border border-white/10 relative shrink-0">
+                  <div className="aspect-video w-full md:w-[180px] md:h-[126px] overflow-hidden rounded-xl bg-neutral-900 border border-white/10 relative shrink-0">
                     {blog.image ? (
                       <img
                         src={blog.image}
@@ -789,13 +817,26 @@ export function PortfolioTemplate({
               </p>
             </div>
 
-            <a
-              href={`mailto:${socialLinks.email || "hello@example.com"}`}
-              className="group flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-medium text-black transition-all hover:bg-neutral-200"
-            >
-              <span>Book a call</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-            </a>
+            <div className="flex items-center gap-4">
+              {socialLinks.twitter && (
+                <a
+                  href={socialLinks.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 rounded-full border border-white/10 bg-[#111] px-6 py-4 text-sm font-medium text-white transition-all hover:bg-neutral-800"
+                >
+                  <span>Follow me</span>
+                  <Twitter className="h-4 w-4" />
+                </a>
+              )}
+              <a
+                href={`mailto:${socialLinks.email || "hello@example.com"}`}
+                className="group flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-medium text-black transition-all hover:bg-neutral-200"
+              >
+                <span>Book a call</span>
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
+              </a>
+            </div>
           </div>
 
           <div className="grid gap-16 lg:grid-cols-2">

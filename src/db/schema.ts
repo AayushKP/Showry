@@ -101,6 +101,7 @@ export interface SocialLinksData {
   twitter?: string;
   website?: string;
   email?: string;
+  resume?: string;
 }
 
 export const portfolio = pgTable("portfolio", {

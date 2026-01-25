@@ -15,6 +15,14 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DashboardHeaderProps {
   user: {
@@ -72,13 +80,46 @@ export function DashboardHeader({
 
         <div className="flex items-center gap-4">
           <div className="hidden items-center gap-3 md:flex">
-            {user.image && (
-              <img
-                src={user.image}
-                alt={user.name || "User"}
-                className="h-8 w-8 rounded-full border border-white/10"
-              />
-            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="cursor-pointer transition-opacity hover:opacity-80">
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.name || "User"}
+                      className="h-8 w-8 rounded-full border border-white/10"
+                    />
+                  ) : (
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-neutral-800 text-xs font-medium text-white">
+                      {user.name?.charAt(0) || "U"}
+                    </div>
+                  )}
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="w-48 border-white/10 bg-[#111] text-neutral-200"
+              >
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none text-white">
+                      {user.name}
+                    </p>
+                    <p className="text-xs leading-none text-neutral-500">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer text-red-400 focus:bg-red-500/10 focus:text-red-400"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           <div className="h-6 w-px bg-white/10 hidden md:block" />

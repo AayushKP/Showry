@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import type { Portfolio } from "@/db/schema";
+import { cn } from "@/lib/utils";
+import { PORTFOLIO_TEMPLATES } from "@/components/portfolio/templates";
 
 interface SettingsFormProps {
   portfolio: Portfolio;
@@ -62,10 +64,26 @@ export function SettingsForm({ portfolio, onUpdate }: SettingsFormProps) {
       {/* Theme Section */}
       <div className="rounded-lg border border-gray-800 bg-gray-900/30 p-6">
         <h3 className="mb-4 font-medium text-white">Theme</h3>
-        <div className="flex items-center gap-4">
-          <div className="flex h-24 w-24 items-center justify-center rounded-lg border-2 border-amber-500 bg-gray-800">
-            <span className="text-sm text-gray-300">Minimal</span>
-          </div>
+        <div className="flex flex-wrap items-center gap-4">
+          {PORTFOLIO_TEMPLATES.map((template) => (
+            <div
+              key={template.id}
+              onClick={() => onUpdate({ theme: template.id })}
+              className={cn(
+                "flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border-2 transition-all hover:scale-105",
+                portfolio.theme === template.id
+                  ? "border-amber-500"
+                  : "border-gray-800 hover:border-gray-600",
+              )}
+              style={{
+                backgroundColor: template.thumbnailColor || "#1f2937", // Default to gray-800 if not specified
+              }}
+            >
+              <span className="text-sm text-gray-300">{template.name}</span>
+            </div>
+          ))}
+
+          {/* Coming Soon Placeholder */}
           <div className="flex h-24 w-24 cursor-not-allowed items-center justify-center rounded-lg border border-gray-700 bg-gray-800 opacity-50">
             <span className="text-xs text-gray-500">Coming Soon</span>
           </div>

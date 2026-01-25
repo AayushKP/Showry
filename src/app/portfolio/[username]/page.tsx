@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { db, portfolio } from "@/db";
 import { eq, and } from "drizzle-orm";
-import { PortfolioTemplate } from "@/components/portfolio/portfolio-template";
+import { getTemplate } from "@/components/portfolio/templates";
 import type { Metadata } from "next";
 
 interface Props {
@@ -13,7 +13,7 @@ async function getPortfolioByUsername(username: string) {
     .select()
     .from(portfolio)
     .where(
-      and(eq(portfolio.username, username), eq(portfolio.isPublished, true))
+      and(eq(portfolio.username, username), eq(portfolio.isPublished, true)),
     )
     .limit(1);
 
@@ -73,5 +73,7 @@ export default async function PortfolioPage({ params }: Props) {
     notFound();
   }
 
-  return <PortfolioTemplate portfolio={portfolioData} isPreview={false} />;
+  const { component: TemplateComponent } = getTemplate(portfolioData.theme);
+
+  return <TemplateComponent portfolio={portfolioData} isPreview={false} />;
 }
