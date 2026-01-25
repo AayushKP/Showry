@@ -378,10 +378,7 @@ export function PortfolioTemplate({
     blogs: rawBlogs, // Destructure blogs
   } = portfolio;
 
-  const skills =
-    isPreview && (!rawSkills || rawSkills.length === 0)
-      ? defaultSkills
-      : (rawSkills ?? []);
+  const skills = rawSkills ?? [];
   const projects = rawProjects ?? [];
   const experience = rawExperience ?? [];
   const socialLinks = rawSocialLinks ?? {};
@@ -624,68 +621,72 @@ export function PortfolioTemplate({
         </div>
       </section>
 
-      {/* Tech Stack Marquee - Restored & Styled */}
-      <section className="py-20 bg-[#080808]/50 overflow-hidden">
-        <div className="mx-auto max-w-6xl w-full px-6 md:px-10 mb-12">
-          <h3 className="text-2xl font-sans font-light text-white mb-8 text-center">
-            Technologies & Tools
-          </h3>
-        </div>
-
-        <div className="mx-auto max-w-6xl w-full">
-          {/* Row 1 - Left */}
-          <div className="mb-8">
-            <Marquee
-              autoFill
-              gradient={true}
-              gradientColor="#050505"
-              speed={40}
-              direction="left"
-            >
-              {skillsRow1.map((skill, i) => {
-                const { icon: Icon, color } = getSkillStyle(skill);
-                return (
-                  <div
-                    key={`${skill}-${i}-1`}
-                    className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
-                  >
-                    <Icon className="h-8 w-8" style={{ color }} />
-                    <span className="text-sm font-light text-neutral-400 capitalize">
-                      {skill}
-                    </span>
-                  </div>
-                );
-              })}
-            </Marquee>
+      {/* Tech Stack Marquee - Restored & Styled - Only if skills exist */}
+      {skills.length > 0 && (
+        <section className="py-20 bg-[#080808]/50 overflow-hidden">
+          <div className="mx-auto max-w-6xl w-full px-6 md:px-10 mb-12">
+            <h3 className="text-2xl font-sans font-light text-white mb-8 text-center">
+              Technologies & Tools
+            </h3>
           </div>
 
-          {/* Row 2 - Right */}
-          <div>
-            <Marquee
-              autoFill
-              gradient={true}
-              gradientColor="#050505"
-              speed={40}
-              direction="right"
-            >
-              {skillsRow2.map((skill, i) => {
-                const { icon: Icon, color } = getSkillStyle(skill);
-                return (
-                  <div
-                    key={`${skill}-${i}-2`}
-                    className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
-                  >
-                    <Icon className="h-8 w-8" style={{ color }} />
-                    <span className="text-sm font-light text-neutral-400 capitalize">
-                      {skill}
-                    </span>
-                  </div>
-                );
-              })}
-            </Marquee>
+          <div className="mx-auto max-w-6xl w-full">
+            {/* Row 1 - Left */}
+            <div className="mb-8">
+              <Marquee
+                autoFill
+                gradient={true}
+                gradientColor="#050505"
+                speed={40}
+                direction="left"
+              >
+                {skillsRow1.map((skill, i) => {
+                  const { icon: Icon, color } = getSkillStyle(skill);
+                  return (
+                    <div
+                      key={`${skill}-${i}-1`}
+                      className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
+                    >
+                      <Icon className="h-8 w-8" style={{ color }} />
+                      <span className="text-sm font-light text-neutral-400 capitalize">
+                        {skill}
+                      </span>
+                    </div>
+                  );
+                })}
+              </Marquee>
+            </div>
+
+            {/* Row 2 - Right */}
+            {skillsRow2.length > 0 && (
+              <div>
+                <Marquee
+                  autoFill
+                  gradient={true}
+                  gradientColor="#050505"
+                  speed={40}
+                  direction="right"
+                >
+                  {skillsRow2.map((skill, i) => {
+                    const { icon: Icon, color } = getSkillStyle(skill);
+                    return (
+                      <div
+                        key={`${skill}-${i}-2`}
+                        className="mx-4 flex h-32 w-40 flex-col items-center justify-center gap-3 rounded-2xl border border-white/5 bg-[#0e0e0e]/80 transition-all hover:border-white/10 hover:bg-white/5"
+                      >
+                        <Icon className="h-8 w-8" style={{ color }} />
+                        <span className="text-sm font-light text-neutral-400 capitalize">
+                          {skill}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </Marquee>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* About Section Removed - Merged into Hero */}
 
