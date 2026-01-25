@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
+import Link from "next/link";
 import { ArrowRight, Play, Zap, Shield, TrendingUp } from "lucide-react";
 import React, { useState } from "react";
 import { AuthModal } from "@/components/auth/auth-modal";
@@ -161,12 +162,14 @@ export function Hero() {
                 </span>
                 <ArrowRight className="relative z-10 h-4 w-4 text-black transition-transform group-hover:translate-x-1" />
               </button>
-              <button className="group flex items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-4 transition-all hover:bg-white/10 hover:scale-105 backdrop-blur-sm">
-                <Play className="h-3 w-3 fill-current text-white" />
-                <span className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-                  Preview
-                </span>
-              </button>
+              <Link href="/preview">
+                <button className="group flex items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-4 transition-all hover:bg-white/10 hover:scale-105 backdrop-blur-sm">
+                  <Play className="h-3 w-3 fill-current text-white" />
+                  <span className="font-mono text-sm font-bold text-white uppercase tracking-wider">
+                    Preview
+                  </span>
+                </button>
+              </Link>
 
               <div className="flex items-center gap-4">
                 <div className="flex -space-x-3">

@@ -277,7 +277,7 @@ const RealHeatmap = ({ username }: { username?: string }) => {
         <span className="text-xs text-neutral-500">Last Year Activity</span>
       </div>
 
-      <div className="flex w-full justify-center overflow-x-auto pb-2 thin-scrollbar">
+      <div className="flex w-full justify-center overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] lg:thin-scrollbar">
         {loading ? (
           <div className="flex h-[108px] w-full items-center justify-center text-sm text-neutral-600 animate-pulse">
             Loading contributions...
@@ -408,6 +408,21 @@ export function PortfolioTemplate({
 
   return (
     <div className="min-h-screen w-full bg-[#050505] text-neutral-200 selection:bg-[#d4a37333] selection:text-[#d4a373] font-sans flex flex-col">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        @media (max-width: 1023px) {
+          ::-webkit-scrollbar {
+            display: none;
+          }
+          * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        }
+      `,
+        }}
+      />
       {/* Edit Button */}
       {isPreview && (
         <div className="fixed bottom-6 right-6 z-50">

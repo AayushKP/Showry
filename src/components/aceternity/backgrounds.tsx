@@ -14,11 +14,11 @@ export const GridBackground = ({
     <div
       className={cn(
         "relative w-full bg-[#0a0a0a] bg-grid-white/[0.02]",
-        className
+        className,
       )}
     >
       {/* Radial gradient overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-[#0a0a0a] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[#0a0a0a] [mask-image:radial-gradient(circle_at_center,transparent_20%,black)]" />
       {children}
     </div>
   );
@@ -35,10 +35,10 @@ export const DotBackground = ({
     <div
       className={cn(
         "relative w-full bg-[#0a0a0a] bg-dot-white/[0.2]",
-        className
+        className,
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[#0a0a0a] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[#0a0a0a] [mask-image:radial-gradient(circle_at_center,transparent_20%,black)]" />
       {children}
     </div>
   );
@@ -55,7 +55,7 @@ export const GradientBackground = ({
     <div
       className={cn(
         "relative min-h-screen w-full overflow-hidden bg-[#0a0a0a]",
-        className
+        className,
       )}
     >
       {/* Gradient orbs */}
