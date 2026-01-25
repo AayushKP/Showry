@@ -59,10 +59,10 @@ export function DashboardHeader({
     });
   };
 
-  const domain = process.env.NEXT_PUBLIC_DOMAIN || "showry.com";
+  const domain = process.env.NEXT_PUBLIC_DOMAIN || "profiled.site";
   // Use portfolio.username from props
   const portfolioUrl = portfolio.username
-    ? `http://${portfolio.username}.${domain}`
+    ? `https://${portfolio.username}.${domain}`
     : "#";
 
   return (
