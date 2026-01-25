@@ -43,6 +43,9 @@ export default function DashboardPage() {
     setActiveSection(section);
 
     if (hasInteracted) {
+      const hasDismissed = localStorage.getItem("hasDismissedPreviewPopup");
+      if (hasDismissed) return;
+
       if (!hasShownPopup) {
         // First time: always show if they've interacted
         setShowPreviewPopup(true);
@@ -301,7 +304,10 @@ export default function DashboardPage() {
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button
-                    onClick={() => setShowPreviewPopup(false)}
+                    onClick={() => {
+                      setShowPreviewPopup(false);
+                      localStorage.setItem("hasDismissedPreviewPopup", "true");
+                    }}
                     className="px-6 py-2.5 rounded-full border border-white/10 text-neutral-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium"
                   >
                     Maybe Later

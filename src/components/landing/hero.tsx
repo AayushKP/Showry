@@ -78,33 +78,6 @@ export function Hero() {
                 </div>
               </button>
             </motion.div>
-
-            {/* Chip 3: Secure */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: [0, -10, 0] }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 2,
-              }}
-              className="absolute bottom-10 left-[5%] hidden xl:block"
-            >
-              <button className="flex items-center gap-3 px-5 py-2.5 bg-[#1a1a1a]/80 border border-white/10 rounded-xl shadow-xl backdrop-blur-md transition-transform hover:scale-105 pointer-events-auto">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/20 flex items-center justify-center border border-blue-500/30">
-                  <Shield className="h-4 w-4 text-blue-500" />
-                </div>
-                <div className="flex flex-col items-start gap-0.5">
-                  <span className="font-mono text-[10px] text-neutral-500 uppercase tracking-wider">
-                    Security
-                  </span>
-                  <span className="font-medium text-sm text-neutral-200">
-                    Enterprise Grade
-                  </span>
-                </div>
-              </button>
-            </motion.div>
           </div>
 
           <div className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 flex flex-col items-center text-center mt-20 md:mt-0">
@@ -174,9 +147,11 @@ export function Hero() {
               <div className="flex items-center gap-4">
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4].map((i) => (
-                    <div
+                    <img
                       key={i}
-                      className="h-8 w-8 rounded-full border border-[#050505] bg-neutral-800 ring-2 ring-[#050505]"
+                      src={`https://i.pravatar.cc/100?img=${i + 20}`}
+                      alt={`User ${i}`}
+                      className="h-8 w-8 rounded-full border border-[#050505] ring-2 ring-[#050505] object-cover bg-neutral-800"
                     />
                   ))}
                 </div>
