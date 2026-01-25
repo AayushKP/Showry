@@ -400,6 +400,27 @@ export function PortfolioTemplate({
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [activeNav, setActiveNav] = useState("Home");
 
+  // Contact Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { name, phone, email, message } = formData;
+    const recipient = socialLinks.email || "hello@example.com";
+    const subject = `Message from ${name} via Portfolio`;
+    const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`;
+
+    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+  };
+
   const navItems = [
     { name: "Home", color: "#3b82f6" },
     { name: "About", color: "#f97316" }, // Orange
@@ -991,7 +1012,7 @@ export function PortfolioTemplate({
             </div>
 
             {/* Right: Form */}
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={handleContactSubmit}>
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <label className="text-xs font-medium text-neutral-500 uppercase tracking-wider">
@@ -999,6 +1020,11 @@ export function PortfolioTemplate({
                   </label>
                   <input
                     type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     placeholder="John Doe"
                     className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
                   />
@@ -1009,6 +1035,10 @@ export function PortfolioTemplate({
                   </label>
                   <input
                     type="tel"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
                     placeholder="+1 234 567 890"
                     className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
                   />
@@ -1020,6 +1050,11 @@ export function PortfolioTemplate({
                 </label>
                 <input
                   type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="john@example.com"
                   className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
                 />
@@ -1030,11 +1065,19 @@ export function PortfolioTemplate({
                 </label>
                 <textarea
                   rows={4}
+                  required
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   placeholder="Tell me about your project..."
                   className="w-full rounded-lg border border-white/10 bg-[#111] px-4 py-3 text-white placeholder:text-neutral-600 focus:border-[#d4a373] focus:outline-none focus:ring-1 focus:ring-[#d4a373]"
                 />
               </div>
-              <button className="w-full rounded-lg bg-white py-4 text-sm font-bold text-black transition-transform hover:scale-[1.02] hover:bg-neutral-200">
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-white py-4 text-sm font-bold text-black transition-transform hover:scale-[1.02] hover:bg-neutral-200"
+              >
                 Submit
               </button>
             </form>
