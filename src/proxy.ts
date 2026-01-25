@@ -38,8 +38,9 @@ export async function proxy(request: NextRequest) {
   // --- Auth & Routing Logic for Root Domain ---
 
   // Check for session cookie (better-auth default)
-  // Note: For robust verification we might need an API call, but cookie presence is standard for fast proxy.
-  const sessionToken = request.cookies.get("better-auth.session_token");
+  const sessionToken =
+    request.cookies.get("better-auth.session_token") ||
+    request.cookies.get("__Secure-better-auth.session_token");
   const isLoggedIn = !!sessionToken;
 
   // Define allowed paths
