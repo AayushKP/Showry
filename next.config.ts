@@ -63,6 +63,14 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      {
+        // Relax headers for Auth & Preview to allow redirects/CORS
+        source: "/api/auth/:path*",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST,OPTIONS" },
+        ],
+      },
     ];
   },
 };
