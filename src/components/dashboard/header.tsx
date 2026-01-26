@@ -144,10 +144,10 @@ export function DashboardHeader({
                 href={portfolioUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden md:flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2 font-mono text-xs uppercase text-white hover:bg-white/10 transition-colors"
+                className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 font-mono text-xs uppercase text-white hover:bg-white/10 transition-colors md:px-4"
               >
                 <ExternalLink className="h-3 w-3" />
-                Visit Site
+                <span className="hidden sm:inline">Visit Site</span>
               </a>
             )}
 

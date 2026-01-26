@@ -150,6 +150,12 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
           {usernameStatus === "available" && (
             <p className="text-xs text-green-400">Username is available!</p>
           )}
+          <p className="text-xs text-yellow-400/80">
+            Your portfolio will be available on{" "}
+            <span className="font-medium">
+              {username || "username"}.profiled.site
+            </span>
+          </p>
         </div>
 
         {/* Full Name */}

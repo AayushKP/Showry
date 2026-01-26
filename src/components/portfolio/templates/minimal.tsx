@@ -829,8 +829,8 @@ export function PortfolioTemplate({
                       viewport={{ once: true, margin: "-50px" }}
                       className="relative grid grid-cols-[1fr] md:grid-cols-[200px_1fr] md:gap-x-12 group"
                     >
-                      {/* Timeline Dot (Absolute to line) */}
-                      <div className="absolute left-[11px] md:left-[5px] -translate-x-1/2 top-1.5 flex items-center justify-center">
+                      {/* Timeline Dot (Absolute to line) - Hidden on mobile */}
+                      <div className="absolute left-[11px] md:left-[5px] -translate-x-1/2 top-1.5 hidden md:flex items-center justify-center">
                         <div
                           className={cn(
                             "h-4 w-4 rounded-full bg-[#050505] border-2 z-10 transition-transform duration-300 group-hover:scale-125",
