@@ -215,7 +215,7 @@ export default function DashboardPage() {
         );
       case "blogs":
         return <BlogsForm initialData={portfolio} onUpdate={handleUpdate} />;
-      case "settings":
+      case "templates":
         return (
           <SettingsForm
             portfolio={portfolio}

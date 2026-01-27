@@ -106,55 +106,86 @@ export function SettingsForm({ portfolio, onThemeChanged }: SettingsFormProps) {
       className="space-y-6"
     >
       <div>
-        <h2 className="text-xl font-semibold text-white">Settings</h2>
+        <h2 className="text-xl font-semibold text-white">Templates</h2>
         <p className="mt-1 text-sm text-gray-400">
-          Manage your portfolio settings
+          Choose a theme for your portfolio
         </p>
       </div>
 
       {/* Theme Section */}
       <div className="rounded-lg border border-gray-800 bg-gray-900/30 p-6">
-        <h3 className="mb-4 font-medium text-white">Theme</h3>
-        <div className="flex flex-wrap items-center gap-4">
+        <h3 className="mb-4 font-medium text-white">Select Theme</h3>
+        <div className="flex flex-wrap items-center gap-6">
           {PORTFOLIO_TEMPLATES.map((template) => {
             const isSelected = portfolio.theme === template.id;
             const isSaving = savingThemeId === template.id;
             const isDisabled = savingThemeId !== null;
 
             return (
-              <div
-                key={template.id}
-                onClick={() => handleThemeChange(template.id)}
-                className={cn(
-                  "relative flex h-24 w-24 items-center justify-center rounded-lg border-2 transition-all",
-                  isSelected
-                    ? "border-amber-500"
-                    : "border-gray-800 hover:border-gray-600",
-                  isDisabled && !isSaving
-                    ? "cursor-not-allowed opacity-50"
-                    : "cursor-pointer hover:scale-105",
-                )}
-                style={{
-                  backgroundColor: template.thumbnailColor || "#1f2937",
-                }}
-              >
-                {isSaving ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-amber-500" />
-                ) : (
-                  <span className="text-sm text-gray-300">{template.name}</span>
-                )}
+              <div key={template.id} className="flex flex-col gap-3">
+                <div
+                  onClick={() => handleThemeChange(template.id)}
+                  className={cn(
+                    "relative flex h-28 w-28 items-center justify-center rounded-xl border-2 transition-all shadow-lg",
+                    isSelected
+                      ? "border-amber-500 bg-amber-500/10"
+                      : "border-gray-800 bg-gray-900/50 hover:border-gray-600",
+                    isDisabled && !isSaving
+                      ? "cursor-not-allowed opacity-50"
+                      : "cursor-pointer hover:scale-105",
+                  )}
+                  style={{
+                    backgroundColor: template.thumbnailColor,
+                  }}
+                >
+                  {isSaving ? (
+                    <Loader2 className="h-6 w-6 animate-spin text-amber-500" />
+                  ) : (
+                    <span className="text-sm font-medium text-white">
+                      {template.name}
+                    </span>
+                  )}
+                  {isSelected && (
+                    <div className="absolute -right-2 -top-2 rounded-full bg-amber-500 p-1 text-black shadow-lg">
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 w-full border-gray-800 bg-transparent text-xs text-gray-400 hover:bg-gray-800 hover:text-white"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(`/preview/${template.id}`, "_blank");
+                  }}
+                >
+                  View
+                </Button>
               </div>
             );
           })}
 
           {/* Coming Soon Placeholder */}
-          <div className="flex h-24 w-24 cursor-not-allowed items-center justify-center rounded-lg border border-gray-700 bg-gray-800 opacity-50">
-            <span className="text-xs text-gray-500">Coming Soon</span>
+          <div className="flex flex-col gap-3 opacity-40">
+            <div className="flex h-28 w-28 cursor-not-allowed items-center justify-center rounded-xl border border-dashed border-gray-700 bg-gray-900/20">
+              <span className="text-xs text-gray-500">More soon</span>
+            </div>
+            <div className="h-8 w-full rounded-md border border-dashed border-gray-800 bg-transparent" />
           </div>
         </div>
-        <p className="mt-4 text-xs text-gray-500">
-          More themes will be available soon!
-        </p>
       </div>
 
       {/* Danger Zone */}

@@ -84,9 +84,9 @@ const navItems = [
     icon: Share2,
   },
   {
-    id: "settings",
-    name: "Settings",
-    href: "/dashboard?section=settings",
+    id: "templates",
+    name: "Templates",
+    href: "/dashboard?section=templates",
     icon: Settings,
   },
 ];
@@ -230,7 +230,7 @@ export function Sidebar({
                   {!isCollapsed && (
                     <>
                       <span>{item.name}</span>
-                      {isCompleted && item.id !== "settings" && (
+                      {isCompleted && item.id !== "templates" && (
                         <CheckCircle2 className="ml-auto h-3.5 w-3.5 text-green-500/80" />
                       )}
                     </>
