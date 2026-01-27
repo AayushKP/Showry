@@ -160,8 +160,11 @@ export default function DashboardPage() {
       if (data.isPublished) {
         toast.success("Portfolio published!");
         // Redirect to subdomain after a short delay
-        const domain = process.env.NEXT_PUBLIC_DOMAIN || "profiled.site";
-        const protocol = window.location.protocol;
+        const isLocalDev = window.location.hostname === "localhost";
+        const domain = isLocalDev
+          ? "localhost:3000"
+          : process.env.NEXT_PUBLIC_DOMAIN || "profiled.site";
+        const protocol = isLocalDev ? "http:" : "https:";
         const portfolioUrl = `${protocol}//${portfolio.username}.${domain}`;
 
         setTimeout(() => {
