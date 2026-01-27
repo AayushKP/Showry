@@ -87,9 +87,11 @@ export default function DashboardPage() {
     }
   }, [session]);
 
-  // Immediate save function
+  // Immediate save function - waits for API confirmation before updating state
   const savePortfolioImmediate = async (data: Partial<Portfolio>) => {
     setIsSaving(true);
+    const savingToast = toast.loading("Saving...");
+
     try {
       const res = await fetch("/api/portfolio", {
         method: "PATCH",
@@ -100,17 +102,24 @@ export default function DashboardPage() {
       if (!res.ok) throw new Error("Failed to save");
 
       const result = await res.json();
+      // Only update local state AFTER API confirms save
       setPortfolio(result.portfolio);
-      toast.success("Saved");
+      toast.success("Saved", { id: savingToast });
     } catch (error) {
       console.error("Save error:", error);
-      toast.error("Failed to save changes");
+      toast.error("Failed to save changes", { id: savingToast });
+      // Revert optimistic update on failure - re-fetch current state
+      try {
+        const res = await fetch("/api/portfolio");
+        const data = await res.json();
+        if (data.portfolio) setPortfolio(data.portfolio);
+      } catch {}
     } finally {
       setIsSaving(false);
     }
   };
 
-  // Debounced save function
+  // Debounced save function (for text inputs - optimistic update is fine)
   const savePortfolioDebounced = useCallback(
     debounce(async (data: Partial<Portfolio>) => {
       setIsSaving(true);
@@ -137,11 +146,13 @@ export default function DashboardPage() {
   );
 
   const handleUpdate = (data: Partial<Portfolio>, immediate = false) => {
-    setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
-
     if (immediate) {
+      // For immediate saves (like theme switching), DON'T update state optimistically
+      // Wait for API confirmation
       savePortfolioImmediate(data);
     } else {
+      // For debounced saves (text inputs), optimistic update is fine
+      setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
       savePortfolioDebounced(data);
     }
 
@@ -233,7 +244,9 @@ export default function DashboardPage() {
       case "blogs":
         return <BlogsForm initialData={portfolio} onUpdate={handleUpdate} />;
       case "settings":
-        return <SettingsForm portfolio={portfolio} onUpdate={handleUpdate} />;
+        return (
+          <SettingsForm portfolio={portfolio} onThemeChanged={setPortfolio} />
+        );
       default:
         return <BasicInfoForm portfolio={portfolio} onUpdate={handleUpdate} />;
     }

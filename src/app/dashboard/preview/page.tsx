@@ -1,19 +1,45 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getTemplate } from "@/components/portfolio/templates";
 import { useSession } from "@/lib/auth-client";
-import { ArrowLeft, Loader2, Monitor, Smartphone, Tablet } from "lucide-react";
 import { AppLoader } from "@/components/ui/app-loader";
 import type { Portfolio } from "@/db/schema";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function UserPreviewPage() {
   const { data: session, isPending } = useSession();
   const [portfolio, setPortfolio] = useState<Partial<Portfolio> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
+  // Memoized fetch function that always gets fresh data
+  const fetchPortfolio = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      // Add timestamp to bust any caching
+      const res = await fetch(`/api/portfolio?t=${Date.now()}`, {
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
+      const data = await res.json();
+
+      if (data.portfolio) {
+        setPortfolio(data.portfolio);
+      } else {
+        setPortfolio({});
+      }
+    } catch {
+      setPortfolio({});
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Fetch on mount and whenever pathname changes (navigation)
   useEffect(() => {
     // Auth Check
     if (!isPending && !session?.user) {
@@ -22,32 +48,11 @@ export default function UserPreviewPage() {
     }
 
     if (session?.user) {
-      const fetchPortfolio = async () => {
-        try {
-          const res = await fetch("/api/portfolio");
-          const data = await res.json();
-
-          if (data.portfolio) {
-            setPortfolio(data.portfolio);
-          } else {
-            // User has no portfolio data yet, but is logged in.
-            // We can show empty state or initialize with minimal defaults.
-            // For now, pass empty and let template handle "empty state"
-            setPortfolio({});
-          }
-        } catch {
-          setPortfolio({});
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
       fetchPortfolio();
     } else if (!isPending) {
-      // Redundant safely check
       setIsLoading(false);
     }
-  }, [session, isPending, router]);
+  }, [session, isPending, router, pathname, fetchPortfolio]);
 
   if (isPending || isLoading) {
     return (
@@ -59,7 +64,6 @@ export default function UserPreviewPage() {
   }
 
   if (!portfolio) return <div>Failed to load portfolio</div>;
-  // If not logged in (and not redirecting yet), show nothing or loader
   if (!session?.user) return null;
 
   const { component: TemplateComponent } = getTemplate(portfolio?.theme);

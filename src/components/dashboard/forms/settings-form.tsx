@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Trash2, AlertTriangle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -20,12 +19,51 @@ import { PORTFOLIO_TEMPLATES } from "@/components/portfolio/templates";
 
 interface SettingsFormProps {
   portfolio: Portfolio;
-  onUpdate: (data: Partial<Portfolio>, immediate?: boolean) => void;
+  onThemeChanged: (newPortfolio: Portfolio) => void;
 }
 
-export function SettingsForm({ portfolio, onUpdate }: SettingsFormProps) {
+export function SettingsForm({ portfolio, onThemeChanged }: SettingsFormProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [savingThemeId, setSavingThemeId] = useState<string | null>(null);
+
+  const handleThemeChange = async (themeId: string) => {
+    // Don't do anything if already selected or currently saving
+    if (themeId === portfolio.theme || savingThemeId !== null) {
+      return;
+    }
+
+    setSavingThemeId(themeId);
+
+    try {
+      // Step 1: Save to API
+      const saveRes = await fetch("/api/portfolio", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ theme: themeId }),
+      });
+
+      if (!saveRes.ok) throw new Error("Failed to save theme");
+
+      // Step 2: Refetch to get confirmed data
+      const fetchRes = await fetch("/api/portfolio");
+      const fetchData = await fetchRes.json();
+
+      if (!fetchData.portfolio)
+        throw new Error("Failed to fetch updated portfolio");
+
+      // Step 3: Update parent state with confirmed data
+      onThemeChanged(fetchData.portfolio);
+
+      // Step 4: Show success
+      toast.success("Theme saved!");
+    } catch (error) {
+      console.error("Theme change error:", error);
+      toast.error("Failed to change theme");
+    } finally {
+      setSavingThemeId(null);
+    }
+  };
 
   const handleDeletePortfolio = async () => {
     setIsDeleting(true);
@@ -65,23 +103,36 @@ export function SettingsForm({ portfolio, onUpdate }: SettingsFormProps) {
       <div className="rounded-lg border border-gray-800 bg-gray-900/30 p-6">
         <h3 className="mb-4 font-medium text-white">Theme</h3>
         <div className="flex flex-wrap items-center gap-4">
-          {PORTFOLIO_TEMPLATES.map((template) => (
-            <div
-              key={template.id}
-              onClick={() => onUpdate({ theme: template.id }, true)}
-              className={cn(
-                "flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border-2 transition-all hover:scale-105",
-                portfolio.theme === template.id
-                  ? "border-amber-500"
-                  : "border-gray-800 hover:border-gray-600",
-              )}
-              style={{
-                backgroundColor: template.thumbnailColor || "#1f2937", // Default to gray-800 if not specified
-              }}
-            >
-              <span className="text-sm text-gray-300">{template.name}</span>
-            </div>
-          ))}
+          {PORTFOLIO_TEMPLATES.map((template) => {
+            const isSelected = portfolio.theme === template.id;
+            const isSaving = savingThemeId === template.id;
+            const isDisabled = savingThemeId !== null;
+
+            return (
+              <div
+                key={template.id}
+                onClick={() => handleThemeChange(template.id)}
+                className={cn(
+                  "relative flex h-24 w-24 items-center justify-center rounded-lg border-2 transition-all",
+                  isSelected
+                    ? "border-amber-500"
+                    : "border-gray-800 hover:border-gray-600",
+                  isDisabled && !isSaving
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer hover:scale-105",
+                )}
+                style={{
+                  backgroundColor: template.thumbnailColor || "#1f2937",
+                }}
+              >
+                {isSaving ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-amber-500" />
+                ) : (
+                  <span className="text-sm text-gray-300">{template.name}</span>
+                )}
+              </div>
+            );
+          })}
 
           {/* Coming Soon Placeholder */}
           <div className="flex h-24 w-24 cursor-not-allowed items-center justify-center rounded-lg border border-gray-700 bg-gray-800 opacity-50">
