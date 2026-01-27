@@ -30,7 +30,7 @@ export const PORTFOLIO_TEMPLATES: TemplateConfig[] = [
     name: "Terminal",
     description: "A developer-first command line interface portfolio.",
     component: TerminalTemplate,
-    thumbnailColor: "#0d1117",
+    thumbnailColor: "#111111",
   },
 ];
 
