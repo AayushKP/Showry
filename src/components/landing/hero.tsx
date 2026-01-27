@@ -1,8 +1,25 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowRight, Play, Zap, Shield, TrendingUp } from "lucide-react";
+import {
+  ArrowRight,
+  Play,
+  Zap,
+  Shield,
+  TrendingUp,
+  Lock,
+  ChevronDown,
+  Check,
+  Terminal,
+  LayoutTemplate,
+} from "lucide-react";
 import React, { useState } from "react";
 import { AuthModal } from "@/components/auth/auth-modal";
 import {
@@ -16,6 +33,10 @@ export function Hero() {
   const y = useTransform(scrollY, [0, 500], [0, 0]);
   const rotateX = useTransform(scrollY, [0, 500], [0, 0]);
   const [authOpen, setAuthOpen] = useState(false);
+  const [activePreview, setActivePreview] = useState<"minimal" | "terminal">(
+    "minimal",
+  );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <>
@@ -188,24 +209,115 @@ export function Hero() {
               className="relative aspect-16/10 w-full overflow-hidden rounded-xl border border-white/10 bg-[#111] shadow-2xl shadow-[#d4a373]/20"
             >
               {/* Browser Toolbar */}
-              <div className="absolute top-0 left-0 right-0 z-20 flex h-10 items-center gap-2 border-b border-white/5 bg-[#1a1a1a] px-4">
+              <div className="absolute top-0 left-0 right-0 z-50 flex h-10 items-center gap-2 border-b border-white/5 bg-[#1a1a1a] px-4 pointer-events-auto">
                 <div className="flex gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-[#ff5f56]/80" />
                   <div className="h-3 w-3 rounded-full bg-[#ffbd2e]/80" />
                   <div className="h-3 w-3 rounded-full bg-[#27c93f]/80" />
                 </div>
-                <div className="mx-auto flex h-6 w-auto min-w-[140px] items-center justify-center rounded bg-black/40 px-3 text-[10px] text-neutral-600 font-mono hover:bg-black/60 transition-colors cursor-default">
-                  profiled.site/alex
+
+                {/* Dynamic Address Bar / Dropdown */}
+                <div className="relative mx-auto z-50">
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex h-6 w-auto min-w-[200px] items-center justify-center gap-2 rounded bg-black/40 px-3 text-[10px] text-neutral-400 font-mono hover:bg-black/60 hover:text-white transition-all border border-white/5"
+                  >
+                    <Lock className="w-2.5 h-2.5 opacity-50" />
+                    <span>profiled.site/{activePreview}</span>
+                    <ChevronDown
+                      className={cn(
+                        "w-3 h-3 transition-transform opacity-50",
+                        isDropdownOpen && "rotate-180",
+                      )}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        key="dropdown"
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-white/10 bg-[#1a1a1a] shadow-xl overflow-hidden p-1 flex flex-col gap-1 z-[100]"
+                      >
+                        <button
+                          onClick={() => {
+                            setActivePreview("minimal");
+                            setIsDropdownOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors w-full text-left font-mono",
+                            activePreview === "minimal"
+                              ? "bg-white/10 text-white"
+                              : "text-neutral-400 hover:bg-white/5 hover:text-white",
+                          )}
+                        >
+                          <LayoutTemplate className="w-3.5 h-3.5" />
+                          <span>minimal</span>
+                          {activePreview === "minimal" && (
+                            <Check className="w-3 h-3 ml-auto text-[#d4a373]" />
+                          )}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActivePreview("terminal");
+                            setIsDropdownOpen(false);
+                          }}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors w-full text-left font-mono",
+                            activePreview === "terminal"
+                              ? "bg-white/10 text-white"
+                              : "text-neutral-400 hover:bg-white/5 hover:text-white",
+                          )}
+                        >
+                          <Terminal className="w-3.5 h-3.5" />
+                          <span>terminal</span>
+                          {activePreview === "terminal" && (
+                            <Check className="w-3 h-3 ml-auto text-[#d4a373]" />
+                          )}
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
-              {/* Preview Page Iframe */}
+              {/* Preview Page Iframes (Stacked) */}
               <div className="relative h-full w-full bg-[#050505] pt-10">
-                <iframe
-                  src="/preview/minimal"
-                  className="w-full h-full border-none"
-                  title="Portfolio Preview"
-                />
+                {/* Minimal Template */}
+                <motion.div
+                  animate={{
+                    opacity: activePreview === "minimal" ? 1 : 0,
+                    zIndex: activePreview === "minimal" ? 10 : 0,
+                    scale: activePreview === "minimal" ? 1 : 0.98,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-x-0 bottom-0 top-10 bg-[#050505]"
+                >
+                  <iframe
+                    src="/preview/minimal"
+                    className="w-full h-full border-none"
+                    title="Minimal Portfolio"
+                  />
+                </motion.div>
+
+                {/* Terminal Template */}
+                <motion.div
+                  animate={{
+                    opacity: activePreview === "terminal" ? 1 : 0,
+                    zIndex: activePreview === "terminal" ? 10 : 0,
+                    scale: activePreview === "terminal" ? 1 : 0.98,
+                  }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-x-0 bottom-0 top-10 bg-[#050505]"
+                >
+                  <iframe
+                    src="/preview/terminal"
+                    className="w-full h-full border-none"
+                    title="Terminal Portfolio"
+                  />
+                </motion.div>
               </div>
 
               {/* Shiny Reflection */}
