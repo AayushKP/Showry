@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Eye, X } from "lucide-react";
+import { Loader2, Eye, X, Rocket, Share2 } from "lucide-react";
 import { AppLoader } from "@/components/ui/app-loader";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { DashboardHeader } from "@/components/dashboard/header";
@@ -33,27 +33,32 @@ export default function DashboardPage() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showPreviewPopup, setShowPreviewPopup] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
-  const [hasShownPopup, setHasShownPopup] = useState(false);
+  const [hasShownPreviewPopup, setHasShownPreviewPopup] = useState(false);
+  const [showPublishPopup, setShowPublishPopup] = useState(false);
+  const [hasShownPublishPopup, setHasShownPublishPopup] = useState(false);
 
-  // Handle section change with preview popup
-  // First popup: only if user has interacted with forms
-  // After first popup: 25% chance on subsequent switches
+  // Handle section change with popup logic
+  // Preview popup: 25% chance (if not shown yet)
+  // Publish popup: 15% chance (if not published and not shown yet)
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
 
-    if (hasInteracted) {
-      const hasDismissed = localStorage.getItem("hasDismissedPreviewPopup");
-      if (hasDismissed) return;
+    // Publish reminder popup: 15% chance if portfolio is not published
+    if (
+      portfolio &&
+      !portfolio.isPublished &&
+      !hasShownPublishPopup &&
+      Math.random() < 0.15
+    ) {
+      setShowPublishPopup(true);
+      setHasShownPublishPopup(true);
+      return; // Don't show both popups at once
+    }
 
-      if (!hasShownPopup) {
-        // First time: always show if they've interacted
-        setShowPreviewPopup(true);
-        setHasShownPopup(true);
-      } else if (Math.random() < 0.25) {
-        // After first: 25% chance
-        setShowPreviewPopup(true);
-      }
+    // Preview popup: 25% chance
+    if (!hasShownPreviewPopup && Math.random() < 0.25) {
+      setShowPreviewPopup(true);
+      setHasShownPreviewPopup(true);
     }
   };
 
@@ -119,10 +124,6 @@ export default function DashboardPage() {
     setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
     // Debounced save to API
     savePortfolioDebounced(data);
-
-    if (!hasInteracted) {
-      setHasInteracted(true);
-    }
   };
 
   // Handle theme change (SettingsForm handles the API call, we just update state)
@@ -321,10 +322,7 @@ export default function DashboardPage() {
                 {/* Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <button
-                    onClick={() => {
-                      setShowPreviewPopup(false);
-                      localStorage.setItem("hasDismissedPreviewPopup", "true");
-                    }}
+                    onClick={() => setShowPreviewPopup(false)}
                     className="px-6 py-2.5 rounded-full border border-white/10 text-neutral-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium"
                   >
                     Maybe Later
@@ -338,6 +336,77 @@ export default function DashboardPage() {
                       Preview Now
                     </button>
                   </Link>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Publish Reminder Popup */}
+      <AnimatePresence>
+        {showPublishPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowPublishPopup(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative mx-4 max-w-md w-full rounded-2xl border border-white/10 bg-[#111] p-8 shadow-2xl"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowPublishPopup(false)}
+                className="absolute right-4 top-4 rounded-full p-1 text-neutral-500 hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* Icon */}
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#d4a373]/10 border border-[#d4a373]/20">
+                <Rocket className="h-8 w-8 text-[#d4a373]" />
+              </div>
+
+              {/* Content */}
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Ready to go live? 🚀
+                </h3>
+                <p className="text-sm text-neutral-400 mb-6">
+                  Publish your portfolio and share your unique profile link with
+                  the world. Let others discover your work!
+                </p>
+
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <button
+                    onClick={() => setShowPublishPopup(false)}
+                    className="px-6 py-2.5 rounded-full border border-white/10 text-neutral-400 hover:bg-white/5 hover:text-white transition-all text-sm font-medium"
+                  >
+                    Maybe Later
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowPublishPopup(false);
+                      handlePublish();
+                    }}
+                    disabled={isPublishing}
+                    className="px-6 py-2.5 rounded-full bg-[#d4a373] text-black hover:bg-[#e5b584] transition-all text-sm font-medium flex items-center gap-2 justify-center w-full sm:w-auto disabled:opacity-50"
+                  >
+                    {isPublishing ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Share2 className="h-4 w-4" />
+                    )}
+                    Publish Now
+                  </button>
                 </div>
               </div>
             </motion.div>
