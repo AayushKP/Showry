@@ -120,8 +120,12 @@ export default function DashboardPage() {
 
   // Handle form field updates (debounced save)
   const handleUpdate = (data: Partial<Portfolio>) => {
-    // Optimistic UI update
-    setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
+    // DEFER state update to next tick to prevent "Cannot update component while rendering" error
+    // This happens if a child component calls handleUpdate instantly on mount/render
+    setTimeout(() => {
+      setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
+    }, 0);
+
     // Debounced save to API
     savePortfolioDebounced(data);
   };
