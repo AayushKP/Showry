@@ -36,26 +36,39 @@ export function SettingsForm({ portfolio, onThemeChanged }: SettingsFormProps) {
     setSavingThemeId(themeId);
 
     try {
-      // Step 1: Save to API
-      const saveRes = await fetch("/api/portfolio", {
+      // Save to API - the response includes the updated portfolio
+      const saveRes = await fetch(`/api/portfolio`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ theme: themeId }),
       });
 
       if (!saveRes.ok) throw new Error("Failed to save theme");
 
-      // Step 2: Refetch to get confirmed data
-      const fetchRes = await fetch("/api/portfolio");
-      const fetchData = await fetchRes.json();
+      // Get the updated portfolio directly from the PATCH response
+      const { portfolio: updatedPortfolio } = await saveRes.json();
 
-      if (!fetchData.portfolio)
-        throw new Error("Failed to fetch updated portfolio");
+      if (!updatedPortfolio) {
+        throw new Error("Failed to get updated portfolio from response");
+      }
 
-      // Step 3: Update parent state with confirmed data
-      onThemeChanged(fetchData.portfolio);
+      // Verify the theme was actually saved
+      if (updatedPortfolio.theme !== themeId) {
+        console.error(
+          "Theme mismatch! Expected:",
+          themeId,
+          "Got:",
+          updatedPortfolio.theme,
+        );
+        throw new Error("Theme was not saved correctly");
+      }
 
-      // Step 4: Show success
+      // Update parent state with confirmed data from PATCH response
+      onThemeChanged(updatedPortfolio);
+
+      // Show success
       toast.success("Theme saved!");
     } catch (error) {
       console.error("Theme change error:", error);

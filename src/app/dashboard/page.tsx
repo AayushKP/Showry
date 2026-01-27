@@ -87,39 +87,7 @@ export default function DashboardPage() {
     }
   }, [session]);
 
-  // Immediate save function - waits for API confirmation before updating state
-  const savePortfolioImmediate = async (data: Partial<Portfolio>) => {
-    setIsSaving(true);
-    const savingToast = toast.loading("Saving...");
-
-    try {
-      const res = await fetch("/api/portfolio", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) throw new Error("Failed to save");
-
-      const result = await res.json();
-      // Only update local state AFTER API confirms save
-      setPortfolio(result.portfolio);
-      toast.success("Saved", { id: savingToast });
-    } catch (error) {
-      console.error("Save error:", error);
-      toast.error("Failed to save changes", { id: savingToast });
-      // Revert optimistic update on failure - re-fetch current state
-      try {
-        const res = await fetch("/api/portfolio");
-        const data = await res.json();
-        if (data.portfolio) setPortfolio(data.portfolio);
-      } catch {}
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  // Debounced save function (for text inputs - optimistic update is fine)
+  // Debounced save for form fields (text inputs, etc.)
   const savePortfolioDebounced = useCallback(
     debounce(async (data: Partial<Portfolio>) => {
       setIsSaving(true);
@@ -145,21 +113,22 @@ export default function DashboardPage() {
     [],
   );
 
-  const handleUpdate = (data: Partial<Portfolio>, immediate = false) => {
-    if (immediate) {
-      // For immediate saves (like theme switching), DON'T update state optimistically
-      // Wait for API confirmation
-      savePortfolioImmediate(data);
-    } else {
-      // For debounced saves (text inputs), optimistic update is fine
-      setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
-      savePortfolioDebounced(data);
-    }
+  // Handle form field updates (debounced save)
+  const handleUpdate = (data: Partial<Portfolio>) => {
+    // Optimistic UI update
+    setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
+    // Debounced save to API
+    savePortfolioDebounced(data);
 
-    // Mark that user has interacted with forms
     if (!hasInteracted) {
       setHasInteracted(true);
     }
+  };
+
+  // Handle theme change (SettingsForm handles the API call, we just update state)
+  const handleThemeChanged = (newPortfolio: Portfolio) => {
+    // Simply update state with the confirmed portfolio from API
+    setPortfolio(newPortfolio);
   };
 
   const handlePublish = async () => {
@@ -245,7 +214,10 @@ export default function DashboardPage() {
         return <BlogsForm initialData={portfolio} onUpdate={handleUpdate} />;
       case "settings":
         return (
-          <SettingsForm portfolio={portfolio} onThemeChanged={setPortfolio} />
+          <SettingsForm
+            portfolio={portfolio}
+            onThemeChanged={handleThemeChanged}
+          />
         );
       default:
         return <BasicInfoForm portfolio={portfolio} onUpdate={handleUpdate} />;
