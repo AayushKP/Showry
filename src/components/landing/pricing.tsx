@@ -8,11 +8,11 @@ const plans = [
   {
     name: "Starter",
     price: "$0",
-    description: "Perfect for trying out Showry.",
+    description: "Perfect for trying out Profiled.",
     features: [
       "1 Project",
       "Basic Themes",
-      "Showry Subdomain",
+      "Profiled Subdomain",
       "Community Support",
     ],
   },

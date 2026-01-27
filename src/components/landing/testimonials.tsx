@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 const testimonials = [
   {
     quote:
-      "Showry helped me land my dream job at a top tech company. The templates are simply stunning and so easy to use.",
+      "Profiled helped me land my dream job at a top tech company. The templates are simply stunning and so easy to use.",
     name: "Alex Rivera",
     title: "Senior Product Designer",
   },
@@ -30,7 +30,7 @@ const testimonials = [
   },
   {
     quote:
-      "I've tried many portfolio builders, but Showry is by far the best. It's clean, fast, and the design is top-notch.",
+      "I've tried many portfolio builders, but Profiled is by far the best. It's clean, fast, and the design is top-notch.",
     name: "Michael Brown",
     title: "Full Stack Developer",
   },
@@ -53,8 +53,8 @@ export function Testimonials() {
           Loved by <span className="text-[#d4a373] italic">creatives.</span>
         </h2>
         <p className="font-mono text-sm text-neutral-400 max-w-lg mx-auto">
-          Join thousands of designers and developers who trust Showry with their
-          professional presence.
+          Join thousands of designers and developers who trust Profiled with
+          their professional presence.
         </p>
       </motion.div>
       <InfiniteMovingCards
