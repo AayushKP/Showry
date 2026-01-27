@@ -20,7 +20,7 @@ import { PORTFOLIO_TEMPLATES } from "@/components/portfolio/templates";
 
 interface SettingsFormProps {
   portfolio: Portfolio;
-  onUpdate: (data: Partial<Portfolio>) => void;
+  onUpdate: (data: Partial<Portfolio>, immediate?: boolean) => void;
 }
 
 export function SettingsForm({ portfolio, onUpdate }: SettingsFormProps) {
@@ -68,7 +68,7 @@ export function SettingsForm({ portfolio, onUpdate }: SettingsFormProps) {
           {PORTFOLIO_TEMPLATES.map((template) => (
             <div
               key={template.id}
-              onClick={() => onUpdate({ theme: template.id })}
+              onClick={() => onUpdate({ theme: template.id }, true)}
               className={cn(
                 "flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border-2 transition-all hover:scale-105",
                 portfolio.theme === template.id

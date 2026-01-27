@@ -87,8 +87,31 @@ export default function DashboardPage() {
     }
   }, [session]);
 
+  // Immediate save function
+  const savePortfolioImmediate = async (data: Partial<Portfolio>) => {
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/portfolio", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error("Failed to save");
+
+      const result = await res.json();
+      setPortfolio(result.portfolio);
+      toast.success("Saved");
+    } catch (error) {
+      console.error("Save error:", error);
+      toast.error("Failed to save changes");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Debounced save function
-  const savePortfolio = useCallback(
+  const savePortfolioDebounced = useCallback(
     debounce(async (data: Partial<Portfolio>) => {
       setIsSaving(true);
       try {
@@ -113,9 +136,15 @@ export default function DashboardPage() {
     [],
   );
 
-  const handleUpdate = (data: Partial<Portfolio>) => {
+  const handleUpdate = (data: Partial<Portfolio>, immediate = false) => {
     setPortfolio((prev) => (prev ? { ...prev, ...data } : null));
-    savePortfolio(data);
+
+    if (immediate) {
+      savePortfolioImmediate(data);
+    } else {
+      savePortfolioDebounced(data);
+    }
+
     // Mark that user has interacted with forms
     if (!hasInteracted) {
       setHasInteracted(true);

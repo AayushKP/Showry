@@ -7,7 +7,6 @@ import { ArrowLeft, Loader2, Monitor, Smartphone, Tablet } from "lucide-react";
 import { AppLoader } from "@/components/ui/app-loader";
 import type { Portfolio } from "@/db/schema";
 import { useRouter } from "next/navigation";
-import { dummyPortfolio } from "@/lib/dummy-data";
 
 export default function UserPreviewPage() {
   const { data: session, isPending } = useSession();

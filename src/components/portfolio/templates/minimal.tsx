@@ -35,6 +35,8 @@ import {
 import type { Portfolio, BlogData } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import { ActivityCalendar } from "react-activity-calendar";
+import { dummyPortfolio } from "@/lib/dummy-data";
+import type { PortfolioTemplateProps } from "./index";
 
 const Marquee = dynamic(() => import("react-fast-marquee"), { ssr: false });
 
@@ -70,12 +72,6 @@ const TimelineScrollAnimation = ({
     </>
   );
 };
-
-interface PortfolioTemplateProps {
-  portfolio: Partial<Portfolio>;
-  isPreview?: boolean;
-  isLoggedIn?: boolean;
-}
 
 // --- Icon & Color Mapping for Skills ---
 const TechStackMap: Record<string, { icon: any; color: string }> = {
@@ -365,29 +361,34 @@ export function PortfolioTemplate({
   isPreview = false,
   isLoggedIn = false,
 }: PortfolioTemplateProps) {
+  const mergedPortfolio = isPreview
+    ? { ...dummyPortfolio, ...portfolio }
+    : portfolio;
+
   const {
     fullName = "Your Name",
     title = "Creative Developer",
     tagline,
     bio,
+    profileImage,
     skills: rawSkills,
     projects: rawProjects,
     experience: rawExperience,
+    education: rawEducation,
     socialLinks: rawSocialLinks,
-    profileImage,
-    blogs: rawBlogs, // Destructure blogs
-  } = portfolio;
+    blogs: rawBlogs,
+  } = mergedPortfolio;
 
+  // Ensure non-null values for arrays and objects
   const skills = rawSkills ?? [];
   const projects = rawProjects ?? [];
   const experience = rawExperience ?? [];
+  const education = rawEducation ?? [];
   const socialLinks = rawSocialLinks ?? {};
-  const blogs = rawBlogs ?? []; // Initialize blogs
+  const blogs = rawBlogs ?? [];
 
-  // Split skills for Marquee (Left/Right)
-  const half = Math.ceil(skills.length / 2);
-  const skillsRow1 = skills.slice(0, half);
-  const skillsRow2 = skills.slice(half);
+  const skillsRow1 = skills.slice(0, Math.ceil(skills.length / 2));
+  const skillsRow2 = skills.slice(Math.ceil(skills.length / 2));
 
   // Hero Icon Color State
   const [heroIconColor, setHeroIconColor] = useState("#d4a373");

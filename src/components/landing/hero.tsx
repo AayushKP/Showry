@@ -135,7 +135,7 @@ export function Hero() {
                 </span>
                 <ArrowRight className="relative z-10 h-4 w-4 text-black transition-transform group-hover:translate-x-1" />
               </button>
-              <Link href="/preview">
+              <Link href="/preview/minimal">
                 <button className="group flex items-center justify-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-4 transition-all hover:bg-white/10 hover:scale-105 backdrop-blur-sm">
                   <Play className="h-3 w-3 fill-current text-white" />
                   <span className="font-mono text-sm font-bold text-white uppercase tracking-wider">
@@ -202,7 +202,7 @@ export function Hero() {
               {/* Preview Page Iframe */}
               <div className="relative h-full w-full bg-[#050505] pt-10">
                 <iframe
-                  src="/preview"
+                  src="/preview/minimal"
                   className="w-full h-full border-none"
                   title="Portfolio Preview"
                 />
