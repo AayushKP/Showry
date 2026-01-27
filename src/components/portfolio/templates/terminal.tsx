@@ -18,6 +18,7 @@ import {
   Copy,
   Check,
   Globe,
+  ChevronDown,
 } from "lucide-react";
 import type { Portfolio, BlogData } from "@/db/schema";
 import { cn } from "@/lib/utils";
@@ -206,6 +207,35 @@ const TerminalPreloader = ({ onComplete }: { onComplete: () => void }) => {
   );
 };
 
+const ExpandableDescription = ({ description }: { description: string }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="flex flex-col items-start">
+      <div
+        className={cn(
+          "text-[#c9d1d9] leading-relaxed opacity-90 border-l-2 border-[#30363d] pl-4 py-1 hover:border-[#4ade80] transition-colors relative",
+          !isExpanded && "line-clamp-3 md:line-clamp-none",
+        )}
+      >
+        {description}
+      </div>
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="text-[#4ade80] text-xs flex items-center gap-1 md:hidden ml-4 mt-2 hover:underline decoration-dashed underline-offset-4"
+      >
+        {isExpanded ? "Read Less" : "Read More"}
+        <ChevronDown
+          className={cn(
+            "w-3 h-3 transition-transform",
+            isExpanded && "rotate-180",
+          )}
+        />
+      </button>
+    </div>
+  );
+};
+
 // --- Main Template Component ---
 
 export function TerminalTemplate({
@@ -239,6 +269,7 @@ export function TerminalTemplate({
   // State
   const [isLoading, setIsLoading] = useState(true);
   const [heroDone, setHeroDone] = useState(false);
+  const [showAllSkills, setShowAllSkills] = useState(false);
 
   // Smooth scroll
   const scrollTo = (id: string) => {
@@ -491,35 +522,57 @@ export function TerminalTemplate({
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6">
-                    {skills.map((skill, index) => (
-                      <motion.div
-                        key={skill}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.05 }}
-                        className="group"
-                      >
-                        <div className="flex justify-between items-end mb-1">
-                          <span className="text-sm font-bold text-[#e6edf3] group-hover:text-[#4ade80] transition-colors">
-                            {">"} {skill}
-                          </span>
-                          <span className="text-xs text-[#8b949e]">100%</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-[#21262d] rounded overflow-hidden">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: "100%" }}
-                            transition={{
-                              duration: 1,
-                              delay: 0.2 + index * 0.05,
-                            }}
-                            className="h-full bg-[#4ade80] opacity-60 group-hover:opacity-100 transition-opacity"
-                          />
-                        </div>
-                      </motion.div>
-                    ))}
+                    {skills.map((skill, index) => {
+                      const isHiddenOnMobile = index >= 7 && !showAllSkills;
+                      return (
+                        <motion.div
+                          key={skill}
+                          initial={{ opacity: 0, x: -10 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.05 }}
+                          className={cn(
+                            "group",
+                            isHiddenOnMobile && "hidden md:block",
+                          )}
+                        >
+                          <div className="flex justify-between items-end mb-1">
+                            <span className="text-sm font-bold text-[#e6edf3] group-hover:text-[#4ade80] transition-colors">
+                              {">"} {skill}
+                            </span>
+                            <span className="text-xs text-[#8b949e]">100%</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-[#21262d] rounded overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              whileInView={{ width: "100%" }}
+                              transition={{
+                                duration: 1,
+                                delay: 0.2 + index * 0.05,
+                              }}
+                              className="h-full bg-[#4ade80] opacity-60 group-hover:opacity-100 transition-opacity"
+                            />
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </div>
+
+                  {/* See More Button for Mobile */}
+                  {skills.length > 7 && (
+                    <button
+                      onClick={() => setShowAllSkills(!showAllSkills)}
+                      className="w-full mt-6 flex items-center justify-center gap-2 text-xs text-[#8b949e] hover:text-[#4ade80] transition-colors md:hidden border border-[#30363d] rounded py-2 bg-[#161b22] group"
+                    >
+                      {showAllSkills ? "Show Less" : "See More"}
+                      <ChevronDown
+                        className={cn(
+                          "w-3 h-3 transition-transform group-hover:text-[#4ade80]",
+                          showAllSkills && "rotate-180",
+                        )}
+                      />
+                    </button>
+                  )}
                 </div>
               </section>
             )}
@@ -559,9 +612,9 @@ export function TerminalTemplate({
                           {job.duration}
                         </span>
                       </div>
-                      <div className="text-[#c9d1d9] leading-relaxed opacity-90 border-l-2 border-[#30363d] pl-4 py-1 hover:border-[#4ade80] transition-colors">
-                        {job.description}
-                      </div>
+                      <ExpandableDescription
+                        description={job.description || ""}
+                      />
                     </motion.div>
                   ))}
                 </div>
