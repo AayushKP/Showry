@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { getTemplate } from "@/components/portfolio/templates";
 import { useSession } from "@/lib/auth-client";
-import { AppLoader } from "@/components/ui/app-loader";
 import type { Portfolio } from "@/db/schema";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -55,12 +54,7 @@ export default function UserPreviewPage() {
   }, [session, isPending, router, pathname, fetchPortfolio]);
 
   if (isPending || isLoading) {
-    return (
-      <AppLoader
-        mode="portfolio"
-        name={portfolio?.fullName || session?.user?.name}
-      />
-    );
+    return null;
   }
 
   if (!portfolio) return <div>Failed to load portfolio</div>;

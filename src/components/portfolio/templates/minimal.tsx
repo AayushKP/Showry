@@ -1,5 +1,7 @@
 "use client";
 
+import { AppLoader } from "@/components/ui/app-loader";
+
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Link from "next/link";
@@ -424,6 +426,17 @@ export function PortfolioTemplate({
     { name: "About", color: "#f97316" }, // Orange
     { name: "Contact", color: "#a855f7" }, // Purple
   ];
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <AppLoader mode="portfolio" name={fullName} />;
+  }
 
   return (
     <div className="min-h-screen w-full bg-[#050505] text-neutral-200 selection:bg-[#d4a37333] selection:text-[#d4a373] font-sans flex flex-col">
