@@ -245,7 +245,7 @@ export default function DashboardPage() {
       />
       <div
         className={cn(
-          "flex flex-1 flex-col transition-all duration-300",
+          "flex flex-1 flex-col transition-all duration-300 relative h-screen overflow-hidden",
           isCollapsed ? "md:ml-20" : "md:ml-64",
           "ml-0", // Reset margin on mobile
         )}
@@ -264,8 +264,8 @@ export default function DashboardPage() {
           isPublishing={isPublishing}
           onMenuClick={() => setIsMobileMenuOpen(true)}
         />
-        <main className="flex-1 overflow-auto p-4 md:p-8">
-          <div className="mx-auto max-w-3xl">
+        <main className="flex-1 overflow-auto p-4 md:p-8 relative scrollbar-hide">
+          <div className="mx-auto max-w-3xl pb-24 md:pb-0">
             {/* Saving indicator */}
             {isSaving && (
               <motion.div

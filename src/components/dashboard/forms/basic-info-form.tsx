@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { debounce } from "@/lib/utils";
+import { ResumeImportButton } from "@/components/dashboard/resume-import-button";
 import type { Portfolio } from "@/db/schema";
 
 interface BasicInfoFormProps {
@@ -72,6 +73,14 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
     }
   }, [username, checkUsername, portfolio.username]);
 
+  // Sync state with portfolio updates (e.g. from Resume Import)
+  useEffect(() => {
+    if (portfolio.fullName) setFullName(portfolio.fullName);
+    if (portfolio.title) setTitle(portfolio.title);
+    if (portfolio.socialLinks?.resume)
+      setResumeLink(portfolio.socialLinks.resume);
+  }, [portfolio.fullName, portfolio.title, portfolio.socialLinks]);
+
   const handleUsernameChange = (value: string) => {
     const formatted = value.toLowerCase().replace(/[^a-z0-9-]/g, "");
     setUsername(formatted);
@@ -95,11 +104,16 @@ export function BasicInfoForm({ portfolio, onUpdate }: BasicInfoFormProps) {
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
-      <div>
-        <h2 className="text-xl font-semibold text-white">Basic Information</h2>
-        <p className="mt-1 text-sm text-gray-400">
-          Set up your portfolio basics and profile information
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold text-white">
+            Basic Information
+          </h2>
+          <p className="mt-1 text-sm text-gray-400">
+            Set up your portfolio basics and profile information
+          </p>
+        </div>
+        <ResumeImportButton onImport={onUpdate} />
       </div>
 
       <div className="space-y-6">
