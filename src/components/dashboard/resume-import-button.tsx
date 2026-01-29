@@ -8,9 +8,13 @@ import { cn } from "@/lib/utils";
 
 interface ResumeImportButtonProps {
   onImport: (data: any) => void;
+  className?: string; // Add optional className prop
 }
 
-export function ResumeImportButton({ onImport }: ResumeImportButtonProps) {
+export function ResumeImportButton({
+  onImport,
+  className,
+}: ResumeImportButtonProps) {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -82,6 +86,7 @@ export function ResumeImportButton({ onImport }: ResumeImportButtonProps) {
           "flex items-center gap-2 rounded-full px-4 py-1.5 transition-all text-sm font-medium border",
           "bg-white/5 border-[#d4a373]/30 text-[#d4a373] hover:bg-[#d4a373]/10",
           isUploading && "opacity-50 cursor-not-allowed",
+          className,
         )}
       >
         {isUploading ? (
