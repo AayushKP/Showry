@@ -112,7 +112,7 @@ export function Hero() {
             >
               <span className="flex h-2 w-2 rounded-full bg-[#27c93f] animate-pulse"></span>
               <span className="font-mono text-[10px] uppercase tracking-widest text-neutral-300">
-                v1.0 is Live {"->"}
+                v1.1.0 is Live {"->"}
               </span>
             </motion.div>
 
