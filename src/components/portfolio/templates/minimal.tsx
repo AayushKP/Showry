@@ -748,7 +748,7 @@ export function PortfolioTemplate({
                   )}
 
                   {/* Hover Overlay */}
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="absolute inset-0 z-20 hidden md:flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
                     <div className="flex gap-4">
                       {project.live && (
                         <a
@@ -794,6 +794,30 @@ export function PortfolioTemplate({
                         {tag}
                       </span>
                     ))}
+                  </div>
+
+                  {/* Mobile Actions */}
+                  <div className="mt-6 flex gap-3 md:hidden">
+                    {project.live && (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/10"
+                      >
+                        Live Demo <ArrowUpRight className="h-3 w-3" />
+                      </a>
+                    )}
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-white/70 backdrop-blur-sm transition-colors hover:bg-white/10"
+                      >
+                        Code <Github className="h-3 w-3" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </motion.div>
