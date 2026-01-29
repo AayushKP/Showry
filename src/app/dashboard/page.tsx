@@ -134,6 +134,8 @@ export default function DashboardPage() {
   const handleThemeChanged = (newPortfolio: Portfolio) => {
     // Simply update state with the confirmed portfolio from API
     setPortfolio(newPortfolio);
+    // Show preview popup immediately after template switch so user can see the new look
+    setShowPreviewPopup(true);
   };
 
   const handlePublish = async () => {
