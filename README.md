@@ -1,6 +1,6 @@
 # Profiled - Build Your Portfolio in Minutes
 
-A complete Portfolio Builder SaaS application with custom subdomains featuring a minimal, elegant portfolio template. Built with Next.js 15, Better Auth, PostgreSQL (Neon), and Drizzle ORM.
+A complete Portfolio Builder SaaS application with custom subdomains featuring a minimal, elegant portfolio template. Built with Next.js 16, Better Auth, PostgreSQL (Supabase), and Drizzle ORM.
 
 ## Features
 
@@ -17,8 +17,8 @@ A complete Portfolio Builder SaaS application with custom subdomains featuring a
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 (App Router with TypeScript, React 19)
-- **Database**: PostgreSQL via Neon serverless
+- **Framework**: Next.js 16 (App Router with TypeScript, React 19)
+- **Database**: PostgreSQL via Supabase
 - **ORM**: Drizzle ORM
 - **Auth**: Better Auth v1 with Google OAuth
 - **Styling**: Tailwind CSS v4 + Framer Motion
@@ -31,20 +31,26 @@ A complete Portfolio Builder SaaS application with custom subdomains featuring a
 
 - Node.js 18+
 - pnpm (recommended) or npm
-- Neon PostgreSQL database
+- Supabase PostgreSQL database
 - Google OAuth credentials
+- Gemini API Key (for AI features)
 
 ### Environment Variables
 
 Create a `.env.local` file in the root directory with:
 
 ```bash
-# Database (Neon)
-DATABASE_URL=postgresql://username:password@host:5432/database?sslmode=require
+# Database (Supabase)
+# Get from: Supabase Dashboard > Project Settings > Database > Connection String (URI)
+# Use the transaction pooler (port 6543) for better performance in serverless environments
+DATABASE_URL=postgresql://postgres.[PROJECT-REF]:[YOUR-PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres
 
 # Better Auth
 BETTER_AUTH_SECRET=your-random-32-character-secret
 BETTER_AUTH_URL=http://localhost:3000
+
+# GEMINI (for AI features)
+GEMINI_API_KEY=your_gemini_api_key
 
 # Google OAuth
 GOOGLE_CLIENT_ID=your-google-client-id
