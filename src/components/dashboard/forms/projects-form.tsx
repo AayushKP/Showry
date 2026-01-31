@@ -42,10 +42,10 @@ const emptyProject: ProjectData = {
 
 export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
   const [projects, setProjects] = useState<ProjectData[]>(
-    portfolio.projects || []
+    portfolio.projects || [],
   );
   const [editingProject, setEditingProject] = useState<ProjectData | null>(
-    null
+    null,
   );
   const [showDialog, setShowDialog] = useState(false);
   const [tagInput, setTagInput] = useState("");
@@ -61,7 +61,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
     let newProjects: ProjectData[];
     if (projects.find((p) => p.id === updatedProject.id)) {
       newProjects = projects.map((p) =>
-        p.id === updatedProject.id ? updatedProject : p
+        p.id === updatedProject.id ? updatedProject : p,
       );
     } else {
       newProjects = [...projects, updatedProject];
@@ -150,7 +150,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
                 <div className="cursor-grab text-gray-600">
                   <GripVertical className="h-5 w-5" />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="font-medium text-white">{project.title}</h3>
                     {project.featured && (
@@ -245,7 +245,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
                 value={editingProject?.title || ""}
                 onChange={(e) =>
                   setEditingProject((prev) =>
-                    prev ? { ...prev, title: e.target.value } : null
+                    prev ? { ...prev, title: e.target.value } : null,
                   )
                 }
                 placeholder="My Awesome Project"
@@ -258,7 +258,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
                 value={editingProject?.description || ""}
                 onChange={(e) =>
                   setEditingProject((prev) =>
-                    prev ? { ...prev, description: e.target.value } : null
+                    prev ? { ...prev, description: e.target.value } : null,
                   )
                 }
                 placeholder="A brief description of your project..."
@@ -273,7 +273,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
                   value={editingProject?.github || ""}
                   onChange={(e) =>
                     setEditingProject((prev) =>
-                      prev ? { ...prev, github: e.target.value } : null
+                      prev ? { ...prev, github: e.target.value } : null,
                     )
                   }
                   placeholder="https://github.com/..."
@@ -285,7 +285,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
                   value={editingProject?.live || ""}
                   onChange={(e) =>
                     setEditingProject((prev) =>
-                      prev ? { ...prev, live: e.target.value } : null
+                      prev ? { ...prev, live: e.target.value } : null,
                     )
                   }
                   placeholder="https://..."
@@ -331,7 +331,7 @@ export function ProjectsForm({ portfolio, onUpdate }: ProjectsFormProps) {
                 checked={editingProject?.featured || false}
                 onCheckedChange={(checked) =>
                   setEditingProject((prev) =>
-                    prev ? { ...prev, featured: checked } : null
+                    prev ? { ...prev, featured: checked } : null,
                   )
                 }
               />
