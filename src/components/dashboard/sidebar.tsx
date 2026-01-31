@@ -139,12 +139,9 @@ export function Sidebar({
         {/* Header - Hidden on Mobile since we have Top Navbar, but visible on Desktop */}
         <div className="hidden md:flex h-20 items-center justify-between px-6">
           {!isCollapsed && (
-            <Link
-              href="/"
-              className="font-instrument text-2xl font-bold text-white hover:opacity-80 transition-opacity"
-            >
+            <div className="font-instrument text-2xl font-bold text-white hover:opacity-80 transition-opacity">
               Profiled<span className="text-[#d4a373]">.</span>
-            </Link>
+            </div>
           )}
           {isCollapsed && (
             <span className="w-full text-center font-instrument text-2xl font-bold text-[#d4a373]">
@@ -269,7 +266,7 @@ export function Sidebar({
               await import("@/lib/auth-client").then((mod) =>
                 mod.authClient.signOut(),
               );
-              window.location.href = "/login";
+              window.location.href = "/";
             }}
             className={cn(
               "flex w-full items-center gap-3 rounded-lg bg-red-500/10 p-3 text-red-500 transition-colors hover:bg-red-500/20 lg:hidden",
