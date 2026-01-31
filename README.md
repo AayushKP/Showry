@@ -357,10 +357,4 @@ If you encounter any issues or have questions:
 2. Open a new issue with a clear description
 3. Include steps to reproduce (for bugs)
 
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
----
-
 Built with love by [Aayush](https://github.com/AayushKP)

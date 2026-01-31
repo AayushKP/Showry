@@ -39,9 +39,12 @@ export function Navbar() {
           className="flex items-center gap-2 rounded-full border border-white/10 bg-[#0a0a0a]/80 p-2 backdrop-blur-md shadow-2xl shadow-black/50"
         >
           <div className="flex items-center px-3 md:px-4">
-            <span className="font-instrument text-lg font-bold text-white">
+            <Link
+              href="/"
+              className="font-instrument text-lg font-bold text-white cursor-pointer"
+            >
               Profiled<span className="text-[#d4a373]">.</span>
-            </span>
+            </Link>
           </div>
 
           <div className="flex items-center gap-1.5 rounded-full bg-white/5 px-1.5 py-1.5 border border-white/5">
@@ -87,9 +90,12 @@ export function Navbar() {
 
       {/* Mobile Navbar (Corners Layout) */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 flex h-20 items-center justify-between px-6 bg-gradient-to-b from-black/50 to-transparent backdrop-blur-[2px]">
-        <span className="font-instrument text-2xl font-bold text-white drop-shadow-lg">
+        <Link
+          href="/"
+          className="font-instrument text-2xl font-bold text-white drop-shadow-lg"
+        >
           Profiled<span className="text-[#d4a373]">.</span>
-        </span>
+        </Link>
         <button
           onClick={() => setIsMobileOpen(true)}
           className="rounded-full border border-white/10 bg-[#0a0a0a]/90 p-3 text-white backdrop-blur-md shadow-lg"

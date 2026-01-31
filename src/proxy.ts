@@ -32,24 +32,29 @@ export function proxy(request: NextRequest) {
 
   const isDashboard = path.startsWith("/dashboard");
   const isPreview = path.startsWith("/preview");
+  const isPseo = path.startsWith("/for");
   const isRoot = path === "/";
 
   if (isLoggedIn) {
-    if (isRoot) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-    if (isDashboard || isPreview) {
+    if (isDashboard || isPreview || isPseo) {
       return NextResponse.next();
     }
+    // Redirect root and others to dashboard for logged-in users?
+    // Usually logged-in users landing on "/" might want dashboard.
     return NextResponse.redirect(new URL("/dashboard", request.url));
   } else {
+    // Logged Out
     if (isDashboard) {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (isRoot || isPreview) {
+    // Allow public routes (Root, Preview, PSEO)
+    if (isRoot || isPreview || isPseo) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/", request.url));
+
+    // For any other unknown route, let it pass so Next.js can render a 404
+    // This is better for SEO than redirecting to "/" (Soft 404)
+    return NextResponse.next();
   }
 }
 
