@@ -325,7 +325,7 @@ export function AtlasBot() {
     setBreadcrumbs([]);
   };
 
-  if (!pathname?.startsWith("/dashboard")) return null;
+  if (pathname !== "/dashboard") return null;
 
   return (
     <>
