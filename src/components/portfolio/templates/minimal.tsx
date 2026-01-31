@@ -358,6 +358,121 @@ const CoolBlogPlaceholder = () => (
   </div>
 );
 
+const ProjectCard = ({ project, index }: { project: any; index: number }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isLongDescription =
+    project.description && project.description.length > 120;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      viewport={{ once: true }}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-[#0e0e0e] hover:border-white/10"
+    >
+      {/* Image Area */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#050505]">
+        {project.image ? (
+          <img
+            src={project.image}
+            alt={project.title}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <CoolProjectPlaceholder />
+        )}
+
+        {/* Hover Overlay */}
+        <div className="absolute inset-0 z-20 hidden md:flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
+          <div className="flex gap-4">
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-medium text-black hover:bg-neutral-200"
+              >
+                Live Demo <ArrowUpRight className="h-4 w-4" />
+              </a>
+            )}
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-full bg-[#111] border border-white/20 px-5 py-2 text-sm font-medium text-white hover:bg-[#222]"
+              >
+                Code <Github className="h-4 w-4" />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-2xl font-medium text-white">{project.title}</h3>
+        </div>
+        <div className="mb-6">
+          <p
+            className={cn(
+              "text-sm leading-relaxed text-neutral-400 font-light",
+              !isExpanded && "line-clamp-3",
+            )}
+          >
+            {project.description}
+          </p>
+          {isLongDescription && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="mt-2 text-xs text-[#d4a373] hover:underline focus:outline-none"
+            >
+              {isExpanded ? "Read Less" : "Read More"}
+            </button>
+          )}
+        </div>
+
+        <div className="mt-auto flex flex-wrap gap-2">
+          {project.tags.map((tag: string) => (
+            <span
+              key={tag}
+              className="text-[10px] font-mono uppercase tracking-wider text-[#d4a373] bg-[#d4a373]/5 px-2 py-1 rounded"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Mobile Actions */}
+        <div className="mt-6 flex gap-3 md:hidden">
+          {project.live && (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/10"
+            >
+              Live Demo <ArrowUpRight className="h-3 w-3" />
+            </a>
+          )}
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-white/70 backdrop-blur-sm transition-colors hover:bg-white/10"
+            >
+              Code <Github className="h-3 w-3" />
+            </a>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 export function PortfolioTemplate({
   portfolio,
   isPreview = false,
@@ -727,100 +842,7 @@ export function PortfolioTemplate({
 
           <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
             {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-[#0e0e0e] hover:border-white/10"
-              >
-                {/* Image Area */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#050505]">
-                  {project.image ? (
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <CoolProjectPlaceholder />
-                  )}
-
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 z-20 hidden md:flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
-                    <div className="flex gap-4">
-                      {project.live && (
-                        <a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-medium text-black hover:bg-neutral-200"
-                        >
-                          Live Demo <ArrowUpRight className="h-4 w-4" />
-                        </a>
-                      )}
-                      {project.github && (
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-full bg-[#111] border border-white/20 px-5 py-2 text-sm font-medium text-white hover:bg-[#222]"
-                        >
-                          Code <Github className="h-4 w-4" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Info */}
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-2xl font-medium text-white">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-neutral-400 font-light">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-mono uppercase tracking-wider text-[#d4a373] bg-[#d4a373]/5 px-2 py-1 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Mobile Actions */}
-                  <div className="mt-6 flex gap-3 md:hidden">
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/10"
-                      >
-                        Live Demo <ArrowUpRight className="h-3 w-3" />
-                      </a>
-                    )}
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-white/70 backdrop-blur-sm transition-colors hover:bg-white/10"
-                      >
-                        Code <Github className="h-3 w-3" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
+              <ProjectCard key={project.id} project={project} index={index} />
             ))}
           </div>
         </div>
