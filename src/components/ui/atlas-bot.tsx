@@ -443,12 +443,47 @@ export function AtlasBot() {
 
       {/* Floating Action Button */}
       <motion.button
+        animate={
+          isOpen
+            ? undefined
+            : {
+                y: [0, -5, 0],
+                boxShadow: [
+                  "0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
+                  "0 12px 36px rgba(212,163,115,0.1), 0 0 0 1px rgba(255,255,255,0.1)",
+                  "0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)",
+                ],
+              }
+        }
+        transition={{
+          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+          boxShadow: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+        }}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 flex h-14 items-center justify-center rounded-full bg-[#0a0a0a] shadow-[0_0_30px_rgba(0,0,0,0.5)] border border-white/10 hover:scale-105 active:scale-95 group md:bottom-8 md:right-8 overflow-hidden",
+          "fixed bottom-6 right-6 z-50 flex h-14 items-center justify-center rounded-full",
+          // Premium Glassy Look
+          "bg-[#0a0a0a]/60 backdrop-blur-lg",
+          "border border-white/10",
+          // Base styles
+          "hover:scale-105 active:scale-95",
+          "transition-transform duration-300",
+          "group md:bottom-8 md:right-8 overflow-hidden",
           isOpen ? "w-14" : "w-14 md:w-auto md:px-5",
         )}
       >
+        {/* Automated Shimmer Effect */}
+        <motion.div
+          animate={{ x: ["-100%", "200%"] }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatDelay: 3,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12"
+        />
+
         {/* Subtle glow behind */}
         <div className="absolute inset-0 rounded-full bg-white/5 blur-md group-hover:bg-white/10 transition-all" />
 
