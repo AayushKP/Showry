@@ -172,7 +172,7 @@ export function SettingsForm({ portfolio, onThemeChanged }: SettingsFormProps) {
                     window.open(`/preview/${template.id}`, "_blank");
                   }}
                 >
-                  View
+                  Template
                 </Button>
               </div>
             );

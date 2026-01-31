@@ -33,10 +33,11 @@ export function proxy(request: NextRequest) {
   const isDashboard = path.startsWith("/dashboard");
   const isPreview = path.startsWith("/preview");
   const isPseo = path.startsWith("/for");
+  const isPortfolio = path.startsWith("/portfolio");
   const isRoot = path === "/";
 
   if (isLoggedIn) {
-    if (isDashboard || isPreview || isPseo) {
+    if (isDashboard || isPreview || isPseo || isPortfolio) {
       return NextResponse.next();
     }
     // Redirect root and others to dashboard for logged-in users?

@@ -194,7 +194,7 @@ export default function DashboardPage() {
   }
 
   if (!session?.user) {
-    router.push("/login");
+    router.push("/");
     return null;
   }
 

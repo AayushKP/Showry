@@ -12,6 +12,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { Analytics } from "@vercel/analytics/next";
 import JsonLd from "@/components/json-ld";
+import { AtlasBot } from "@/components/ui/atlas-bot";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({
@@ -112,6 +113,7 @@ export default function RootLayout({
       >
         <QueryProvider>{children}</QueryProvider>
         <Toaster />
+        <AtlasBot />
         <Analytics />
         <JsonLd />
       </body>

@@ -42,7 +42,7 @@ export default function UserPreviewPage() {
   useEffect(() => {
     // Auth Check
     if (!isPending && !session?.user) {
-      router.push("/login?redirect=/dashboard/preview");
+      router.push("/");
       return;
     }
 

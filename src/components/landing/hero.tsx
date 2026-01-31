@@ -166,7 +166,7 @@ export function Hero() {
                 >
                   <Play className="h-3 w-3 fill-current text-white" />
                   <span className="font-mono text-sm font-bold text-white uppercase tracking-wider">
-                    Preview
+                    Templates
                   </span>
                   <ChevronDown
                     className={cn(
