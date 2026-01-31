@@ -41,10 +41,6 @@ export default function UserPreviewPage() {
   // Fetch on mount and whenever pathname changes (navigation)
   useEffect(() => {
     // Auth Check
-    if (!isPending && !session?.user) {
-      router.push("/");
-      return;
-    }
 
     if (session?.user) {
       fetchPortfolio();
