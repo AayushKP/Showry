@@ -478,7 +478,6 @@ export function AtlasBot() {
           transition={{
             duration: 3,
             repeat: Infinity,
-            repeatDelay: 3,
             ease: "easeInOut",
           }}
           className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/10 to-transparent skew-x-12"
