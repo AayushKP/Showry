@@ -461,7 +461,7 @@ export function AtlasBot() {
         }}
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 flex h-14 items-center justify-center rounded-full",
+          "fixed bottom-6 right-6 z-50 flex h-16 items-center justify-center rounded-full",
           // Premium Glassy Look
           "bg-[#0a0a0a]/60 backdrop-blur-lg",
           "border border-white/10",
@@ -469,7 +469,7 @@ export function AtlasBot() {
           "hover:scale-105 active:scale-95",
           "transition-transform duration-300",
           "group md:bottom-8 md:right-8 overflow-hidden",
-          isOpen ? "w-14" : "w-14 md:w-auto md:px-5",
+          isOpen ? "w-16" : "w-16 md:w-auto md:px-5",
         )}
       >
         {/* Automated Shimmer Effect */}
