@@ -309,6 +309,14 @@ Your template receives this data from the `portfolio` prop:
 4. Test on different screen sizes
 5. Verify all animations work smoothly
 
+### Viewing Published Portfolios Locally
+
+Since browsers don't resolve wildcard subdomains for `localhost`, you can view portfolios locally using the direct path:
+
+```
+http://localhost:3000/portfolio/your-username
+```
+
 #### 7. Submit Your Template
 
 1. Create a branch: `git checkout -b template/your-template-name`
