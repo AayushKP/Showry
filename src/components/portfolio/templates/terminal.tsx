@@ -453,7 +453,13 @@ export function TerminalTemplate({
                           )}
                         </div>
 
-                        <p className="text-[#8b949e] text-sm mb-6 leading-relaxed flex-1">
+                        <p
+                          className="text-[#8b949e] text-sm mb-6 leading-relaxed flex-1"
+                          style={{
+                            wordBreak: "break-word",
+                            overflowWrap: "anywhere",
+                          }}
+                        >
                           <span className="text-[#4ade80] mr-2">$</span>
                           {project.description}
                         </p>
