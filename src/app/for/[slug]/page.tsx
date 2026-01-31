@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: role.title,
       description: role.description,
       type: "website",
-      url: `https://profiled.app/for/${slug}`,
+      url: `https://profiled.site/for/${slug}`,
     },
   };
 }

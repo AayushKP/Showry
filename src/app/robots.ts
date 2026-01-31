@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/dashboard/", "/api/"],
     },
-    sitemap: "https://profiled.app/sitemap.xml",
+    sitemap: "https://profiled.site/sitemap.xml",
   };
 }
