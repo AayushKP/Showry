@@ -319,7 +319,7 @@ export function TerminalTemplate({
           {/* Edit Button */}
           {isPreview && (
             <div className="fixed bottom-6 right-6 z-50">
-              <Link href={isLoggedIn ? "/dashboard" : "/signup"}>
+              <Link href={isLoggedIn ? "/dashboard" : "/"}>
                 <button className="flex items-center gap-2 rounded border border-[#30363d] bg-[#161b22] px-4 py-2 text-sm text-[#4ade80] hover:bg-[#21262d] hover:border-[#4ade80] shadow-lg transition-all">
                   {isLoggedIn ? "> edit_portfolio" : "> create_yours"}
                 </button>

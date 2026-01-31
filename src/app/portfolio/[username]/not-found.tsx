@@ -34,7 +34,7 @@ export default function NotFound() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Go Home
           </Button>
-          <Link href="/signup">
+          <Link href="/">
             <Button>Create Your Portfolio</Button>
           </Link>
         </div>

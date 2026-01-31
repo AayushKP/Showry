@@ -53,7 +53,7 @@ export function DashboardHeader({
     await signOut({
       fetchOptions: {
         onSuccess: () => {
-          router.push("/login");
+          router.push("/");
         },
       },
     });

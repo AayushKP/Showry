@@ -235,7 +235,7 @@ export function YourTemplateName({
       {/* Preview/Edit button for preview mode */}
       {isPreview && (
         <div className="fixed bottom-6 right-6 z-50">
-          <Link href={isLoggedIn ? "/dashboard" : "/signup"}>
+          <Link href={isLoggedIn ? "/dashboard" : "/"}>
             <button className="...">
               {isLoggedIn ? "Edit Portfolio" : "Create Your Own"}
             </button>
